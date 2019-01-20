@@ -9,6 +9,8 @@ import edu.asu.heal.core.api.dao.DAOFactory;
 import edu.asu.heal.core.api.models.*;
 import edu.asu.heal.core.api.responses.HEALResponse;
 import edu.asu.heal.core.api.service.HealService;
+import edu.asu.heal.core.api.service.SuggestedActivityiesMappingService.MappingFactory;
+import edu.asu.heal.core.api.service.SuggestedActivityiesMappingService.MappingInterface;
 import edu.asu.heal.reachv3.api.models.MakeBelieveActivityInstance;
 import edu.asu.heal.reachv3.api.models.MakeBelieveSituation;
 import edu.asu.heal.reachv3.api.models.WorryHeadsModel;
@@ -118,11 +120,15 @@ public class ReachService implements HealService {
         }
     }
 
-    @Override
+ 
     public String getEmotionsActivityInstance(int patientPin, String emotion, int intensity){
         try{
             DAO dao = DAOFactory.getTheDAO();
-            List<String> results = dao.getEmotionsActivityInstance(emotion.toLowerCase(), intensity);
+            // Task #386
+            MappingInterface mapper = MappingFactory.getTheMapper();
+            String intensityVal = (String)mapper.intensityMappingToDifficultyLevel(intensity);
+            
+            List<String> results = dao.getEmotionsActivityInstance(emotion.toLowerCase(), intensityVal);
             if(results == null)
                 return "";
 

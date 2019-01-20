@@ -18,7 +18,9 @@
     <copy file="${src}/${daopackage}/dao.properties" todir="${destdir}/WEB-INF/classes/${daopackage}"/>
     <copy file="${src}/${servicepackage}/service.properties" todir="${destdir}/WEB-INF/classes/${servicepackage}"/>
     <copy file="${src}/${halpackage}/hal.properties" todir="${destdir}/WEB-INF/classes/${halpackage}"/>
-    <copy file="${src}/${daopackage}/impl/emotions.properties" todir="${destdir}/WEB-INF/classes/${daopackage}/impl" />
+ <!-- <copy file="${src}/${daopackage}/impl/emotions.properties" todir="${destdir}/WEB-INF/classes/${daopackage}/impl" /> -->
+    <copy file="${src}/${mapperservicepackage}/mapper.properties" todir="${destdir}/WEB-INF/classes/${mapperservicepackage}" />
+    <copy file="${src}/${activitysuggestionpackage}/emotions.properties" todir="${destdir}/WEB-INF/classes/${activitysuggestionpackage}" />
   </target>
 
   <target name="build" depends="compile">

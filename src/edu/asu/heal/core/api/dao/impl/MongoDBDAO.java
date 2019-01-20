@@ -1,9 +1,15 @@
 package edu.asu.heal.core.api.dao.impl;
 
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.AggregateIterable;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Accumulators;
 import com.mongodb.client.model.Aggregates;
@@ -11,6 +17,7 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Projections;
 import edu.asu.heal.core.api.dao.DAO;
 import edu.asu.heal.core.api.models.*;
+import edu.asu.heal.reachv3.api.models.Emotions;
 import edu.asu.heal.reachv3.api.models.MakeBelieveActivityInstance;
 import edu.asu.heal.reachv3.api.models.MakeBelieveSituation;
 import org.bson.Document;
@@ -35,9 +42,11 @@ public class MongoDBDAO implements DAO {
 	private static final String MAKEBELIEVESITUATIONS_COLLECTION = "makeBelieveSituations";
 	private static final String MAKEBELIEVESITUATIONNAMES_COLLECTION = "makeBelieveSituationNames";
 	private static final String LOGGER_COLLECTION = "logger";
+	private static final String EMOTIONS_COLLECTION = "emotions";
 
 	private static String __mongoDBName;
 	private static String __mongoURI;
+	private Properties properties1 = new Properties();
 	private Map<String, List<String>> emotionsMap = new HashMap<>();
 
 
@@ -45,25 +54,25 @@ public class MongoDBDAO implements DAO {
 		__mongoURI = properties.getProperty("mongo.uri");
 		__mongoDBName = properties.getProperty("mongo.dbname");
 
-		try {
-			Properties properties1 = new Properties();
-			properties1.load(MongoDBDAO.class.getResourceAsStream("emotions.properties"));
-
-			emotionsMap.put(Emotions.happy.toString(),
-					new ArrayList<>(Arrays.asList(properties1.getProperty("emotions.happy").split(","))));
-			emotionsMap.put(Emotions.sad.toString(),
-					new ArrayList<>(Arrays.asList(properties1.getProperty("emotions.sad").split(","))));
-			emotionsMap.put(Emotions.sick.toString(),
-					new ArrayList<>(Arrays.asList(properties1.getProperty("emotions.sick").split(","))));
-			emotionsMap.put(Emotions.angry.toString(),
-					new ArrayList<>(Arrays.asList(properties1.getProperty("emotions.angry").split(","))));
-			emotionsMap.put(Emotions.scared.toString(),
-					new ArrayList<>(Arrays.asList(properties1.getProperty("emotions.scared").split(","))));
-			emotionsMap.put(Emotions.worried.toString(),
-					new ArrayList<>(Arrays.asList(properties1.getProperty("emotions.worried").split(","))));
-		}catch (IOException e){
-			e.printStackTrace();
-		}
+		//		try {
+		//			//	Properties properties1 = new Properties();
+		//		//	properties1.load(MongoDBDAO.class.getResourceAsStream("emotions.properties"));
+		//			//	
+		//			//			emotionsMap.put(Emotions.happy.toString(),
+		//			//					new ArrayList<>(Arrays.asList(properties1.getProperty("emotions.happy").split(","))));
+		//			//			emotionsMap.put(Emotions.sad.toString(),
+		//			//					new ArrayList<>(Arrays.asList(properties1.getProperty("emotions.sad").split(","))));
+		//			//			emotionsMap.put(Emotions.sick.toString(),
+		//			//					new ArrayList<>(Arrays.asList(properties1.getProperty("emotions.sick").split(","))));
+		//			//			emotionsMap.put(Emotions.angry.toString(),
+		//			//					new ArrayList<>(Arrays.asList(properties1.getProperty("emotions.angry").split(","))));
+		//			//			emotionsMap.put(Emotions.scared.toString(),
+		//			//					new ArrayList<>(Arrays.asList(properties1.getProperty("emotions.scared").split(","))));
+		//			//			emotionsMap.put(Emotions.worried.toString(),
+		//			//					new ArrayList<>(Arrays.asList(properties1.getProperty("emotions.worried").split(","))));
+		//					}catch (IOException e){
+		//						e.printStackTrace();
+		//					}
 	}
 
 	private static MongoClient mongoClient  = null;
@@ -679,17 +688,33 @@ public class MongoDBDAO implements DAO {
 	}
 
 	@Override
-	public List<String> getEmotionsActivityInstance(String emotion, int intensity) {
+	public List<String> getEmotionsActivityInstance(String emotion, Object intensity) {
 		try {
-			if (emotion.equals(Emotions.worried.toString())) {
-				if (intensity >= 6) {
-					List<String> temp = emotionsMap.get(emotion);
-					temp.remove("faceIt");
-					return temp;
+			MongoDatabase database = MongoDBDAO.getConnectedDatabase();
+			// needs to incorporate Emotions model. - Task #386
+			MongoCollection<Document> emotionMongoCollection =
+					database.getCollection(MongoDBDAO.EMOTIONS_COLLECTION);//, Emotions.class);
+
+			FindIterable<Document> result =	emotionMongoCollection.find(Filters.eq(Emotions.EMOTION_NAME,emotion));
+
+			MongoCursor<Document> cursor = result.iterator();
+			List<String> rval = new ArrayList<String>();
+			while(cursor.hasNext()) {
+				Document doc = cursor.next();
+				String tempIntensity = doc.getString(Emotions.INTENSITY);
+				if(tempIntensity.contains((String)intensity)) {
+					if(doc.getString(Emotions.SUGGESTED_ACTIVITIES).length() ==1) {
+						rval.add(doc.getString(Emotions.SUGGESTED_ACTIVITIES));
+					}
+					else {
+						String x[] = doc.getString(Emotions.SUGGESTED_ACTIVITIES).split(",");
+						System.out.println("0 : " + x[0]);
+						Collections.addAll(rval, x);
+					}
 				}
 			}
 
-			return emotionsMap.get(emotion);
+			return rval;
 		}catch (NullPointerException npe){
 			npe.printStackTrace();
 			return null;
@@ -699,6 +724,6 @@ public class MongoDBDAO implements DAO {
 
 }
 
-enum Emotions{
-	happy, sad, sick, scared, worried, angry
-}
+//enum Emotions{
+//	happy, sad, sick, scared, worried, angry
+//}

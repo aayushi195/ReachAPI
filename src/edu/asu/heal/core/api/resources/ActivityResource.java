@@ -1,11 +1,13 @@
 package edu.asu.heal.core.api.resources;
 
 import edu.asu.heal.core.api.models.*;
+import edu.asu.heal.core.api.responses.ActivityInstanceResponse;
 import edu.asu.heal.core.api.responses.ActivityResponse;
 import edu.asu.heal.core.api.responses.HEALResponse;
 import edu.asu.heal.core.api.responses.HEALResponseBuilder;
 import edu.asu.heal.core.api.service.HealService;
 import edu.asu.heal.core.api.service.HealServiceFactory;
+import edu.asu.heal.reachv3.api.service.ReachService;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -131,6 +133,89 @@ public class ActivityResource {
         }
         return Response.status(response.getStatusCode()).entity(response.toEntity()).build();
     }
+    
+    /**
+	 * @apiDefine BadRequestError
+	 * @apiError (Error 4xx) {400} BadRequest Bad Request Encountered
+	 * */
+
+	/** @apiDefine ActivityInstanceNotFoundError
+	 * @apiError (Error 4xx) {404} NotFound ActivityInstance(s) cannot be found
+	 * */
+
+	/**
+	 * @apiDefine InternalServerError
+	 * @apiError (Error 5xx) {500} InternalServerError Something went wrong at server, Please contact the administrator!
+	 * */
+
+	/**
+	 * @apiDefine NotImplementedError
+	 * @apiError (Error 5xx) {501} NotImplemented The resource has not been implemented. Please keep patience, our developers are working hard on it!!
+	 * */
+
+	/**
+	 * @api {get} /getSuggestedActivities?patientPin={patientPin}&emotion={emotionName}&intensity={intensityValue} ActivityInstances
+	 * @apiName GetActivityInstances
+	 * @apiGroup ActivityInstance
+	 * @apiParam {Number} patientPin Patient's Unique Id
+	 * @apiParam {String} Emotion Name of emotion
+	 * @apiParam {Number} Intensity of emotion
+	 * @apiUse BadRequestError
+	 * @apiUse ActivityInstanceNotFoundError
+	 * @apiUse InternalServerError
+	 * @apiUse NotImplementedError
+	 */
+	@GET
+	@Path("/getsuggestedactivities")
+	public Response getSuggestedActivities(@QueryParam("patientPin") int patientPin,
+			@QueryParam("emotion") String emotion,
+			@QueryParam("intensity") int intensity) {
+		HEALResponse response = null;
+		HEALResponseBuilder builder;
+		try{
+			builder = new HEALResponseBuilder(ActivityInstanceResponse.class);
+		}catch (InstantiationException | IllegalAccessException ie){
+			ie.printStackTrace();
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+		}
+		if (patientPin == 0 || patientPin < -1) {
+			response = builder
+					.setData("YOUR PATIENT PIN IS ABSENT FROM THE REQUEST")
+					.setStatusCode(Response.Status.BAD_REQUEST.getStatusCode())
+					.setServerURI(_uri.getBaseUri().toString())
+					.build();
+		} else {
+			if(emotion != null){
+				ReachService service = (ReachService)reachService;
+				String emotionsActivityResponse = service.getEmotionsActivityInstance(patientPin, emotion, intensity);
+				if(emotionsActivityResponse == null){
+					response = builder
+							.setStatusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
+							.setData("SOME ERROR ON THE SERVER. CONTACT ADMINISTRATOR")
+							.build();
+				}else if(emotionsActivityResponse.length() == 0){
+					response = builder
+							.setStatusCode(Response.Status.BAD_REQUEST.getStatusCode())
+							.setData("THE EMOTION YOU PASSED IN IS INCORRECT")
+							.build();
+				}else{
+					response = builder
+							.setStatusCode(Response.Status.OK.getStatusCode())
+							.setData(emotionsActivityResponse)
+							.build();
+				}
+			}else{
+				// Task #386 : Has to be done more general to satisfy activities suggestion for any activity.
+				response = builder
+						.setStatusCode(Response.Status.BAD_REQUEST.getStatusCode())
+						.setData("EMOTION PARAMETER IS MISSING")
+						.build();
+			}
+		}
+				
+		return Response.status(response.getStatusCode()).entity(response.toEntity()).build();
+	}
+
 
     /**
      * @api {post} /activities Create Activity
