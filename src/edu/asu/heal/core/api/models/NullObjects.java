@@ -11,7 +11,7 @@ public class NullObjects {
     private static final Patient NULL_PATIENT;
     private static final Trial NULL_TRIAL;
     private static final Domain NULL_DOMAIN;
-
+    private static final Logger NULL_LOGGER;
 
     static {
         Activity a = new Activity();
@@ -71,6 +71,19 @@ public class NullObjects {
 
         NULL_DOMAIN = d;
 
+        Logger l = new Logger();
+
+        l.setTrialId("NULL");
+        l.setFormat("NULL");
+        l.setLevel("NULL");
+        l.setMetadata("NULL");
+        l.setPatientPin("NULL");
+        l.setPatientPin("NULL");
+        l.setTimeStamp("NULL");
+        l.setType("NULL");
+
+        NULL_LOGGER = l;
+
     }
 
     public static Activity getNullActivity() {
@@ -96,4 +109,6 @@ public class NullObjects {
     public static Domain getNullDomain() {
         return NULL_DOMAIN;
     }
+
+    public static Logger getNullLogger() { return NULL_LOGGER; }
 }

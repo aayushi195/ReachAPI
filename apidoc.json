@@ -18,6 +18,7 @@
     "UpdateActivityInstance",
     "DeleteActivityInstance",
     "Activity",
-    "CreateActivity"
+    "CreateActivity",
+    "AddLogs"
   ]
 }

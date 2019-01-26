@@ -1,6 +1,7 @@
 package edu.asu.heal.core.api.service;
 
 import edu.asu.heal.core.api.models.*;
+import edu.asu.heal.reachv3.api.models.MakeBelieveActivityInstance;
 
 import java.util.List;
 
@@ -54,9 +55,14 @@ public interface HealService {
 
     Trial addTrial(Trial trialInstance);
 
+    /****************************************  Service methods for Logger  ********************************************/
+    Logger[] logMessage (Logger[] loggerInstance);
+
     /****************************************  Other Service methods  *************************************************/
 
     String getWorryHeadsInstance();
 
     String getEmotionsActivityInstance(int patientPin, String emotion, int intensity);
+
+    MakeBelieveActivityInstance getActivityMakeBelieveInstanceDAO(String activityInstanceId);
 }

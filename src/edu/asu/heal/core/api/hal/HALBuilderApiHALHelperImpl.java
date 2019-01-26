@@ -21,7 +21,7 @@ public class HALBuilderApiHALHelperImpl implements HALHelper{
                 .withLink("patient_pin", patientResourcePath + "/" + String.valueOf(activityInstance.getPatientPin()))
                 .withLink("activity_type", activityResourcePath + "/" + activityInstance.getInstanceOf().getActivityId());
 
-        System.out.println("REPRESENTATION HERE");
+        System.out.println("REPRESENTATION HERE");  
         System.out.println(representation);
         return representation.toString(RepresentationFactory.HAL_JSON);
     }

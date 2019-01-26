@@ -14,3 +14,16 @@
 
 out
 doc
+/bin/
+
+
+# Ingone 
+ReachAPI.war
+ReachAPI/
+WebContent/
+.classpath
+.project
+.settings/
+
+
+
