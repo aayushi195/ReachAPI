@@ -74,26 +74,6 @@ public class ActivityInstanceResource {
 					.setServerURI(_uri.getBaseUri().toString())
 					.build();
 		} else {
-			// Task #386
-//			if(emotion != null){
-//				String emotionsActivityResponse = reachService.getEmotionsActivityInstance(patientPin, emotion, intensity);
-//				if(emotionsActivityResponse == null){
-//					response = builder
-//							.setStatusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
-//							.setData("SOME ERROR ON THE SERVER. CONTACT ADMINISTRATOR")
-//							.build();
-//				}else if(emotionsActivityResponse.length() == 0){
-//					response = builder
-//							.setStatusCode(Response.Status.BAD_REQUEST.getStatusCode())
-//							.setData("THE EMOTION YOU PASSED IN IS INCORRECT")
-//							.build();
-//				}else{
-//					response = builder
-//							.setStatusCode(Response.Status.OK.getStatusCode())
-//							.setData(emotionsActivityResponse)
-//							.build();
-//				}
-//			}else{
 				List<ActivityInstance> instances = reachService.getActivityInstances(patientPin);
 				if (instances == null) {
 					response = builder
@@ -126,14 +106,9 @@ public class ActivityInstanceResource {
 							.build();
 				}
 			}
-//		}
 		return Response.status(response.getStatusCode()).entity(response.toEntity()).build();
 	}
 
-	
-	
-	
-	
 	/**
 	 * @api {get} /activityInstance/:id ActivityInstance Detail
 	 * @apiName ActivityInstanceDetail
@@ -339,23 +314,5 @@ public class ActivityInstanceResource {
 		}
 		return Response.status(response.getStatusCode()).build();
 
-	}
-
-	// XXX again why a new endpoint? WorryHeads is just an acivityinstance from the API perspective. Yes, we
-	// will need to route to the right service call, but we do not have to expose a new endpoint. Rather,
-	// the subtype we are looking for (WH, MB, etc.) is a query filter
-	@GET
-	@Path("/worryheads")
-	public Response fetchWorryHeadsInstance() {
-		// XXX what WH instance would this even return? A single or a collection? How would it be scoped?
-		String worryHeadsInstanceString = reachService.getWorryHeadsInstance();
-		if (worryHeadsInstanceString == null)
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Some server error. Please contact "
-					+ "administrator").build();
-
-		if (worryHeadsInstanceString.equals("Bad Request"))
-			return Response.status(Response.Status.BAD_REQUEST).build();
-
-		return Response.status(Response.Status.OK).entity(worryHeadsInstanceString).build();
 	}
 }

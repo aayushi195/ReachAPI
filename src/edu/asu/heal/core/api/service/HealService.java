@@ -58,7 +58,4 @@ public interface HealService {
     /****************************************  Service methods for Logger  ********************************************/
     Logger[] logMessage (Logger[] loggerInstance);
 
-    /****************************************  Other Service methods  *************************************************/
-
-    String getWorryHeadsInstance();
 }

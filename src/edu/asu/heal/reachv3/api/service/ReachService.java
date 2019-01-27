@@ -12,8 +12,7 @@ import edu.asu.heal.core.api.service.HealService;
 import edu.asu.heal.core.api.service.SuggestedActivityiesMappingService.MappingFactory;
 import edu.asu.heal.core.api.service.SuggestedActivityiesMappingService.MappingInterface;
 import edu.asu.heal.reachv3.api.models.MakeBelieveActivityInstance;
-import edu.asu.heal.reachv3.api.models.MakeBelieveSituation;
-import edu.asu.heal.reachv3.api.models.WorryHeadsModel;
+import edu.asu.heal.reachv3.api.models.WorryHeadsActivityInstance;
 
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
@@ -157,8 +156,11 @@ public class ReachService implements HealService {
             ActivityInstance rval;
             rval =  dao.getActivityInstance(activityInstanceId);
 
-            if(rval!=null && rval.getInstanceOf().getName().equals("MakeBelieve")) //todo need to do this more elegantly
+            if(rval!=null && rval.getInstanceOf().getName().equals("MakeBelieve"))
                 rval = dao.getActivityMakeBelieveInstanceDAO(activityInstanceId);
+
+            else if(rval!=null && rval.getInstanceOf().getName().equals("WorryHeads"))
+                rval = dao.getActivityWorryHeadsInstanceDAO(activityInstanceId);
 
             return rval;
         } catch (Exception e) {
@@ -184,6 +186,14 @@ public class ReachService implements HealService {
                         activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
                         activityInstance.getInstanceOf(), activityInstance.getState(),
                         activityInstance.getPatientPin(), dao.getMakeBelieveSituation());
+            } else if(activityInstance.getInstanceOf().getName().equals("WorryHeads")){
+                activityInstance = new WorryHeadsActivityInstance(
+                        activityInstance.getActivityInstanceId(),
+                        activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
+                        activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
+                        activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
+                        activityInstance.getInstanceOf(), activityInstance.getState(),
+                        activityInstance.getPatientPin(), dao.getWorryHeadsSituation());
             }
 
             ActivityInstance newActivityInstance = dao.createActivityInstance(activityInstance);
@@ -210,6 +220,9 @@ public class ReachService implements HealService {
             ActivityInstance instance;
             if(activityInstanceType.equals("MakeBelieve")){ // todo Need to find a more elegant way to do this
                 instance = mapper.readValue(requestBody, MakeBelieveActivityInstance.class);
+                instance.setUpdatedAt(new Date());
+            } else if(activityInstanceType.equals("WorryHeads")) {
+                instance = mapper.readValue(requestBody, WorryHeadsActivityInstance.class);
                 instance.setUpdatedAt(new Date());
             }else{
                 instance  = mapper.readValue(requestBody, ActivityInstance.class);
@@ -423,34 +436,6 @@ public class ReachService implements HealService {
 
             Logger[] logger = dao.logMessage(loggerInstance);
             return logger;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    /****************************************  Other Service methods  *************************************************/
-
-    @Override
-    public String getWorryHeadsInstance() {
-        try {
-            Random r = new Random();
-            String[] o_options = {"The goalie isn't the only player on the team," +
-                    " so it couldn't have been only my fault that we lost",
-                    "Even though we didn't win, we tied the game, so we still did pretty well",
-                    "I've practiced and I feel that I did the best I could and sometimes losing just happens",
-                    "I should have practice harder."};
-
-            WorryHeadsModel whm = new WorryHeadsModel(0,
-                    "WorryHeads",
-                    "You think, \"She thinks it's my fault we didn't win.\"",
-                    "You are the goalie for your soccer team and today's game ended in a tie. " +
-                            "After the game, you hear a teammate say that your team should have won",
-                    "P text",
-                    r.nextInt(4),
-                    o_options);
-
-            return new ObjectMapper().writeValueAsString(whm);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
