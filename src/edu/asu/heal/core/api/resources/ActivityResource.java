@@ -154,7 +154,7 @@ public class ActivityResource {
 	 * */
 
 	/**
-	 * @api {get} /getSuggestedActivities?patientPin={patientPin}&emotion={emotionName}&intensity={intensityValue} ActivityInstances
+	 * @api {get} /suggestions?patientPin={patientPin}&emotion={emotionName}&intensity={intensityValue} ActivityInstances
 	 * @apiName GetActivityInstances
 	 * @apiGroup ActivityInstance
 	 * @apiParam {Number} patientPin Patient's Unique Id
@@ -166,7 +166,7 @@ public class ActivityResource {
 	 * @apiUse NotImplementedError
 	 */
 	@GET
-	@Path("/getsuggestedactivities")
+	@Path("/suggestions")
 	public Response getSuggestedActivities(@QueryParam("patientPin") int patientPin,
 			@QueryParam("emotion") String emotion,
 			@QueryParam("intensity") int intensity) {
