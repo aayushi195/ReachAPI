@@ -1,10 +1,12 @@
 package edu.asu.heal.reachv3.api.models;
 
-public class Emotions {
+
+public class Emotions{
 	
 	public static String EMOTION_NAME="emotionName";
 	public static String INTENSITY="intensity";
 	public static String SUGGESTED_ACTIVITIES="suggestedActivities";
+	public static String ACTIVITIES="activities";
 	public static String SESSION ="session";
 	//public static String ID=""
 	private String emotionName;

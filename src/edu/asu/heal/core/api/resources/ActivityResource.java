@@ -20,121 +20,121 @@ import java.util.List;
 @Produces(MediaType.APPLICATION_JSON)
 public class ActivityResource {
 
-    @Context
-    private UriInfo _uri;
+	@Context
+	private UriInfo _uri;
 
-    private static HealService reachService =
-            HealServiceFactory.getTheService();
+	private static HealService reachService =
+			HealServiceFactory.getTheService();
 
-    /** @apiDefine ActivityNotFoundError
-     * @apiError (Error 4xx) {404} NotFound Activity cannot be found
-     * */
+	/** @apiDefine ActivityNotFoundError
+	 * @apiError (Error 4xx) {404} NotFound Activity cannot be found
+	 * */
 
-    /**
-     * @apiDefine InternalServerError
-     * @apiError (Error 5xx) {500} InternalServerError Something went wrong at server, Please contact the administrator!
-     * */
+	/**
+	 * @apiDefine InternalServerError
+	 * @apiError (Error 5xx) {500} InternalServerError Something went wrong at server, Please contact the administrator!
+	 * */
 
-    /**
-     * @api {get} /activities?domain=domainName Get list of Activities for a given domain
-     * @apiName GetActivities
-     * @apiGroup Activity
-     * @apiParam {String} domain Domain name for which activities are to be fetched. Use "_" in place of space
-     * character. Case sensitive.
-     * @apiUse ActivityNotFoundError
-     * @apiUse InternalServerError
-     */
-    @GET
-    @QueryParam("domain")
-    public Response getActivities(@QueryParam("domain") String domain) {
-        List<Activity> activities = reachService.getActivities(domain);
+	/**
+	 * @api {get} /activities?domain=domainName Get list of Activities for a given domain
+	 * @apiName GetActivities
+	 * @apiGroup Activity
+	 * @apiParam {String} domain Domain name for which activities are to be fetched. Use "_" in place of space
+	 * character. Case sensitive.
+	 * @apiUse ActivityNotFoundError
+	 * @apiUse InternalServerError
+	 */
+	@GET
+	@QueryParam("domain")
+	public Response getActivities(@QueryParam("domain") String domain) {
+		List<Activity> activities = reachService.getActivities(domain);
 
-        HEALResponse response;
-        HEALResponseBuilder builder;
-        try{
-            builder = new HEALResponseBuilder(ActivityResponse.class);
-        }catch (InstantiationException | IllegalAccessException ie){
-            ie.printStackTrace();
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-        }
+		HEALResponse response;
+		HEALResponseBuilder builder;
+		try{
+			builder = new HEALResponseBuilder(ActivityResponse.class);
+		}catch (InstantiationException | IllegalAccessException ie){
+			ie.printStackTrace();
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+		}
 
-        if (activities == null) {
-            response = builder
-                    .setStatusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
-                    .setData("SOME SERVER ERROR. PLEASE CONTACT ADMINISTRATOR")
-                    .build();
-        } else if (activities.isEmpty()) {
-            response = builder
-                    .setStatusCode(Response.Status.OK.getStatusCode())
-                    .setData("THERE ARE NO ACTIVITIES FOR THIS DOMAIN")
-                    .build();
-        } else if (activities.size() == 1) {
-            if (activities.get(0).equals(NullObjects.getNullActivity())) {
-                response = builder
-                        .setStatusCode(Response.Status.BAD_REQUEST.getStatusCode())
-                        .setData("THE DOMAIN YOU'VE PASSED IN IS INCORRECT OR DOES NOT EXIST")
-                        .build();
-            } else {
-                response = builder
-                        .setStatusCode(Response.Status.OK.getStatusCode())
-                        .setData(activities)
-                        .setServerURI(_uri.getBaseUri().toString())
-                        .build();
-            }
-        } else {
-            response = builder
-                    .setStatusCode(Response.Status.OK.getStatusCode())
-                    .setData(activities)
-                    .setServerURI(_uri.getBaseUri().toString())
-                    .build();
-        }
-        return Response.status(response.getStatusCode()).entity(response.toEntity()).build();
-    }
+		if (activities == null) {
+			response = builder
+					.setStatusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
+					.setData("SOME SERVER ERROR. PLEASE CONTACT ADMINISTRATOR")
+					.build();
+		} else if (activities.isEmpty()) {
+			response = builder
+					.setStatusCode(Response.Status.OK.getStatusCode())
+					.setData("THERE ARE NO ACTIVITIES FOR THIS DOMAIN")
+					.build();
+		} else if (activities.size() == 1) {
+			if (activities.get(0).equals(NullObjects.getNullActivity())) {
+				response = builder
+						.setStatusCode(Response.Status.BAD_REQUEST.getStatusCode())
+						.setData("THE DOMAIN YOU'VE PASSED IN IS INCORRECT OR DOES NOT EXIST")
+						.build();
+			} else {
+				response = builder
+						.setStatusCode(Response.Status.OK.getStatusCode())
+						.setData(activities)
+						.setServerURI(_uri.getBaseUri().toString())
+						.build();
+			}
+		} else {
+			response = builder
+					.setStatusCode(Response.Status.OK.getStatusCode())
+					.setData(activities)
+					.setServerURI(_uri.getBaseUri().toString())
+					.build();
+		}
+		return Response.status(response.getStatusCode()).entity(response.toEntity()).build();
+	}
 
-    /**
-     * @api {get} /activities/:id Activity Detail
-     * @apiName ActivityDetail
-     * @apiGroup Activity
-     * @apiParam {String} id Activity's Unique Id
-     * @apiParamExample http://localhost:8080/ReachAPI/rest/activities/5abd71b82e027e29ca2353a0
-     * @apiUse ActivityInstanceNotFoundError
-     * @apiUse InternalServerError
-     * @apiUse NotImplementedError
-     */
-    @GET
-    @Path("/{activityId}")
-    public Response getActivity(@PathParam("activityId") String activityId){
-        HEALResponse response;
-        HEALResponseBuilder builder;
-        try{
-            builder = new HEALResponseBuilder(ActivityResponse.class);
-        }catch (InstantiationException | IllegalAccessException ie){
-            ie.printStackTrace();
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-        }
-        Activity activity = reachService.getActivity(activityId);
+	/**
+	 * @api {get} /activities/:id Activity Detail
+	 * @apiName ActivityDetail
+	 * @apiGroup Activity
+	 * @apiParam {String} id Activity's Unique Id
+	 * @apiParamExample http://localhost:8080/ReachAPI/rest/activities/5abd71b82e027e29ca2353a0
+	 * @apiUse ActivityInstanceNotFoundError
+	 * @apiUse InternalServerError
+	 * @apiUse NotImplementedError
+	 */
+	@GET
+	@Path("/{activityId}")
+	public Response getActivity(@PathParam("activityId") String activityId){
+		HEALResponse response;
+		HEALResponseBuilder builder;
+		try{
+			builder = new HEALResponseBuilder(ActivityResponse.class);
+		}catch (InstantiationException | IllegalAccessException ie){
+			ie.printStackTrace();
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+		}
+		Activity activity = reachService.getActivity(activityId);
 
-        if (activity == null) {
-            response = builder
-                    .setStatusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
-                    .setData("SOME SERVER ERROR. PLEASE CONTACT ADMINISTRATOR")
-                    .build();
-        } else if (activity.equals(NullObjects.getNullActivity())) {
-            response = builder
-                    .setStatusCode(Response.Status.NOT_FOUND.getStatusCode())
-                    .setData("THE ACTIVITY YOU'RE REQUESTING DOES NOT EXIST")
-                    .build();
-        } else {
-            response = builder
-                    .setStatusCode(Response.Status.OK.getStatusCode())
-                    .setData(activity)
-                    .setServerURI(_uri.getBaseUri().toString())
-                    .build();
-        }
-        return Response.status(response.getStatusCode()).entity(response.toEntity()).build();
-    }
-    
-    /**
+		if (activity == null) {
+			response = builder
+					.setStatusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
+					.setData("SOME SERVER ERROR. PLEASE CONTACT ADMINISTRATOR")
+					.build();
+		} else if (activity.equals(NullObjects.getNullActivity())) {
+			response = builder
+					.setStatusCode(Response.Status.NOT_FOUND.getStatusCode())
+					.setData("THE ACTIVITY YOU'RE REQUESTING DOES NOT EXIST")
+					.build();
+		} else {
+			response = builder
+					.setStatusCode(Response.Status.OK.getStatusCode())
+					.setData(activity)
+					.setServerURI(_uri.getBaseUri().toString())
+					.build();
+		}
+		return Response.status(response.getStatusCode()).entity(response.toEntity()).build();
+	}
+
+	/**
 	 * @apiDefine BadRequestError
 	 * @apiError (Error 4xx) {400} BadRequest Bad Request Encountered
 	 * */
@@ -173,11 +173,12 @@ public class ActivityResource {
 		HEALResponse response = null;
 		HEALResponseBuilder builder;
 		try{
-			builder = new HEALResponseBuilder(ActivityInstanceResponse.class);
+			builder = new HEALResponseBuilder(ActivityResponse.class);
 		}catch (InstantiationException | IllegalAccessException ie){
 			ie.printStackTrace();
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
 		}
+
 		if (patientPin == 0 || patientPin < -1) {
 			response = builder
 					.setData("YOUR PATIENT PIN IS ABSENT FROM THE REQUEST")
@@ -185,25 +186,27 @@ public class ActivityResource {
 					.setServerURI(_uri.getBaseUri().toString())
 					.build();
 		} else {
+			// Task #396 - Activity suggestion according to emotion and its intensity.
 			if(emotion != null){
 				ReachService service = (ReachService)reachService;
-				String emotionsActivityResponse = service.getEmotionsActivityInstance(patientPin, emotion, intensity);
-				if(emotionsActivityResponse == null){
+				List<Activity> emotionsActivityResponse = service.getEmotionsActivityInstance(patientPin, emotion, intensity);
+				if (emotionsActivityResponse == null) {
 					response = builder
 							.setStatusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
-							.setData("SOME ERROR ON THE SERVER. CONTACT ADMINISTRATOR")
+							.setData("SOME SERVER ERROR. PLEASE CONTACT ADMINISTRATOR")
 							.build();
-				}else if(emotionsActivityResponse.length() == 0){
+				} else if (emotionsActivityResponse.isEmpty()) {
 					response = builder
-							.setStatusCode(Response.Status.BAD_REQUEST.getStatusCode())
-							.setData("THE EMOTION YOU PASSED IN IS INCORRECT")
+							.setStatusCode(Response.Status.OK.getStatusCode())
+							.setData("THERE ARE NO ACTIVITIES SUGESSTION FOR THIS EMOTION AND INTENSITY")
 							.build();
-				}else{
+				}  else {
 					response = builder
 							.setStatusCode(Response.Status.OK.getStatusCode())
 							.setData(emotionsActivityResponse)
+							.setServerURI(_uri.getBaseUri().toString())
 							.build();
-				}
+				}		        
 			}else{
 				// Task #386 : Has to be done more general to satisfy activities suggestion for any activity.
 				response = builder
@@ -212,137 +215,137 @@ public class ActivityResource {
 						.build();
 			}
 		}
-				
 		return Response.status(response.getStatusCode()).entity(response.toEntity()).build();
+
 	}
 
 
-    /**
-     * @api {post} /activities Create Activity
-     * @apiName CreateActivity
-     * @apiGroup Activity
-     * @apiParam {String} Title Title of the Activity
-     * @apiParam {String} Description Description of the Activity
-     * @apiParam (Login) {String} pass Only logged in user can get this
-     * @apiSuccess {Object[]} data null
-     * @apiSuccess {String} message Response Message
-     * @apiSuccess {String} messageType Response Message Type
-     * @apiSuccess {Number} statusCode  Response Status Code
-     * @apiSuccessExample {json} Success-Response:
-     * HTTP/1.1 201 CREATED
-     * {
-     * "data": null,
-     * "message": "Created",
-     * "messageType": "success",
-     * "statusCode": 201
-     * }
-     * @apiUse InternalServerError
-     */
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response createActivity(Activity activityJSON) {
-        HEALResponse response;
-        HEALResponseBuilder builder;
-        try{
-            builder = new HEALResponseBuilder(ActivityResponse.class);
-        }catch (InstantiationException | IllegalAccessException ie){
-            ie.printStackTrace();
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-        }
+	/**
+	 * @api {post} /activities Create Activity
+	 * @apiName CreateActivity
+	 * @apiGroup Activity
+	 * @apiParam {String} Title Title of the Activity
+	 * @apiParam {String} Description Description of the Activity
+	 * @apiParam (Login) {String} pass Only logged in user can get this
+	 * @apiSuccess {Object[]} data null
+	 * @apiSuccess {String} message Response Message
+	 * @apiSuccess {String} messageType Response Message Type
+	 * @apiSuccess {Number} statusCode  Response Status Code
+	 * @apiSuccessExample {json} Success-Response:
+	 * HTTP/1.1 201 CREATED
+	 * {
+	 * "data": null,
+	 * "message": "Created",
+	 * "messageType": "success",
+	 * "statusCode": 201
+	 * }
+	 * @apiUse InternalServerError
+	 */
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response createActivity(Activity activityJSON) {
+		HEALResponse response;
+		HEALResponseBuilder builder;
+		try{
+			builder = new HEALResponseBuilder(ActivityResponse.class);
+		}catch (InstantiationException | IllegalAccessException ie){
+			ie.printStackTrace();
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+		}
 
-        if (activityJSON.getTitle() == null || activityJSON.getTitle().trim().length() == 0) {
-            response = builder
-                    .setStatusCode(Response.Status.BAD_REQUEST.getStatusCode())
-                    .setData("TITLE MISSING FROM REQUEST")
-                    .build();
-        } else {
-            Activity activity = reachService.createActivity(activityJSON.getTitle(), activityJSON.getDescription());
-            if (activity == null) {
-                response = builder
-                        .setStatusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
-                        .setData("COULD NOT CREATE ACTIVITY. CONTACT ADMINISTRATOR")
-                        .build();
-            } else {
-                response = builder
-                        .setStatusCode(Response.Status.CREATED.getStatusCode())
-                        .setData(activity)
-                        .setServerURI(_uri.getBaseUri().toString())
-                        .build();
-            }
-        }
-        return Response.status(response.getStatusCode()).entity(response).build();
-    }
+		if (activityJSON.getTitle() == null || activityJSON.getTitle().trim().length() == 0) {
+			response = builder
+					.setStatusCode(Response.Status.BAD_REQUEST.getStatusCode())
+					.setData("TITLE MISSING FROM REQUEST")
+					.build();
+		} else {
+			Activity activity = reachService.createActivity(activityJSON.getTitle(), activityJSON.getDescription());
+			if (activity == null) {
+				response = builder
+						.setStatusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
+						.setData("COULD NOT CREATE ACTIVITY. CONTACT ADMINISTRATOR")
+						.build();
+			} else {
+				response = builder
+						.setStatusCode(Response.Status.CREATED.getStatusCode())
+						.setData(activity)
+						.setServerURI(_uri.getBaseUri().toString())
+						.build();
+			}
+		}
+		return Response.status(response.getStatusCode()).entity(response).build();
+	}
 
-    @PUT
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateActivity(Activity activityJSON){
-        HEALResponse response;
-        HEALResponseBuilder builder;
-        try{
-            builder = new HEALResponseBuilder(ActivityResponse.class);
-        }catch (InstantiationException | IllegalAccessException ie){
-            ie.printStackTrace();
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-        }
+	@PUT
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response updateActivity(Activity activityJSON){
+		HEALResponse response;
+		HEALResponseBuilder builder;
+		try{
+			builder = new HEALResponseBuilder(ActivityResponse.class);
+		}catch (InstantiationException | IllegalAccessException ie){
+			ie.printStackTrace();
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+		}
 
-        if (activityJSON.getActivityId() == null || activityJSON.getActivityId().length() == 0) {
-            response = builder
-                    .setStatusCode(Response.Status.BAD_REQUEST.getStatusCode())
-                    .setData("ACTIVITYID MISSING FROM REQUEST")
-                    .build();
-        } else {
-            Activity updatedActivity = reachService.updateActivity(activityJSON);
-            if (updatedActivity == null) {
-                response = builder
-                        .setStatusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
-                        .setData("COULD NOT UPDATE ACTIVITY. CONTACT ADMINISTRATOR")
-                        .build();
-            } else if(updatedActivity.equals(NullObjects.getNullActivity())){
-                response = builder
-                        .setStatusCode(Response.Status.BAD_REQUEST.getStatusCode())
-                        .setData("ACTIVITY ID YOU PASSED IN IS INCORRECT OR DOES NOT EXIST")
-                        .build();
-            } else {
-                response = builder
-                        .setStatusCode(Response.Status.OK.getStatusCode())
-                        .setData(updatedActivity)
-                        .setServerURI(_uri.getBaseUri().toString())
-                        .build();
-            }
-        }
-        return Response.status(response.getStatusCode()).entity(response).build();
-    }
+		if (activityJSON.getActivityId() == null || activityJSON.getActivityId().length() == 0) {
+			response = builder
+					.setStatusCode(Response.Status.BAD_REQUEST.getStatusCode())
+					.setData("ACTIVITYID MISSING FROM REQUEST")
+					.build();
+		} else {
+			Activity updatedActivity = reachService.updateActivity(activityJSON);
+			if (updatedActivity == null) {
+				response = builder
+						.setStatusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
+						.setData("COULD NOT UPDATE ACTIVITY. CONTACT ADMINISTRATOR")
+						.build();
+			} else if(updatedActivity.equals(NullObjects.getNullActivity())){
+				response = builder
+						.setStatusCode(Response.Status.BAD_REQUEST.getStatusCode())
+						.setData("ACTIVITY ID YOU PASSED IN IS INCORRECT OR DOES NOT EXIST")
+						.build();
+			} else {
+				response = builder
+						.setStatusCode(Response.Status.OK.getStatusCode())
+						.setData(updatedActivity)
+						.setServerURI(_uri.getBaseUri().toString())
+						.build();
+			}
+		}
+		return Response.status(response.getStatusCode()).entity(response).build();
+	}
 
-    @DELETE
-    @Path("/{id}")
-    public Response removeActivity(@PathParam("id") String activityId) {
-        HEALResponse response;
-        HEALResponseBuilder builder;
-        try{
-            builder = new HEALResponseBuilder(ActivityResponse.class);
-        }catch (InstantiationException | IllegalAccessException ie){
-            ie.printStackTrace();
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-        }
+	@DELETE
+	@Path("/{id}")
+	public Response removeActivity(@PathParam("id") String activityId) {
+		HEALResponse response;
+		HEALResponseBuilder builder;
+		try{
+			builder = new HEALResponseBuilder(ActivityResponse.class);
+		}catch (InstantiationException | IllegalAccessException ie){
+			ie.printStackTrace();
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+		}
 
-        Activity removedActivity = reachService.deleteActivity(activityId);
+		Activity removedActivity = reachService.deleteActivity(activityId);
 
-        if (removedActivity.equals(NullObjects.getNullActivity())) {
-            response = builder
-                    .setStatusCode(Response.Status.NOT_FOUND.getStatusCode())
-                    .setData("ACTIVITY DOES NOT EXIST")
-                    .build();
-        } else if (removedActivity == null) {
-            response = builder
-                    .setStatusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
-                    .setData("SOME PROBLEM IN DELETING ACTIVITY. CONTACT ADMINISTRATOR")
-                    .build();
-        } else {
-            response = builder
-                    .setStatusCode(Response.Status.NO_CONTENT.getStatusCode())
-                    .setData(null)
-                    .build();
-        }
-        return Response.status(response.getStatusCode()).build();
-    }
+		if (removedActivity.equals(NullObjects.getNullActivity())) {
+			response = builder
+					.setStatusCode(Response.Status.NOT_FOUND.getStatusCode())
+					.setData("ACTIVITY DOES NOT EXIST")
+					.build();
+		} else if (removedActivity == null) {
+			response = builder
+					.setStatusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
+					.setData("SOME PROBLEM IN DELETING ACTIVITY. CONTACT ADMINISTRATOR")
+					.build();
+		} else {
+			response = builder
+					.setStatusCode(Response.Status.NO_CONTENT.getStatusCode())
+					.setData(null)
+					.build();
+		}
+		return Response.status(response.getStatusCode()).build();
+	}
 }
