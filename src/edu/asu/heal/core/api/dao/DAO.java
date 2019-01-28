@@ -65,11 +65,11 @@ public interface DAO {
 
     /****************************************  Other DAO methods ******************************************************/
 
-    List<String> getEmotionsActivityInstance(String emotion, Object intensity);
+    List<Activity> getEmotionsActivityInstance(String emotion, Object intensity);
 
     MakeBelieveSituation getMakeBelieveSituation();
 
-	MakeBelieveActivityInstance getActivityMakeBelieveInstanceDAO(String activityInstanceId);
+	  MakeBelieveActivityInstance getActivityMakeBelieveInstanceDAO(String activityInstanceId);
 
     List<WorryHeadsSituation> getWorryHeadsSituation();
 

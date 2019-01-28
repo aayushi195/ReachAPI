@@ -18,6 +18,7 @@ public interface HealService {
     Activity updateActivity(Activity activity);
 
     Activity deleteActivity(String activityId);
+    
 
     /****************************************  Service methods for ActivityInstance  **********************************/
     List<ActivityInstance> getActivityInstances(int patientPin);

@@ -119,36 +119,24 @@ public class ReachService implements HealService {
         }
     }
 
- 
-    public String getEmotionsActivityInstance(int patientPin, String emotion, int intensity){
-        try{
-            DAO dao = DAOFactory.getTheDAO();
-            // Task #386
-            MappingInterface mapper = MappingFactory.getTheMapper();
-            String intensityVal = (String)mapper.intensityMappingToDifficultyLevel(intensity);
-            
-            List<String> results = dao.getEmotionsActivityInstance(emotion.toLowerCase(), intensityVal);
-            if(results == null)
-                return "";
+    public List<Activity> getEmotionsActivityInstance(int patientPin, String emotion, int intensity){
+		  try{
+			  DAO dao = DAOFactory.getTheDAO();
+			  // Task #386
+			  MappingInterface mapper = MappingFactory.getTheMapper();
+			  String intensityVal = (String)mapper.intensityMappingToDifficultyLevel(intensity);
 
-            StringWriter writer = new StringWriter();
-            JsonGenerator generator = new JsonFactory().createGenerator(writer);
-            generator.setCodec(new ObjectMapper());
-            generator.writeStartObject();
-            generator.writeObjectField("activities", results);
-            generator.writeEndObject();
+			  List<Activity> results = dao.getEmotionsActivityInstance(emotion.toLowerCase(), intensityVal);
+			  if(results == null)
+				  return null;
+			  return results;
 
-            generator.close();
-            String emotionsActivities = writer.toString();
-            writer.close();
-            return emotionsActivities;
-
-        } catch (Exception e){
-            e.printStackTrace();
-            return null;
-        }
-    }
-
+		  } catch (Exception e){
+			  e.printStackTrace();
+			  return null;
+		  }
+	  }
+  
     @Override
     public ActivityInstance getActivityInstance(String activityInstanceId) {
         try {

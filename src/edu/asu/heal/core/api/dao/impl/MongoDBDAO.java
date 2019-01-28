@@ -21,6 +21,7 @@ import edu.asu.heal.reachv3.api.models.*;
 import org.bson.Document;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
+import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
 import java.io.IOException;
@@ -262,8 +263,6 @@ public class MongoDBDAO implements DAO {
 
 			MongoCollection<ActivityInstance> activityInstanceCollection =
 					database.getCollection(MongoDBDAO.ACTIVITYINSTANCES_COLLECTION, ActivityInstance.class);
-
-
 			return activityInstanceCollection
 					.find(Filters.and(Filters.in(ActivityInstance.ACTIVITYINSTANCEID_ATTRIBUTE,
 							patient.getActivityInstances().toArray(new String[]{})),
@@ -726,7 +725,7 @@ public class MongoDBDAO implements DAO {
 	}
 
 	@Override
-	public List<String> getEmotionsActivityInstance(String emotion, Object intensity) {
+	public List<Activity> getEmotionsActivityInstance(String emotion, Object intensity) {
 		try {
 			MongoDatabase database = MongoDBDAO.getConnectedDatabase();
 			// needs to incorporate Emotions model. - Task #386
@@ -737,22 +736,25 @@ public class MongoDBDAO implements DAO {
 
 			MongoCursor<Document> cursor = result.iterator();
 			List<String> rval = new ArrayList<String>();
+			List<Activity> suggestedActivities = new ArrayList<Activity>();
+
 			while(cursor.hasNext()) {
 				Document doc = cursor.next();
 				String tempIntensity = doc.getString(Emotions.INTENSITY);
 				if(tempIntensity.contains((String)intensity)) {
-					if(doc.getString(Emotions.SUGGESTED_ACTIVITIES).length() ==1) {
-						rval.add(doc.getString(Emotions.SUGGESTED_ACTIVITIES));
-					}
-					else {
-						String x[] = doc.getString(Emotions.SUGGESTED_ACTIVITIES).split(",");
-						System.out.println("0 : " + x[0]);
-						Collections.addAll(rval, x);
-					}
+					rval.addAll((List<String>) doc.get(Emotions.ACTIVITIES));
 				}
 			}
 
-			return rval;
+			MongoCollection<Activity> activityCollection = database.getCollection(ACTIVITIES_COLLECTION, Activity.class);
+
+			suggestedActivities = activityCollection.find(Filters.in(Activity.ACTIVITYID_ATTRIBUTE,  
+					rval.toArray(new String [] {})))
+					.projection(Projections.excludeId())
+					.into(new ArrayList<>());
+
+			return suggestedActivities;
+
 		}catch (NullPointerException npe){
 			npe.printStackTrace();
 			return null;
