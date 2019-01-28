@@ -3,6 +3,8 @@ package edu.asu.heal.core.api.dao;
 import edu.asu.heal.core.api.models.*;
 import edu.asu.heal.reachv3.api.models.MakeBelieveActivityInstance;
 import edu.asu.heal.reachv3.api.models.MakeBelieveSituation;
+import edu.asu.heal.reachv3.api.models.WorryHeadsActivityInstance;
+import edu.asu.heal.reachv3.api.models.WorryHeadsSituation;
 
 import java.util.List;
 
@@ -63,10 +65,14 @@ public interface DAO {
 
     /****************************************  Other DAO methods ******************************************************/
 
-    MakeBelieveSituation getMakeBelieveSituation();
-
     List<Activity> getEmotionsActivityInstance(String emotion, Object intensity);
 
-	MakeBelieveActivityInstance getActivityMakeBelieveInstanceDAO(String activityInstanceId);
+    MakeBelieveSituation getMakeBelieveSituation();
+
+	  MakeBelieveActivityInstance getActivityMakeBelieveInstanceDAO(String activityInstanceId);
+
+    List<WorryHeadsSituation> getWorryHeadsSituation();
+
+    WorryHeadsActivityInstance getActivityWorryHeadsInstanceDAO(String activityInstanceId);
 
 }

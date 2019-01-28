@@ -17,9 +17,7 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Projections;
 import edu.asu.heal.core.api.dao.DAO;
 import edu.asu.heal.core.api.models.*;
-import edu.asu.heal.reachv3.api.models.Emotions;
-import edu.asu.heal.reachv3.api.models.MakeBelieveActivityInstance;
-import edu.asu.heal.reachv3.api.models.MakeBelieveSituation;
+import edu.asu.heal.reachv3.api.models.*;
 import org.bson.Document;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
@@ -42,6 +40,7 @@ public class MongoDBDAO implements DAO {
 	private static final String ACTIVITYINSTANCES_COLLECTION = "activityInstances";
 	private static final String MAKEBELIEVESITUATIONS_COLLECTION = "makeBelieveSituations";
 	private static final String MAKEBELIEVESITUATIONNAMES_COLLECTION = "makeBelieveSituationNames";
+	private static final String WORRYHEADSSITUATIONS_COLLECTION = "worryHeadsSituations";
 	private static final String LOGGER_COLLECTION = "logger";
 	private static final String EMOTIONS_COLLECTION = "emotions";
 
@@ -54,26 +53,6 @@ public class MongoDBDAO implements DAO {
 	public MongoDBDAO(Properties properties) {
 		__mongoURI = properties.getProperty("mongo.uri");
 		__mongoDBName = properties.getProperty("mongo.dbname");
-
-		//		try {
-		//			//	Properties properties1 = new Properties();
-		//		//	properties1.load(MongoDBDAO.class.getResourceAsStream("emotions.properties"));
-		//			//	
-		//			//			emotionsMap.put(Emotions.happy.toString(),
-		//			//					new ArrayList<>(Arrays.asList(properties1.getProperty("emotions.happy").split(","))));
-		//			//			emotionsMap.put(Emotions.sad.toString(),
-		//			//					new ArrayList<>(Arrays.asList(properties1.getProperty("emotions.sad").split(","))));
-		//			//			emotionsMap.put(Emotions.sick.toString(),
-		//			//					new ArrayList<>(Arrays.asList(properties1.getProperty("emotions.sick").split(","))));
-		//			//			emotionsMap.put(Emotions.angry.toString(),
-		//			//					new ArrayList<>(Arrays.asList(properties1.getProperty("emotions.angry").split(","))));
-		//			//			emotionsMap.put(Emotions.scared.toString(),
-		//			//					new ArrayList<>(Arrays.asList(properties1.getProperty("emotions.scared").split(","))));
-		//			//			emotionsMap.put(Emotions.worried.toString(),
-		//			//					new ArrayList<>(Arrays.asList(properties1.getProperty("emotions.worried").split(","))));
-		//					}catch (IOException e){
-		//						e.printStackTrace();
-		//					}
 	}
 
 	private static MongoClient mongoClient  = null;
@@ -357,7 +336,6 @@ public class MongoDBDAO implements DAO {
 			MongoCollection<ActivityInstance> activityInstanceMongoCollection =
 					database.getCollection(ACTIVITYINSTANCES_COLLECTION, ActivityInstance.class);
 
-
 			ActivityInstance instance = activityInstanceMongoCollection
 					.find(Filters.eq(ActivityInstance.ACTIVITYINSTANCEID_ATTRIBUTE, activityInstanceId))
 					.projection(Projections.excludeId())
@@ -401,6 +379,66 @@ public class MongoDBDAO implements DAO {
 			System.out.println("SOME PROBLEM IN GETTING ACTIVITY INSTANCE WITH ID " + activityInstanceId);
 			ne.printStackTrace();
 			return (MakeBelieveActivityInstance) NullObjects.getNullActivityInstance();
+		} catch (Exception e) {
+			System.out.println("SOME SERVER PROBLEM IN GETACTIVITYINSTANCEID");
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	@Override
+	public List<WorryHeadsSituation> getWorryHeadsSituation() {
+		try{
+			MongoDatabase database = MongoDBDAO.getConnectedDatabase();
+			MongoCollection<WorryHeadsSituation> situationMongoCollection =
+					database.getCollection(MongoDBDAO.WORRYHEADSSITUATIONS_COLLECTION, WorryHeadsSituation.class);
+
+			//Code to randomly get a situation from the database
+			AggregateIterable<WorryHeadsSituation> situations = situationMongoCollection
+					.aggregate(Arrays.asList(Aggregates.sample(1)));
+
+			WorryHeadsSituation situation = null;
+			for(WorryHeadsSituation temp : situations){
+				situation = temp;
+			}
+
+			List<WorryHeadsSituation> worryHeadsSituations = new ArrayList();
+			worryHeadsSituations.add(situation);
+
+			return worryHeadsSituations;
+		}catch (NullPointerException ne){
+			System.out.println("Could not get random worry heads situation");
+			ne.printStackTrace();
+			return null;
+		}catch (Exception e){
+			System.out.println("Some problem in getting Worry heads situation");
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	@Override
+	public WorryHeadsActivityInstance getActivityWorryHeadsInstanceDAO(String activityInstanceId) {
+		try {
+			MongoDatabase database = MongoDBDAO.getConnectedDatabase();
+			MongoCollection<WorryHeadsActivityInstance> activityInstanceMongoCollection =
+					database.getCollection(ACTIVITYINSTANCES_COLLECTION, WorryHeadsActivityInstance.class);
+
+			WorryHeadsActivityInstance instance = activityInstanceMongoCollection
+					.find(Filters.eq(ActivityInstance.ACTIVITYINSTANCEID_ATTRIBUTE, activityInstanceId))
+					.projection(Projections.excludeId())
+					.first();
+
+
+			List<WorryHeadsSituation> situations = getWorryHeadsSituation();
+			instance.setSituation(situations);
+
+			System.out.println("ACTIVITY INSTANCE GOT FROM DB");
+			return instance ;
+		} catch (NullPointerException ne) {
+			System.out.println("SOME PROBLEM IN GETTING ACTIVITY INSTANCE WITH ID " + activityInstanceId);
+			ne.printStackTrace();
+			return (WorryHeadsActivityInstance) NullObjects.getNullActivityInstance();
 		} catch (Exception e) {
 			System.out.println("SOME SERVER PROBLEM IN GETACTIVITYINSTANCEID");
 			e.printStackTrace();
