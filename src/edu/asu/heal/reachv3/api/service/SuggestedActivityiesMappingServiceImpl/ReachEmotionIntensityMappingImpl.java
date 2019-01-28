@@ -23,8 +23,6 @@ public class ReachEmotionIntensityMappingImpl implements MappingInterface {
 		try {
 			Properties properties1 = new Properties();
 			properties1.load(ReachEmotionIntensityMappingImpl.class.getResourceAsStream("emotions.properties"));
-			System.out.println("Emotion read....."+ intensity);
-			System.out.println(Integer.parseInt(properties1.getProperty("easy.low")));
 			if(		( intensity >= (Integer.parseInt(properties1.getProperty("easy.low")) ) ) &&
 					( intensity <= (Integer.parseInt(properties1.getProperty("easy.high")))) 
 					){
