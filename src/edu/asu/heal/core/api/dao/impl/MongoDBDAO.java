@@ -447,6 +447,66 @@ public class MongoDBDAO implements DAO {
 	}
 
 	@Override
+	public List<StandUpSituation> getStandUpSituation() {
+		try{
+			MongoDatabase database = MongoDBDAO.getConnectedDatabase();
+			MongoCollection<StandUpSituation> situationMongoCollection =
+					database.getCollection(MongoDBDAO.WORRYHEADSSITUATIONS_COLLECTION, StandUpSituation.class);
+
+			//Code to randomly get a situation from the database
+			AggregateIterable<StandUpSituation> situations = situationMongoCollection
+					.aggregate(Arrays.asList(Aggregates.sample(1)));
+
+			StandUpSituation situation = null;
+			for(StandUpSituation temp : situations){
+				situation = temp;
+			}
+
+			List<StandUpSituation> standUpSituations = new ArrayList();
+			standUpSituations.add(situation);
+
+			return standUpSituations;
+		}catch (NullPointerException ne){
+			System.out.println("Could not get random stand up situations");
+			ne.printStackTrace();
+			return null;
+		}catch (Exception e){
+			System.out.println("Some problem in getting StandUp situation");
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	@Override
+	public StandUpActivityInstance getActivityStandUpInstanceDAO(String activityInstanceId) {
+		try {
+			MongoDatabase database = MongoDBDAO.getConnectedDatabase();
+			MongoCollection<StandUpActivityInstance> activityInstanceMongoCollection =
+					database.getCollection(ACTIVITYINSTANCES_COLLECTION, StandUpActivityInstance.class);
+
+			StandUpActivityInstance instance = activityInstanceMongoCollection
+					.find(Filters.eq(ActivityInstance.ACTIVITYINSTANCEID_ATTRIBUTE, activityInstanceId))
+					.projection(Projections.excludeId())
+					.first();
+
+
+			List<StandUpSituation> situations = getStandUpSituation();
+			instance.setSituations(situations);
+
+			System.out.println("ACTIVITY INSTANCE GOT FROM DB");
+			return instance ;
+		} catch (NullPointerException ne) {
+			System.out.println("SOME PROBLEM IN GETTING ACTIVITY INSTANCE WITH ID " + activityInstanceId);
+			ne.printStackTrace();
+			return (StandUpActivityInstance) NullObjects.getNullActivityInstance();
+		} catch (Exception e) {
+			System.out.println("SOME SERVER PROBLEM IN GETACTIVITYINSTANCEID");
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	@Override
 	public boolean updateActivityInstance(ActivityInstance instance) {
 		try {
 			MongoDatabase database = MongoDBDAO.getConnectedDatabase();
