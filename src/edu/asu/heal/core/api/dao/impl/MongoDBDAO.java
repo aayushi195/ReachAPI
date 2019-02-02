@@ -388,7 +388,7 @@ public class MongoDBDAO implements DAO {
 	}
 
 	@Override
-	public List<WorryHeadsSituation> getWorryHeadsSituation() {
+	public WorryHeadsSituation getWorryHeadsSituation() {
 		try{
 			MongoDatabase database = MongoDBDAO.getConnectedDatabase();
 			MongoCollection<WorryHeadsSituation> situationMongoCollection =
@@ -403,16 +403,13 @@ public class MongoDBDAO implements DAO {
 				situation = temp;
 			}
 
-			List<WorryHeadsSituation> worryHeadsSituations = new ArrayList();
-			worryHeadsSituations.add(situation);
-
-			return worryHeadsSituations;
+			return situation;
 		}catch (NullPointerException ne){
 			System.out.println("Could not get random worry heads situation");
 			ne.printStackTrace();
 			return null;
 		}catch (Exception e){
-			System.out.println("Some problem in getting Worry heads situation");
+			System.out.println("Some problem in getting worry heads situation");
 			e.printStackTrace();
 			return null;
 		}
@@ -431,7 +428,7 @@ public class MongoDBDAO implements DAO {
 					.first();
 
 
-			List<WorryHeadsSituation> situations = getWorryHeadsSituation();
+			WorryHeadsSituation situations = getWorryHeadsSituation();
 			instance.setSituation(situations);
 
 			System.out.println("ACTIVITY INSTANCE GOT FROM DB");

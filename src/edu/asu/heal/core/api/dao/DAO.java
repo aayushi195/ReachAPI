@@ -68,7 +68,7 @@ public interface DAO {
 
     MakeBelieveActivityInstance getActivityMakeBelieveInstanceDAO(String activityInstanceId);
 
-    List<WorryHeadsSituation> getWorryHeadsSituation();
+    WorryHeadsSituation getWorryHeadsSituation();
 
     WorryHeadsActivityInstance getActivityWorryHeadsInstanceDAO(String activityInstanceId);
 
