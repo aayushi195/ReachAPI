@@ -13,6 +13,7 @@ import edu.asu.heal.core.api.service.SuggestedActivityiesMappingService.MappingF
 import edu.asu.heal.core.api.service.SuggestedActivityiesMappingService.MappingInterface;
 import edu.asu.heal.reachv3.api.models.DailyDiaryActivityInstance;
 import edu.asu.heal.reachv3.api.models.MakeBelieveActivityInstance;
+import edu.asu.heal.reachv3.api.models.StandUpActivityInstance;
 import edu.asu.heal.reachv3.api.models.SwapActivityInstance;
 import edu.asu.heal.reachv3.api.models.WorryHeadsActivityInstance;
 
@@ -186,8 +187,17 @@ public class ReachService implements HealService {
                         activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
                         activityInstance.getInstanceOf(), activityInstance.getState(),
                         activityInstance.getPatientPin(), dao.getWorryHeadsSituation());
+            } else if(activityInstance.getInstanceOf().getName().equals("StandUp")){
+                activityInstance = new StandUpActivityInstance(
+                        activityInstance.getActivityInstanceId(),
+                        activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
+                        activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
+                        activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
+                        activityInstance.getInstanceOf(), activityInstance.getState(),
+                        activityInstance.getPatientPin(), dao.getStandUpSituation());
             } else if(activityInstance.getInstanceOf().getName().equals("DailyDiary")){
-                activityInstance = new DailyDiaryActivityInstance(activityInstance.getActivityInstanceId(),
+                activityInstance = new DailyDiaryActivityInstance(
+                        activityInstance.getActivityInstanceId(),
                         activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
                         activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
                         activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),

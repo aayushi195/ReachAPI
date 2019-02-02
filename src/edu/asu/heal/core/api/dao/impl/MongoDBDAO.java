@@ -41,6 +41,7 @@ public class MongoDBDAO implements DAO {
 	private static final String MAKEBELIEVESITUATIONS_COLLECTION = "makeBelieveSituations";
 	private static final String MAKEBELIEVESITUATIONNAMES_COLLECTION = "makeBelieveSituationNames";
 	private static final String WORRYHEADSSITUATIONS_COLLECTION = "worryHeadsSituations";
+	private static final String STANDUPSITUATIONS_COLLECTION = "standUpSituations";
 	private static final String LOGGER_COLLECTION = "logger";
 	private static final String EMOTIONS_COLLECTION = "emotions";
 
@@ -439,6 +440,65 @@ public class MongoDBDAO implements DAO {
 			System.out.println("SOME PROBLEM IN GETTING ACTIVITY INSTANCE WITH ID " + activityInstanceId);
 			ne.printStackTrace();
 			return (WorryHeadsActivityInstance) NullObjects.getNullActivityInstance();
+		} catch (Exception e) {
+			System.out.println("SOME SERVER PROBLEM IN GETACTIVITYINSTANCEID");
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	@Override
+	public StandUpSituation getStandUpSituation() {
+		try{
+			MongoDatabase database = MongoDBDAO.getConnectedDatabase();
+			MongoCollection<StandUpSituation> situationMongoCollection =
+					database.getCollection(MongoDBDAO.STANDUPSITUATIONS_COLLECTION, StandUpSituation.class);
+
+			//Code to randomly get a situation from the database
+			AggregateIterable<StandUpSituation> situations = situationMongoCollection
+					.aggregate(Arrays.asList(Aggregates.sample(1)));
+
+			StandUpSituation situation = null;
+			for(StandUpSituation temp : situations){
+				situation = temp;
+			}
+
+			return situation;
+		}catch (NullPointerException ne){
+			System.out.println("Could not get random make believe situation");
+			ne.printStackTrace();
+			return null;
+		}catch (Exception e){
+			System.out.println("Some problem in getting Make believe situation");
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	@Override
+	public StandUpActivityInstance getActivityStandUpInstanceDAO(String activityInstanceId) {
+		try {
+			MongoDatabase database = MongoDBDAO.getConnectedDatabase();
+			MongoCollection<StandUpActivityInstance> activityInstanceMongoCollection =
+					database.getCollection(ACTIVITYINSTANCES_COLLECTION, StandUpActivityInstance.class);
+
+			StandUpActivityInstance makeBelieveIns =  new StandUpActivityInstance();
+			StandUpActivityInstance instance = activityInstanceMongoCollection
+					.find(Filters.eq(ActivityInstance.ACTIVITYINSTANCEID_ATTRIBUTE, activityInstanceId))
+					.projection(Projections.excludeId())
+					.first();
+
+			StandUpSituation situation = getStandUpSituation();
+
+			instance.setSituation(situation);
+
+			System.out.println("ACTIVITY INSTANCE GOT FROM DB");
+			System.out.println(instance);
+			return instance ;
+		} catch (NullPointerException ne) {
+			System.out.println("SOME PROBLEM IN GETTING ACTIVITY INSTANCE WITH ID " + activityInstanceId);
+			ne.printStackTrace();
+			return (StandUpActivityInstance) NullObjects.getNullActivityInstance();
 		} catch (Exception e) {
 			System.out.println("SOME SERVER PROBLEM IN GETACTIVITYINSTANCEID");
 			e.printStackTrace();
