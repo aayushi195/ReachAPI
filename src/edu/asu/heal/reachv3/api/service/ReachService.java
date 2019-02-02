@@ -221,6 +221,9 @@ public class ReachService implements HealService {
             } else if(activityInstanceType.equals("WorryHeads")) {
                 instance = mapper.readValue(requestBody, WorryHeadsActivityInstance.class);
                 instance.setUpdatedAt(new Date());
+            }else if(activityInstanceType.equals("SWAP")) {
+                instance = mapper.readValue(requestBody, SwapActivityInstance.class);
+                instance.setUpdatedAt(new Date());
             }else{
                 instance  = mapper.readValue(requestBody, ActivityInstance.class);
                 instance.setUpdatedAt(new Date());
