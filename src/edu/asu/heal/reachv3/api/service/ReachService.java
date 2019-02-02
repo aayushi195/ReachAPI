@@ -153,6 +153,9 @@ public class ReachService implements HealService {
             else if(rval!=null && rval.getInstanceOf().getName().equals("WorryHeads"))
                 rval = dao.getActivityWorryHeadsInstanceDAO(activityInstanceId);
 
+            else if(rval!=null && rval.getInstanceOf().getName().equals("StandUp"))
+                rval = dao.getActivityStandUpInstanceDAO(activityInstanceId);
+
             return rval;
         } catch (Exception e) {
             System.out.println("SOME ERROR IN HEAL SERVICE getActivityInstance");
