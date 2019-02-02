@@ -13,6 +13,7 @@ import edu.asu.heal.core.api.service.SuggestedActivityiesMappingService.MappingF
 import edu.asu.heal.core.api.service.SuggestedActivityiesMappingService.MappingInterface;
 import edu.asu.heal.reachv3.api.models.DailyDiaryActivityInstance;
 import edu.asu.heal.reachv3.api.models.MakeBelieveActivityInstance;
+import edu.asu.heal.reachv3.api.models.SwapActivityInstance;
 import edu.asu.heal.reachv3.api.models.WorryHeadsActivityInstance;
 
 import java.io.StringWriter;
@@ -186,7 +187,14 @@ public class ReachService implements HealService {
                         activityInstance.getInstanceOf(), activityInstance.getState(),
                         activityInstance.getPatientPin(), dao.getWorryHeadsSituation());
             } else if(activityInstance.getInstanceOf().getName().equals("DailyDiary")){
-                activityInstance = new DailyDiaryActivityInstance(
+                activityInstance = new DailyDiaryActivityInstance(activityInstance.getActivityInstanceId(),
+                        activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
+                        activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
+                        activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
+                        activityInstance.getInstanceOf(), activityInstance.getState(),
+                        activityInstance.getPatientPin());
+            } else if(activityInstance.getInstanceOf().getName().equals("SWAP")){
+                activityInstance = new SwapActivityInstance(
                         activityInstance.getActivityInstanceId(),
                         activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
                         activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
@@ -225,6 +233,9 @@ public class ReachService implements HealService {
                 instance.setUpdatedAt(new Date());
             }else if(activityInstanceType.equals("DailyDiary")) {
                 instance = mapper.readValue(requestBody, DailyDiaryActivityInstance.class);
+                instance.setUpdatedAt(new Date());
+            }else if(activityInstanceType.equals("SWAP")) {
+                instance = mapper.readValue(requestBody, SwapActivityInstance.class);
                 instance.setUpdatedAt(new Date());
             }else{
                 instance  = mapper.readValue(requestBody, ActivityInstance.class);
