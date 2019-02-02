@@ -11,8 +11,10 @@ import edu.asu.heal.core.api.responses.HEALResponse;
 import edu.asu.heal.core.api.service.HealService;
 import edu.asu.heal.core.api.service.SuggestedActivityiesMappingService.MappingFactory;
 import edu.asu.heal.core.api.service.SuggestedActivityiesMappingService.MappingInterface;
+import edu.asu.heal.reachv3.api.models.DailyDiaryActivityInstance;
 import edu.asu.heal.reachv3.api.models.MakeBelieveActivityInstance;
 import edu.asu.heal.reachv3.api.models.StandUpActivityInstance;
+import edu.asu.heal.reachv3.api.models.SwapActivityInstance;
 import edu.asu.heal.reachv3.api.models.WorryHeadsActivityInstance;
 
 import java.io.StringWriter;
@@ -167,6 +169,8 @@ public class ReachService implements HealService {
             if (activityInstance.getState() == null) activityInstance.setState(ActivityInstanceStatus.CREATED.status());
             if (activityInstance.getUpdatedAt() == null) activityInstance.setUpdatedAt(new Date());
 
+            // Create one config file to store activity name as per service.
+            
             if(activityInstance.getInstanceOf().getName().equals("MakeBelieve")){ //todo need a more elegant way of making the check whether it is of type make believe
                 activityInstance =
                         new MakeBelieveActivityInstance(activityInstance.getActivityInstanceId(),
@@ -191,6 +195,22 @@ public class ReachService implements HealService {
                         activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
                         activityInstance.getInstanceOf(), activityInstance.getState(),
                         activityInstance.getPatientPin(), dao.getStandUpSituation());
+            } else if(activityInstance.getInstanceOf().getName().equals("DailyDiary")){
+                activityInstance = new DailyDiaryActivityInstance(
+                        activityInstance.getActivityInstanceId(),
+                        activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
+                        activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
+                        activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
+                        activityInstance.getInstanceOf(), activityInstance.getState(),
+                        activityInstance.getPatientPin());
+            } else if(activityInstance.getInstanceOf().getName().equals("SWAP")){
+                activityInstance = new SwapActivityInstance(
+                        activityInstance.getActivityInstanceId(),
+                        activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
+                        activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
+                        activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
+                        activityInstance.getInstanceOf(), activityInstance.getState(),
+                        activityInstance.getPatientPin());
             }
 
             ActivityInstance newActivityInstance = dao.createActivityInstance(activityInstance);
@@ -220,6 +240,12 @@ public class ReachService implements HealService {
                 instance.setUpdatedAt(new Date());
             } else if(activityInstanceType.equals("WorryHeads")) {
                 instance = mapper.readValue(requestBody, WorryHeadsActivityInstance.class);
+                instance.setUpdatedAt(new Date());
+            } else if(activityInstanceType.equals("DailyDiary")) {
+                instance = mapper.readValue(requestBody, DailyDiaryActivityInstance.class);
+                instance.setUpdatedAt(new Date());
+            } else if(activityInstanceType.equals("SWAP")) {
+                instance = mapper.readValue(requestBody, SwapActivityInstance.class);
                 instance.setUpdatedAt(new Date());
             }else{
                 instance  = mapper.readValue(requestBody, ActivityInstance.class);
