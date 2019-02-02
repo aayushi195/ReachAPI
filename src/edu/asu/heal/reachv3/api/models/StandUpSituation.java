@@ -7,41 +7,16 @@ public class StandUpSituation {
 	private int situationId;
 	private String situationTitle;
 	private List<StandUpQuestion> questions;
-	private List<StandUpResponse> responses;
 
-	public List<StandUpResponse> getResponses() {
-		return responses;
-	}
+	public int getSituationId() { return situationId; }
 
-	public void setResponses(List<StandUpResponse> responses) {
-		this.responses = responses;
-	}
+	public void setSituationId(int situationId) { this.situationId = situationId; }
 
-	public List<StandUpQuestion> getQuestions() {
-		return questions;
-	}
+	public String getSituationTitle() { return situationTitle; }
 
-	public void setQuestions(List<StandUpQuestion> questions) {
-		this.questions = questions;
-	}
-	
-	public StandUpSituation() {
-		
-	}
-	
-	public int getSituationId() {
-		return situationId;
-	}
+	public void setSituationTitle(String situationTitle) { this.situationTitle = situationTitle; }
 
-	public void setSituationId(int situationId) {
-		this.situationId = situationId;
-	}
+	public List<StandUpQuestion> getQuestions() { return questions; }
 
-	public String getSituationTitle() {
-		return situationTitle;
-	}
-
-	public void setSituationTitle(String situationTitle) {
-		this.situationTitle = situationTitle;
-	}
+	public void setQuestions(List<StandUpQuestion> questions) { this.questions = questions; }
 }

@@ -7,30 +7,30 @@ import edu.asu.heal.core.api.models.ActivityInstance;
 import edu.asu.heal.core.api.models.ActivityInstanceType;
 
 public class StandUpActivityInstance extends ActivityInstance{
-	
-	private List<StandUpSituation> situations;
-	
-	public StandUpActivityInstance() {}
-	
-	public StandUpActivityInstance(String activityInstanceId, Date createdAt, Date updatedAt,
-								   String description, Date startTime, Date endTime, Date userSubmissionTime,
-								   Date actualSubmissionTime, ActivityInstanceType instanceOf, String state,
-								   int patientPin, List<StandUpSituation> situation) {
-        super(activityInstanceId, createdAt, updatedAt, description, startTime, endTime, userSubmissionTime,
+
+	private StandUpSituation situation;
+
+	public StandUpActivityInstance(){}
+	public StandUpActivityInstance(StandUpSituation situation) {
+		this.situation = situation;
+	}
+
+	public StandUpActivityInstance(String activityInstanceId, Date createdAt, Date updatedAt, String description,
+								   Date startTime, Date endTime, Date userSubmissionTime, Date actualSubmissionTime,
+								   ActivityInstanceType instanceOf, String state, int patientPin,
+								   StandUpSituation situation) {
+		super(activityInstanceId, createdAt, updatedAt, description, startTime, endTime, userSubmissionTime,
 				actualSubmissionTime, instanceOf, state, patientPin);
-        this.situations = situation;
-        }
-	
-	public StandUpActivityInstance(List<StandUpSituation> situation) {
-		this.situations = situation;
+		this.situation = situation;
 	}
 
-	public List<StandUpSituation> getSituations() {
-		return situations;
+
+	public StandUpSituation getSituation() {
+		return situation;
 	}
 
-	public void setSituations(List<StandUpSituation> situation) {
-		this.situations = situation;
+	public void setSituation(StandUpSituation situation) {
+		this.situation = situation;
 	}
 	
 }

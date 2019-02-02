@@ -4,20 +4,27 @@ public class StandUpOption {
 
 	private int optionId;
 	private String title;
-	
-	public StandUpOption() {
-		
+
+	public StandUpOption() {}
+
+	public StandUpOption(int optionId, String title) {
+		this.optionId = optionId;
+		this.title = title;
 	}
-	
+
 	public int getOptionId() {
+
 		return optionId;
 	}
+
 	public void setOptionId(int optionId) {
 		this.optionId = optionId;
 	}
+
 	public String getTitle() {
 		return title;
 	}
+
 	public void setTitle(String title) {
 		this.title = title;
 	}

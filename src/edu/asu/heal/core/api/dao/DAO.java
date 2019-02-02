@@ -72,7 +72,7 @@ public interface DAO {
 
     WorryHeadsActivityInstance getActivityWorryHeadsInstanceDAO(String activityInstanceId);
 
-    List<StandUpSituation> getStandUpSituation();
+    StandUpSituation getStandUpSituation();
 
     StandUpActivityInstance getActivityStandUpInstanceDAO(String activityInstanceId);
 
