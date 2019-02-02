@@ -369,10 +369,6 @@ public class MongoDBDAO implements DAO {
 					.projection(Projections.excludeId())
 					.first();
 
-			MakeBelieveSituation situation = getMakeBelieveSituation();
-
-			instance.setSituation(situation);
-
 			System.out.println("ACTIVITY INSTANCE GOT FROM DB");
 			System.out.println(instance);
 			return instance ;
@@ -427,9 +423,6 @@ public class MongoDBDAO implements DAO {
 					.projection(Projections.excludeId())
 					.first();
 
-			WorryHeadsSituation situations = getWorryHeadsSituation();
-			instance.setSituation(situations);
-
 			System.out.println("ACTIVITY INSTANCE GOT FROM DB");
 			return instance ;
 		} catch (NullPointerException ne) {
@@ -483,11 +476,6 @@ public class MongoDBDAO implements DAO {
 					.find(Filters.eq(ActivityInstance.ACTIVITYINSTANCEID_ATTRIBUTE, activityInstanceId))
 					.projection(Projections.excludeId())
 					.first();
-
-			StandUpSituation situation = getStandUpSituation();
-
-			instance.setSituation(situation);
-
 			System.out.println("ACTIVITY INSTANCE GOT FROM DB");
 			System.out.println(instance);
 			return instance ;
