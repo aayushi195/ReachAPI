@@ -427,7 +427,6 @@ public class MongoDBDAO implements DAO {
 					.projection(Projections.excludeId())
 					.first();
 
-
 			WorryHeadsSituation situations = getWorryHeadsSituation();
 			instance.setSituation(situations);
 

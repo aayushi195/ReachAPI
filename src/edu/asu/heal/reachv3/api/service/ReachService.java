@@ -238,19 +238,22 @@ public class ReachService implements HealService {
             String activityInstanceType = activityInstanceAsTree.get("instanceOf").get("name").asText();
 
             ActivityInstance instance;
-            if(activityInstanceType.equals("MakeBelieve")){ // todo Need to find a more elegant way to do this
+            if (activityInstanceType.equals("MakeBelieve")) { // todo Need to find a more elegant way to do this
                 instance = mapper.readValue(requestBody, MakeBelieveActivityInstance.class);
                 instance.setUpdatedAt(new Date());
-            } else if(activityInstanceType.equals("WorryHeads")) {
+            } else if (activityInstanceType.equals("WorryHeads")) {
                 instance = mapper.readValue(requestBody, WorryHeadsActivityInstance.class);
                 instance.setUpdatedAt(new Date());
-            } else if(activityInstanceType.equals("DailyDiary")) {
+            } else if (activityInstanceType.equals("DailyDiary")) {
                 instance = mapper.readValue(requestBody, DailyDiaryActivityInstance.class);
                 instance.setUpdatedAt(new Date());
-            } else if(activityInstanceType.equals("SWAP")) {
+            } else if (activityInstanceType.equals("SWAP")) {
                 instance = mapper.readValue(requestBody, SwapActivityInstance.class);
                 instance.setUpdatedAt(new Date());
-            }else{
+            } else if (activityInstanceType.equals("StandUp")) {
+                instance = mapper.readValue(requestBody, StandUpActivityInstance.class);
+                instance.setUpdatedAt(new Date());
+            } else{
                 instance  = mapper.readValue(requestBody, ActivityInstance.class);
                 instance.setUpdatedAt(new Date());
             }
