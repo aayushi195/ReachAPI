@@ -518,7 +518,7 @@ public class MongoDBDAO implements DAO {
 	}
 
 	@Override
-	public FaceItActivityInstance getActivityFaceInstanceDAO(String activityInstanceId) {
+	public FaceItActivityInstance getActivityFaceInstanceDAO(String activityInstanceId){
 		try {
 			MongoDatabase database = MongoDBDAO.getConnectedDatabase();
 			MongoCollection<FaceItActivityInstance> activityInstanceMongoCollection =
