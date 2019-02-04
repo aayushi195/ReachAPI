@@ -518,8 +518,29 @@ public class MongoDBDAO implements DAO {
 	}
 
 	@Override
-	public FaceItActivityInstance getActivityFaceInstanceDAO(String activityInstanceId) {
-		return null;
+	public FaceItActivityInstance getActivityFaceInstanceDAO(String activityInstanceId){
+		try {
+			MongoDatabase database = MongoDBDAO.getConnectedDatabase();
+			MongoCollection<FaceItActivityInstance> activityInstanceMongoCollection =
+					database.getCollection(ACTIVITYINSTANCES_COLLECTION, FaceItActivityInstance.class);
+
+			//FaceItActivityInstance faceItIns =  new FaceItActivityInstance();
+			FaceItActivityInstance instance = activityInstanceMongoCollection
+					.find(Filters.eq(ActivityInstance.ACTIVITYINSTANCEID_ATTRIBUTE, activityInstanceId))
+					.projection(Projections.excludeId())
+					.first();
+			System.out.println("ACTIVITY INSTANCE GOT FROM DB");
+			System.out.println(instance);
+			return instance ;
+		} catch (NullPointerException ne) {
+			System.out.println("SOME PROBLEM IN GETTING ACTIVITY INSTANCE WITH ID " + activityInstanceId);
+			ne.printStackTrace();
+			return (FaceItActivityInstance) NullObjects.getNullActivityInstance();
+		} catch (Exception e) {
+			System.out.println("SOME SERVER PROBLEM IN GETACTIVITYINSTANCEID");
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	@Override

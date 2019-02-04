@@ -12,7 +12,6 @@ import edu.asu.heal.core.api.service.HealService;
 import edu.asu.heal.core.api.service.SuggestedActivityiesMappingService.MappingFactory;
 import edu.asu.heal.core.api.service.SuggestedActivityiesMappingService.MappingInterface;
 import edu.asu.heal.reachv3.api.models.*;
-
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -151,6 +150,9 @@ public class ReachService implements HealService {
 
             else if(rval!=null && rval.getInstanceOf().getName().equals("StandUp"))
                 rval = dao.getActivityStandUpInstanceDAO(activityInstanceId);
+
+            else if(rval!=null && rval.getInstanceOf().getName().equals("FaceIt"))
+                rval = dao.getActivityFaceInstanceDAO(activityInstanceId);
 
             return rval;
         } catch (Exception e) {
