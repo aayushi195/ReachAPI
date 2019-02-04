@@ -42,6 +42,7 @@ public class MongoDBDAO implements DAO {
 	private static final String MAKEBELIEVESITUATIONNAMES_COLLECTION = "makeBelieveSituationNames";
 	private static final String WORRYHEADSSITUATIONS_COLLECTION = "worryHeadsSituations";
 	private static final String STANDUPSITUATIONS_COLLECTION = "standUpSituations";
+	private static final String FACEITCHALLENGES_COLLECTION = "faceItChallenges";
 	private static final String LOGGER_COLLECTION = "logger";
 	private static final String EMOTIONS_COLLECTION = "emotions";
 
@@ -488,6 +489,37 @@ public class MongoDBDAO implements DAO {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	@Override
+	public List<FaceItChallenges> getFaceItChallenges() {
+		try{
+			MongoDatabase database = MongoDBDAO.getConnectedDatabase();
+			MongoCollection<FaceItChallenges> situationMongoCollection =
+					database.getCollection(MongoDBDAO.FACEITCHALLENGES_COLLECTION, FaceItChallenges.class);
+
+			FindIterable<FaceItChallenges> challenges = situationMongoCollection.find();
+
+			List<FaceItChallenges> faceItChallenges = new ArrayList<>();
+			for (FaceItChallenges challenge : challenges) {
+				faceItChallenges.add(challenge);
+			}
+
+			return faceItChallenges;
+		}catch (NullPointerException ne){
+			System.out.println("Could not get face it challenges");
+			ne.printStackTrace();
+			return null;
+		}catch (Exception e){
+			System.out.println("Some problem in getting face it challenge");
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	@Override
+	public FaceItActivityInstance getActivityFaceInstanceDAO(String activityInstanceId) {
+		return null;
 	}
 
 	@Override
