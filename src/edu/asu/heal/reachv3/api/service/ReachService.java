@@ -12,6 +12,7 @@ import edu.asu.heal.core.api.service.HealService;
 import edu.asu.heal.core.api.service.SuggestedActivityiesMappingService.MappingFactory;
 import edu.asu.heal.core.api.service.SuggestedActivityiesMappingService.MappingInterface;
 import edu.asu.heal.reachv3.api.models.DailyDiaryActivityInstance;
+import edu.asu.heal.reachv3.api.models.EmotionActivityInstance;
 import edu.asu.heal.reachv3.api.models.MakeBelieveActivityInstance;
 import edu.asu.heal.reachv3.api.models.StandUpActivityInstance;
 import edu.asu.heal.reachv3.api.models.SwapActivityInstance;
@@ -208,6 +209,14 @@ public class ReachService implements HealService {
                         activityInstance.getPatientPin());
             } else if(activityInstance.getInstanceOf().getName().equals("SWAP")){
                 activityInstance = new SwapActivityInstance(
+                        activityInstance.getActivityInstanceId(),
+                        activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
+                        activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
+                        activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
+                        activityInstance.getInstanceOf(), activityInstance.getState(),
+                        activityInstance.getPatientPin());
+            }else if(activityInstance.getInstanceOf().getName().equals("Emotion")){
+                activityInstance = new EmotionActivityInstance(
                         activityInstance.getActivityInstanceId(),
                         activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
                         activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
