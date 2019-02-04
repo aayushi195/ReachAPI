@@ -11,11 +11,7 @@ import edu.asu.heal.core.api.responses.HEALResponse;
 import edu.asu.heal.core.api.service.HealService;
 import edu.asu.heal.core.api.service.SuggestedActivityiesMappingService.MappingFactory;
 import edu.asu.heal.core.api.service.SuggestedActivityiesMappingService.MappingInterface;
-import edu.asu.heal.reachv3.api.models.DailyDiaryActivityInstance;
-import edu.asu.heal.reachv3.api.models.MakeBelieveActivityInstance;
-import edu.asu.heal.reachv3.api.models.StandUpActivityInstance;
-import edu.asu.heal.reachv3.api.models.SwapActivityInstance;
-import edu.asu.heal.reachv3.api.models.WorryHeadsActivityInstance;
+import edu.asu.heal.reachv3.api.models.*;
 
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
@@ -214,6 +210,14 @@ public class ReachService implements HealService {
                         activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
                         activityInstance.getInstanceOf(), activityInstance.getState(),
                         activityInstance.getPatientPin());
+            } else if(activityInstance.getInstanceOf().getName().equals("FaceIt")){
+                activityInstance = new FaceItActivityInstance(
+                        activityInstance.getActivityInstanceId(),
+                        activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
+                        activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
+                        activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
+                        activityInstance.getInstanceOf(), activityInstance.getState(),
+                        activityInstance.getPatientPin(),dao.getFaceItChallenges());
             }
 
             ActivityInstance newActivityInstance = dao.createActivityInstance(activityInstance);

@@ -76,4 +76,8 @@ public interface DAO {
 
     StandUpActivityInstance getActivityStandUpInstanceDAO(String activityInstanceId);
 
+    List<FaceItChallenges> getFaceItChallenges();
+
+    FaceItActivityInstance getActivityFaceInstanceDAO(String activityInstanceId);
+
 }
