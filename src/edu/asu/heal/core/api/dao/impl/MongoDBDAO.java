@@ -829,7 +829,7 @@ public class MongoDBDAO implements DAO {
 			MongoCollection<Document> emotionMongoCollection =
 					database.getCollection(MongoDBDAO.EMOTIONS_COLLECTION);//, Emotions.class);
 
-			FindIterable<Document> result =	emotionMongoCollection.find(Filters.eq(Emotions.EMOTION_NAME,emotion));
+			FindIterable<Document> result =	emotionMongoCollection.find(Filters.eq(EmotionActivityInstance.EMOTION_NAME,emotion));
 
 			MongoCursor<Document> cursor = result.iterator();
 			List<String> rval = new ArrayList<String>();
@@ -837,9 +837,9 @@ public class MongoDBDAO implements DAO {
 
 			while(cursor.hasNext()) {
 				Document doc = cursor.next();
-				String tempIntensity = doc.getString(Emotions.INTENSITY);
+				String tempIntensity = doc.getString(EmotionActivityInstance.INTENSITY);
 				if(tempIntensity.contains((String)intensity)) {
-					rval.addAll((List<String>) doc.get(Emotions.ACTIVITIES));
+					rval.addAll((List<String>) doc.get(EmotionActivityInstance.ACTIVITIES));
 				}
 			}
 
