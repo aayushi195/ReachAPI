@@ -500,13 +500,10 @@ public class MongoDBDAO implements DAO {
 
 			FindIterable<FaceItChallenges> challenges = situationMongoCollection.find();
 
-			FaceItChallenges challenge = null;
-			for(FaceItChallenges temp : challenges){
-				challenge = temp;
-			}
-
 			List<FaceItChallenges> faceItChallenges = new ArrayList<>();
-			faceItChallenges.add(challenge);
+			for (FaceItChallenges challenge : challenges) {
+				faceItChallenges.add(challenge);
+			}
 
 			return faceItChallenges;
 		}catch (NullPointerException ne){
