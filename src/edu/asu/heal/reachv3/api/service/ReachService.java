@@ -262,6 +262,9 @@ public class ReachService implements HealService {
             } else if (activityInstanceType.equals("StandUp")) {
                 instance = mapper.readValue(requestBody, StandUpActivityInstance.class);
                 instance.setUpdatedAt(new Date());
+            }else if (activityInstanceType.equals("Emotion")) {
+                instance = mapper.readValue(requestBody, EmotionActivityInstance.class);
+                instance.setUpdatedAt(new Date());
             } else{
                 instance  = mapper.readValue(requestBody, ActivityInstance.class);
                 instance.setUpdatedAt(new Date());
