@@ -1,11 +1,14 @@
 package edu.asu.heal.reachv3.api.models;
 
+import java.util.Date;
+
 public class FaceItChallenges {
 
     private int questionId;
     private String questionText;
     private int answerId;
     private String status;
+    private Date lastModified;
 
     public FaceItChallenges() {}
 
@@ -47,4 +50,8 @@ public class FaceItChallenges {
     public void setQuestionId(int questionId) {
         this.questionId = questionId;
     }
+
+    public Date getLastModified() { return lastModified; }
+
+    public void setLastModified(Date lastModified) { this.lastModified = lastModified; }
 }
