@@ -1,7 +1,11 @@
 package edu.asu.heal.reachv3.api.models;
 
+import java.util.Date;
 
-public class Emotions{
+import edu.asu.heal.core.api.models.ActivityInstance;
+import edu.asu.heal.core.api.models.ActivityInstanceType;
+
+public class EmotionActivityInstance extends ActivityInstance{
 	
 	public static String EMOTION_NAME="emotionName";
 	public static String INTENSITY="intensity";
@@ -11,9 +15,24 @@ public class Emotions{
 	//public static String ID=""
 	private String emotionName;
 	private String intensity;
-	private String suggestedActivities;
+	private String suggestedActivities; // this needs to be activity array with suggested activity
 	private String session;
 	
+	public EmotionActivityInstance() {
+		
+	}
+	
+	public EmotionActivityInstance(String activityInstanceId, Date createdAt, Date updatedAt, String description,
+			Date startTime, Date endTime, Date userSubmissionTime, Date actualSubmissionTime,
+			ActivityInstanceType instanceOf, String state, int patientPin) {
+		super(activityInstanceId, createdAt, updatedAt, description, startTime, endTime, 
+	    		 userSubmissionTime, actualSubmissionTime, instanceOf, state, patientPin);
+		this.emotionName=null;
+		this.session=null;
+		this.intensity=null;
+		this.suggestedActivities=null;
+		
+	}
 	public String getEmotionName() {
 		return emotionName;
 	}
