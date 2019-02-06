@@ -44,12 +44,11 @@ public class ActivityInstanceResource {
 	 * */
 
 	/**
-	 * @api {get} /activityInstance?patientPin={patientPin}&trialId={trialId} ActivityInstances
-	 * @apiName GetActivityInstances
+	 * @api {get} /activityinstances?patientPin={patientPin} Get Activity Instances for a patient
+	 * @apiName GetActivityInstancesOfPatient
 	 * @apiGroup ActivityInstance
 	 * @apiParam {Number} patientPin Patient's Unique Id
-	 * @apiParam {Number} trialId Trial's Unique Id
-	 * @apiParam (Login) {String} pass Only logged in user can get this
+	 * @apiSampleRequest http://localhost:8080/ReachAPI/rest/activityinstances?patientPin=4015
 	 * @apiUse BadRequestError
 	 * @apiUse ActivityInstanceNotFoundError
 	 * @apiUse InternalServerError
@@ -57,8 +56,8 @@ public class ActivityInstanceResource {
 	 */
 	@GET
 	public Response fetchActivityInstances(@QueryParam("patientPin") int patientPin,
-			@QueryParam("emotion") String emotion,
-			@QueryParam("intensity") int intensity) {
+										   @QueryParam("emotion") String emotion,
+										   @QueryParam("intensity") int intensity) {
 		HEALResponse response = null;
 		HEALResponseBuilder builder;
 		try{
@@ -74,30 +73,23 @@ public class ActivityInstanceResource {
 					.setServerURI(_uri.getBaseUri().toString())
 					.build();
 		} else {
-				List<ActivityInstance> instances = reachService.getActivityInstances(patientPin);
-				if (instances == null) {
+			List<ActivityInstance> instances = reachService.getActivityInstances(patientPin);
+			if (instances == null) {
+				response = builder
+						.setStatusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
+						.setData("SOME SERVER ERROR. PLEASE CONTACT ADMINISTRATOR")
+						.build();
+			} else if (instances.isEmpty()) {
+				response = builder
+						.setStatusCode(Response.Status.OK.getStatusCode())
+						.setData("THERE ARE NO ACTIVITIES INSTANCES FOR THIS PATIENT")
+						.build();
+			} else if (instances.size() == 1) {
+				if (instances.get(0).equals(NullObjects.getNullActivityInstance())) {
 					response = builder
-							.setStatusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
-							.setData("SOME SERVER ERROR. PLEASE CONTACT ADMINISTRATOR")
+							.setStatusCode(Response.Status.BAD_REQUEST.getStatusCode())
+							.setData("THE PATIENT PIN YOU'VE PASSED IN IS INCORRECT OR DOES NOT EXIST")
 							.build();
-				} else if (instances.isEmpty()) {
-					response = builder
-							.setStatusCode(Response.Status.OK.getStatusCode())
-							.setData("THERE ARE NO ACTIVITIES INSTANCES FOR THIS PATIENT")
-							.build();
-				} else if (instances.size() == 1) {
-					if (instances.get(0).equals(NullObjects.getNullActivityInstance())) {
-						response = builder
-								.setStatusCode(Response.Status.BAD_REQUEST.getStatusCode())
-								.setData("THE PATIENT PIN YOU'VE PASSED IN IS INCORRECT OR DOES NOT EXIST")
-								.build();
-					} else {
-						response = builder
-								.setStatusCode(Response.Status.OK.getStatusCode())
-								.setData(instances)
-								.setServerURI(_uri.getBaseUri().toString())
-								.build();
-					}
 				} else {
 					response = builder
 							.setStatusCode(Response.Status.OK.getStatusCode())
@@ -105,7 +97,14 @@ public class ActivityInstanceResource {
 							.setServerURI(_uri.getBaseUri().toString())
 							.build();
 				}
+			} else {
+				response = builder
+						.setStatusCode(Response.Status.OK.getStatusCode())
+						.setData(instances)
+						.setServerURI(_uri.getBaseUri().toString())
+						.build();
 			}
+		}
 		return Response.status(response.getStatusCode()).entity(response.toEntity()).build();
 	}
 
@@ -114,7 +113,6 @@ public class ActivityInstanceResource {
 	 * @apiName ActivityInstanceDetail
 	 * @apiGroup ActivityInstance
 	 * @apiParam {Number} id ActivityInstance's Unique Id
-	 * @apiParamExample http://localhost:8080/ReachAPI/rest/activityinstances/5abd71b82e027e29ca2353a0
 	 * @apiUse BadRequestError
 	 * @apiUse ActivityInstanceNotFoundError
 	 * @apiUse InternalServerError
@@ -134,23 +132,23 @@ public class ActivityInstanceResource {
 
 		ActivityInstance instance = reachService.getActivityInstance(activityInstanceId);
 
-			if (instance == null) {
-				response = builder
-						.setStatusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
-						.setData("SOME SERVER ERROR. PLEASE CONTACT ADMINISTRATOR")
-						.build();
-			} else if (instance.equals(NullObjects.getNullActivityInstance())) {
-				response = builder
-						.setStatusCode(Response.Status.NOT_FOUND.getStatusCode())
-						.setData("THE ACTIVITY INSTANCE YOU'RE REQUESTING DOES NOT EXIST")
-						.build();
-			} else {
-				response = builder
-						.setStatusCode(Response.Status.OK.getStatusCode())
-						.setData(instance)
-						.setServerURI(_uri.getBaseUri().toString())
-						.build();
-			}
+		if (instance == null) {
+			response = builder
+					.setStatusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
+					.setData("SOME SERVER ERROR. PLEASE CONTACT ADMINISTRATOR")
+					.build();
+		} else if (instance.equals(NullObjects.getNullActivityInstance())) {
+			response = builder
+					.setStatusCode(Response.Status.NOT_FOUND.getStatusCode())
+					.setData("THE ACTIVITY INSTANCE YOU'RE REQUESTING DOES NOT EXIST")
+					.build();
+		} else {
+			response = builder
+					.setStatusCode(Response.Status.OK.getStatusCode())
+					.setData(instance)
+					.setServerURI(_uri.getBaseUri().toString())
+					.build();
+		}
 
 		return Response.status(response.getStatusCode()).entity(response.toEntity()).build();
 	}
@@ -275,7 +273,6 @@ public class ActivityInstanceResource {
 	 * @apiName DeleteActivityInstance
 	 * @apiGroup ActivityInstance
 	 * @apiParam {String} id ActivityInstance's unique id
-	 * @apiParamExample http://localhost:8080/ReachAPI/rest/activityinstances/5abd71b82e027e29ca2353a0
 	 * @apiUse BadRequestError
 	 * @apiUse ActivityInstanceNotFoundError
 	 * @apiUse InternalServerError
@@ -316,3 +313,4 @@ public class ActivityInstanceResource {
 
 	}
 }
+
