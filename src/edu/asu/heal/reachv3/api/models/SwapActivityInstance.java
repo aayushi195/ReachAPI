@@ -22,6 +22,18 @@ public class SwapActivityInstance extends ActivityInstance {
 		this.worry=null;
 		this.action=null;
 	}
+	
+	public SwapActivityInstance(ActivityInstance activityInstance) {
+		super(activityInstance.getActivityInstanceId(),
+                activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
+                activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
+                activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
+                activityInstance.getInstanceOf(), activityInstance.getState(),
+                activityInstance.getPatientPin());
+		this.situation=null;
+		this.worry=null;
+		this.action=null;
+	}
 
 	public String getSituation() {
 		return situation;

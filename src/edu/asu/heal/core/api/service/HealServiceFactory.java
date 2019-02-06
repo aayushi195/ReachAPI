@@ -42,17 +42,14 @@ public class HealServiceFactory {
 
     private static HealService initializeService(String serviceClassName) {
         try {
-
             Class<?> serviceClass = Class.forName(serviceClassName);
             Constructor<?> serviceClassConstructor = serviceClass.getConstructor();
             _theService = (HealService) serviceClassConstructor.newInstance();
-
         } catch (ClassNotFoundException ce) {
             System.out.println(ce.getMessage());
         } catch (Exception ex) {
             System.out.println("Exception occurred: " + ex.getMessage());
         }
-
         return _theService;
     }
 

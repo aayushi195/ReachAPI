@@ -243,8 +243,8 @@ public class ActivityInstanceResource {
 	@PUT
 	@Path("/{activityInstanceId}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response updateActivityInstance(@PathParam("activityInstanceId") String activityInstanceId, String payload) {
-		ActivityInstance instance = reachService.updateActivityInstance(payload);
+	public Response updateActivityInstance(@PathParam("activityInstanceId") String activityInstanceId, ActivityInstance activityInstance) {
+		ActivityInstance instance = reachService.updateActivityInstance(activityInstance);
 		HEALResponse response;
 		HEALResponseBuilder builder;
 		try{

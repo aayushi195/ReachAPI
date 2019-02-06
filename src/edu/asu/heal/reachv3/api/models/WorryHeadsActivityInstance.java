@@ -23,6 +23,16 @@ public class WorryHeadsActivityInstance extends ActivityInstance{
         this.situation = situation;
     }
 
+    public WorryHeadsActivityInstance(ActivityInstance activityInstance, WorryHeadsSituation
+    		situation) {
+    	super(activityInstance.getActivityInstanceId(),
+                activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
+                activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
+                activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
+                activityInstance.getInstanceOf(), activityInstance.getState(),
+                activityInstance.getPatientPin());
+    	this.situation=situation;
+    }
 
     public WorryHeadsSituation getSituation() {
         return situation;

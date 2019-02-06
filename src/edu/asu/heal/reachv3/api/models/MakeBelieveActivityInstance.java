@@ -18,7 +18,16 @@ public class MakeBelieveActivityInstance extends ActivityInstance{
         this.situation = situation;
     }
 
-
+    public MakeBelieveActivityInstance(ActivityInstance activityInstance, MakeBelieveSituation situation) {
+    	super(activityInstance.getActivityInstanceId(),
+                activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
+                activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
+                activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
+                activityInstance.getInstanceOf(), activityInstance.getState(),
+                activityInstance.getPatientPin());
+    	this.situation=situation;
+    }
+    
     public MakeBelieveSituation getSituation() {
         return situation;
     }

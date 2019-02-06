@@ -8,6 +8,7 @@ import edu.asu.heal.core.api.responses.HEALResponseBuilder;
 import edu.asu.heal.core.api.service.HealService;
 import edu.asu.heal.core.api.service.HealServiceFactory;
 import edu.asu.heal.reachv3.api.service.ReachService;
+import edu.asu.heal.reachv3.api.service.ReachServiceImpl;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -188,8 +189,8 @@ public class ActivityResource {
 		} else {
 			// Task #396 - Activity suggestion according to emotion and its intensity.
 			if(emotion != null){
-				ReachService service = (ReachService)reachService;
-				List<Activity> emotionsActivityResponse = service.getEmotionsActivityInstance(patientPin, emotion, intensity);
+				ReachServiceImpl service = (ReachServiceImpl)reachService;
+				List<Activity> emotionsActivityResponse = service.getSuggestedEmotionsActivities(patientPin, emotion, intensity);
 				if (emotionsActivityResponse == null) {
 					response = builder
 							.setStatusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())

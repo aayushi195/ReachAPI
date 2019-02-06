@@ -33,6 +33,19 @@ public class EmotionActivityInstance extends ActivityInstance{
 		this.suggestedActivities=null;
 		
 	}
+	
+	public EmotionActivityInstance(ActivityInstance activityInstance) {
+		super(activityInstance.getActivityInstanceId(),
+                activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
+                activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
+                activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
+                activityInstance.getInstanceOf(), activityInstance.getState(),
+                activityInstance.getPatientPin());
+		this.emotionName=null;
+		this.session=null;
+		this.intensity=null;
+		this.suggestedActivities=null;
+	}
 	public String getEmotionName() {
 		return emotionName;
 	}

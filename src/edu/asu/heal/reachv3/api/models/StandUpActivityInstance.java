@@ -23,7 +23,16 @@ public class StandUpActivityInstance extends ActivityInstance{
 				actualSubmissionTime, instanceOf, state, patientPin);
 		this.situation = situation;
 	}
-
+	
+	public StandUpActivityInstance(ActivityInstance activityInstance, StandUpSituation situation) {
+    	super(activityInstance.getActivityInstanceId(),
+                activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
+                activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
+                activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
+                activityInstance.getInstanceOf(), activityInstance.getState(),
+                activityInstance.getPatientPin());
+    	this.situation=situation;
+	}
 
 	public StandUpSituation getSituation() {
 		return situation;

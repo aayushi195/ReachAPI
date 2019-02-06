@@ -10,14 +10,14 @@ public class HealServiceSingleton {
 		
 	}
 	
-	public HealService getInstance(String className) {
+	public static HealService getInstance(String className) {
 		if(instance == null) {
-			instance = HealServiceSingleton.initializeService(className);
+			return HealServiceSingleton.initializeService(className);
 		}
 		return instance;
 	}
 	
-	public static HealService initializeService(String serviceClassName) {
+	private static HealService initializeService(String serviceClassName) {
         try {
 
             Class<?> serviceClass = Class.forName(serviceClassName);

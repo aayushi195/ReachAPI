@@ -27,6 +27,19 @@ public class DailyDiaryActivityInstance extends ActivityInstance {
 		this.thoughts = null;
 	}
 	
+	public DailyDiaryActivityInstance(ActivityInstance activityInstance) {
+		super(activityInstance.getActivityInstanceId(),
+                activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
+                activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
+                activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
+                activityInstance.getInstanceOf(), activityInstance.getState(),
+                activityInstance.getPatientPin());
+	    this.whatHappened = null;
+		this.worryIntensity = 0;
+		this.actionTaken = null;
+		this.thoughts = null;
+	}
+	
 	public String getWhatHappened() {
 		return whatHappened;
 	}

@@ -23,6 +23,16 @@ public class FaceItActivityInstance extends ActivityInstance {
 	    this.faceItChallenges=faceItChallenges;
 	}
 
+	public FaceItActivityInstance(ActivityInstance activityInstance, List<FaceItChallenges> faceItChallenges) {
+    	super(activityInstance.getActivityInstanceId(),
+                activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
+                activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
+                activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
+                activityInstance.getInstanceOf(), activityInstance.getState(),
+                activityInstance.getPatientPin());
+    	this.faceItChallenges=faceItChallenges;
+	}
+	
 	public List<FaceItChallenges> getFaceItChallenges() {
 		return faceItChallenges;
 	}
