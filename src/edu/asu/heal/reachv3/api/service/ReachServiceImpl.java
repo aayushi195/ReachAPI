@@ -1,24 +1,37 @@
 package edu.asu.heal.reachv3.api.service;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import edu.asu.heal.core.api.dao.DAO;
-import edu.asu.heal.core.api.dao.DAOFactory;
-import edu.asu.heal.core.api.models.*;
-import edu.asu.heal.core.api.responses.HEALResponse;
-import edu.asu.heal.core.api.service.HealService;
-import edu.asu.heal.core.api.service.SuggestedActivityiesMappingService.MappingFactory;
-import edu.asu.heal.core.api.service.SuggestedActivityiesMappingService.MappingInterface;
-import edu.asu.heal.reachv3.api.models.*;
-import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 
-public class ReachService implements HealService {
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import edu.asu.heal.core.api.dao.DAO;
+import edu.asu.heal.core.api.dao.DAOFactory;
+import edu.asu.heal.core.api.models.Activity;
+import edu.asu.heal.core.api.models.ActivityInstance;
+import edu.asu.heal.core.api.models.ActivityInstanceStatus;
+import edu.asu.heal.core.api.models.Domain;
+import edu.asu.heal.core.api.models.DomainState;
+import edu.asu.heal.core.api.models.Logger;
+import edu.asu.heal.core.api.models.NullObjects;
+import edu.asu.heal.core.api.models.Patient;
+import edu.asu.heal.core.api.models.Trial;
+import edu.asu.heal.core.api.responses.HEALResponse;
+import edu.asu.heal.core.api.service.AHealService;
+import edu.asu.heal.core.api.service.SuggestedActivityiesMappingService.MappingFactory;
+import edu.asu.heal.core.api.service.SuggestedActivityiesMappingService.MappingInterface;
+import edu.asu.heal.reachv3.api.models.DailyDiaryActivityInstance;
+import edu.asu.heal.reachv3.api.models.EmotionActivityInstance;
+import edu.asu.heal.reachv3.api.models.FaceItActivityInstance;
+import edu.asu.heal.reachv3.api.models.MakeBelieveActivityInstance;
+import edu.asu.heal.reachv3.api.models.StandUpActivityInstance;	
+import edu.asu.heal.reachv3.api.models.SwapActivityInstance;
+import edu.asu.heal.reachv3.api.models.WorryHeadsActivityInstance;
+
+public class ReachServiceImpl extends AHealService implements IReachService {
+
 
     private static final String DATE_FORMAT = "MM/dd/yyyy";
 
@@ -440,8 +453,8 @@ public class ReachService implements HealService {
             Domain domain = dao.getDomain(trialInstance.getDomainId());
             if (domain != null) {
 
-                Date startDateFormat = new SimpleDateFormat(ReachService.DATE_FORMAT).parse(trialInstance.getStartDate().toString());
-                Date endDateFormat = new SimpleDateFormat(ReachService.DATE_FORMAT).parse(trialInstance.getEndDate().toString());
+                Date startDateFormat = new SimpleDateFormat(ReachServiceImpl.DATE_FORMAT).parse(trialInstance.getStartDate().toString());
+                Date endDateFormat = new SimpleDateFormat(ReachServiceImpl.DATE_FORMAT).parse(trialInstance.getEndDate().toString());
 
                 trialInstance.setUpdatedAt(new Date());
                 trialInstance.setCreatedAt(new Date());
@@ -493,5 +506,6 @@ public class ReachService implements HealService {
 			  return null;
 		  }
 	  }
+	
 
 }
