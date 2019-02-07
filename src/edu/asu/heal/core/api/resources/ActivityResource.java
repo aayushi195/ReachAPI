@@ -1,7 +1,6 @@
 package edu.asu.heal.core.api.resources;
 
 import edu.asu.heal.core.api.models.*;
-import edu.asu.heal.core.api.responses.ActivityInstanceResponse;
 import edu.asu.heal.core.api.responses.ActivityResponse;
 import edu.asu.heal.core.api.responses.HEALResponse;
 import edu.asu.heal.core.api.responses.HEALResponseBuilder;
@@ -26,6 +25,11 @@ public class ActivityResource {
 	private static HealService reachService =
 			HealServiceFactory.getTheService();
 
+	/**
+	 * @apiDefine BadRequestError
+	 * @apiError (Error 4xx) {400} BadRequest Bad Request Encountered
+	 * */
+
 	/** @apiDefine ActivityNotFoundError
 	 * @apiError (Error 4xx) {404} NotFound Activity cannot be found
 	 * */
@@ -36,13 +40,19 @@ public class ActivityResource {
 	 * */
 
 	/**
-	 * @api {get} /activities?domain=domainName Get list of Activities for a given domain
-	 * @apiName GetActivities
+	 * @apiDefine NotImplementedError
+	 * @apiError (Error 5xx) {501} NotImplemented The resource has not been implemented. Please keep patience, our developers are working hard on it!!
+	 * */
+
+	/**
+	 * @api {get} /activities?domain={domainName} Get list of Activities for a given domain
+	 * @apiName GetActivitiesByDomain
 	 * @apiGroup Activity
-	 * @apiParam {String} domain Domain name for which activities are to be fetched. Use "_" in place of space
-	 * character. Case sensitive.
+	 * @apiParam {String} domain Domain name for which activities are to be fetched.
+	 * @apiSampleRequest http://localhost:8080/ReachAPI/rest/activities?domain=Preventive Anxiety
 	 * @apiUse ActivityNotFoundError
 	 * @apiUse InternalServerError
+	 * @apiUse BadRequestError
 	 */
 	@GET
 	@QueryParam("domain")
@@ -92,11 +102,11 @@ public class ActivityResource {
 	}
 
 	/**
-	 * @api {get} /activities/:id Activity Detail
+	 * @api {get} /activities/:activityId Get an Activity for an activity Id
 	 * @apiName ActivityDetail
 	 * @apiGroup Activity
 	 * @apiParam {String} id Activity's Unique Id
-	 * @apiParamExample http://localhost:8080/ReachAPI/rest/activities/5abd71b82e027e29ca2353a0
+	 * @apiSampleRequest http://localhost:8080/ReachAPI/rest/activities/5a9496ef66684905df624348
 	 * @apiUse ActivityInstanceNotFoundError
 	 * @apiUse InternalServerError
 	 * @apiUse NotImplementedError
@@ -135,31 +145,13 @@ public class ActivityResource {
 	}
 
 	/**
-	 * @apiDefine BadRequestError
-	 * @apiError (Error 4xx) {400} BadRequest Bad Request Encountered
-	 * */
-
-	/** @apiDefine ActivityInstanceNotFoundError
-	 * @apiError (Error 4xx) {404} NotFound ActivityInstance(s) cannot be found
-	 * */
-
-	/**
-	 * @apiDefine InternalServerError
-	 * @apiError (Error 5xx) {500} InternalServerError Something went wrong at server, Please contact the administrator!
-	 * */
-
-	/**
-	 * @apiDefine NotImplementedError
-	 * @apiError (Error 5xx) {501} NotImplemented The resource has not been implemented. Please keep patience, our developers are working hard on it!!
-	 * */
-
-	/**
-	 * @api {get} /suggestions?patientPin={patientPin}&emotion={emotionName}&intensity={intensityValue} ActivityInstances
-	 * @apiName GetActivityInstances
-	 * @apiGroup ActivityInstance
+	 * @api {get} /activities/suggestions?patientPin={patientPin}&emotion={emotionName}&intensity={intensityValue} Get suggested activities based on the emotionName and intensity level
+	 * @apiName GetSuggestedActivities
+	 * @apiGroup Activity
 	 * @apiParam {Number} patientPin Patient's Unique Id
-	 * @apiParam {String} Emotion Name of emotion
-	 * @apiParam {Number} Intensity of emotion
+	 * @apiParam {String} emotion Name of the emotion
+	 * @apiParam {Number} intensity Intensity level of the emotion
+	 * @apiSampleRequest http://localhost:8080/ReachAPI/rest/activities/suggestions?patientPin=4015&emotion=sad&intensity=5
 	 * @apiUse BadRequestError
 	 * @apiUse ActivityInstanceNotFoundError
 	 * @apiUse InternalServerError
@@ -170,7 +162,7 @@ public class ActivityResource {
 	public Response getSuggestedActivities(@QueryParam("patientPin") int patientPin,
 			@QueryParam("emotion") String emotion,
 			@QueryParam("intensity") int intensity) {
-		HEALResponse response = null;
+		HEALResponse response;
 		HEALResponseBuilder builder;
 		try{
 			builder = new HEALResponseBuilder(ActivityResponse.class);
@@ -221,25 +213,19 @@ public class ActivityResource {
 
 
 	/**
-	 * @api {post} /activities Create Activity
+	 * @api {post} /activities Create an Activity
 	 * @apiName CreateActivity
 	 * @apiGroup Activity
 	 * @apiParam {String} Title Title of the Activity
 	 * @apiParam {String} Description Description of the Activity
-	 * @apiParam (Login) {String} pass Only logged in user can get this
-	 * @apiSuccess {Object[]} data null
-	 * @apiSuccess {String} message Response Message
-	 * @apiSuccess {String} messageType Response Message Type
-	 * @apiSuccess {Number} statusCode  Response Status Code
-	 * @apiSuccessExample {json} Success-Response:
-	 * HTTP/1.1 201 CREATED
+	 * @apiParamExample {json} Activity Example:
 	 * {
-	 * "data": null,
-	 * "message": "Created",
-	 * "messageType": "success",
-	 * "statusCode": 201
+	 * 		"title" : "SWAP",
+	 * 		"description" : "SWAP Activity"
 	 * }
+	 * @apiSampleRequest http://localhost:8080/ReachAPI/rest/activities
 	 * @apiUse InternalServerError
+	 * @apiUse BadRequestError
 	 */
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -276,6 +262,27 @@ public class ActivityResource {
 		return Response.status(response.getStatusCode()).entity(response).build();
 	}
 
+	/**
+	 * @api {put} /activities Update an Activity
+	 * @apiName UpdateActivity
+	 * @apiGroup Activity
+	 * @apiParam {String} Title Title of the Activity
+	 * @apiParam {String} Description Description of the Activity
+	 * @apiParam {String} ActivityId Unique Id of an Activity
+	 * @apiParam {DateTime} createdAt Created Date and Time of the Activity
+	 * @apiParam {DateTime} updatedAt Updated Data and Time of the Activity
+	 * @apiParamExample {json} Activity Example:
+	 * {
+	 * 	"activityId" : "5a9496ef66684905df624348",
+	 * 	"title" : "SWAP",
+	 * 	"description" : "SWAP Activity",
+	 * 	"createdAt" : ISODate("2018-02-26T07:00:00Z"),
+	 * 	"updatedAt" : ISODate("2018-02-26T07:00:00Z")
+	 * }
+	 * @apiSampleRequest http://localhost:8080/ReachAPI/rest/activities
+	 * @apiUse InternalServerError
+	 * @apiUse BadRequestError
+	 */
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response updateActivity(Activity activityJSON){
@@ -315,6 +322,18 @@ public class ActivityResource {
 		}
 		return Response.status(response.getStatusCode()).entity(response).build();
 	}
+
+	/**
+	 * @api {delete} /activities/:id Delete an Activity
+	 * @apiName DeleteActivity
+	 * @apiGroup Activity
+	 * @apiParam {String} id Activity's Unique Id
+	 * @apiSampleRequest http://localhost:8080/ReachAPI/rest/activities/5a9496ef66684905df624348
+	 * @apiUse ActivityInstanceNotFoundError
+	 * @apiUse BadRequestError
+	 * @apiUse InternalServerError
+	 * @apiUse NotImplementedError
+	 */
 
 	@DELETE
 	@Path("/{id}")
