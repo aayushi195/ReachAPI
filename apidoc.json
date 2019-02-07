@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "HEAL API Documentation",
   "title": "HEAL API",
+  "url" : "https://localhost:8080/ReachAPI/rest/",
   "order":[
     "Patient",
     "GetPatients",
