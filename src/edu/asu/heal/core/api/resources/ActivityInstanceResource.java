@@ -7,7 +7,6 @@ import edu.asu.heal.core.api.responses.HEALResponseBuilder;
 import edu.asu.heal.core.api.service.HealService;
 import edu.asu.heal.core.api.service.HealServiceFactory;
 import edu.asu.heal.reachv3.api.models.MakeBelieveActivityInstance;
-import edu.asu.heal.reachv3.api.service.ReachService;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -243,8 +242,8 @@ public class ActivityInstanceResource {
 	@PUT
 	@Path("/{activityInstanceId}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response updateActivityInstance(@PathParam("activityInstanceId") String activityInstanceId, ActivityInstance activityInstance) {
-		ActivityInstance instance = reachService.updateActivityInstance(activityInstance);
+	public Response updateActivityInstance(@PathParam("activityInstanceId") String activityInstanceId, String payload) {
+		ActivityInstance instance = reachService.updateActivityInstance(payload);
 		HEALResponse response;
 		HEALResponseBuilder builder;
 		try{

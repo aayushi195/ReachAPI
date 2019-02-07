@@ -1,6 +1,12 @@
 package edu.asu.heal.reachv3.api.service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.asu.heal.core.api.dao.DAO;
 import edu.asu.heal.core.api.dao.DAOFactory;
 import edu.asu.heal.core.api.models.*;
@@ -116,8 +122,56 @@ public class ReachServiceImpl extends AHealService implements IReachService {
     }
 
     @Override
-    public ActivityInstance updateActivityInstance(ActivityInstance instance) {
-    	return service.updateActivityInstance(instance);
+    public ActivityInstance updateActivityInstance(String requestBody) {
+//    	return service.updateActivityInstance(instance);
+        try {
+
+            DAO dao = DAOFactory.getTheDAO();
+
+            ObjectMapper mapper = new ObjectMapper();
+            SimpleDateFormat format = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss");
+            mapper.setDateFormat(format);
+
+            JsonNode activityInstanceAsTree = mapper.readTree(requestBody);
+            String activityInstanceType = activityInstanceAsTree.get("instanceOf").get("name").asText();
+
+            ActivityInstance instance;
+            if (activityInstanceType.equals("MakeBelieve")) { // todo Need to find a more elegant way to do this
+                instance = mapper.readValue(requestBody, MakeBelieveActivityInstance.class);
+                instance.setUpdatedAt(new Date());
+            } else if (activityInstanceType.equals("WorryHeads")) {
+                instance = mapper.readValue(requestBody, WorryHeadsActivityInstance.class);
+                instance.setUpdatedAt(new Date());
+            } else if (activityInstanceType.equals("DailyDiary")) {
+                instance = mapper.readValue(requestBody, DailyDiaryActivityInstance.class);
+                instance.setUpdatedAt(new Date());
+            } else if (activityInstanceType.equals("SWAP")) {
+                instance = mapper.readValue(requestBody, SwapActivityInstance.class);
+                instance.setUpdatedAt(new Date());
+            } else if (activityInstanceType.equals("StandUp")) {
+                instance = mapper.readValue(requestBody, StandUpActivityInstance.class);
+                instance.setUpdatedAt(new Date());
+            } else if (activityInstanceType.equals("FaceIt")) {
+                instance = mapper.readValue(requestBody, FaceItActivityInstance.class);
+                instance.setUpdatedAt(new Date());
+            }else if (activityInstanceType.equals("Emotion")) {
+                instance = mapper.readValue(requestBody, EmotionActivityInstance.class);
+                instance.setUpdatedAt(new Date());
+            } else{
+                instance  = mapper.readValue(requestBody, ActivityInstance.class);
+                instance.setUpdatedAt(new Date());
+            }
+            if(dao.updateActivityInstance(instance)){
+                return instance;
+            }
+            return NullObjects.getNullActivityInstance();
+        } catch (NullPointerException ne){
+            return NullObjects.getNullActivityInstance();
+        }catch (Exception e) {
+            System.out.println("Error from updateActivityInstance() in ReachService");
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override

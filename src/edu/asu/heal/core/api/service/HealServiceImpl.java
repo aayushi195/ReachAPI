@@ -3,7 +3,7 @@ package edu.asu.heal.core.api.service;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.asu.heal.core.api.dao.DAO;
 import edu.asu.heal.core.api.dao.DAOFactory;
 import edu.asu.heal.core.api.models.Activity;
@@ -147,10 +147,20 @@ public class HealServiceImpl implements HealService{
 	}
 
 	@Override
-	public ActivityInstance updateActivityInstance(ActivityInstance instance) {
+	public ActivityInstance updateActivityInstance(String requestBody) {
 		try {
+
 			DAO dao = DAOFactory.getTheDAO();
+
+			ObjectMapper mapper = new ObjectMapper();
+			SimpleDateFormat format = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss");
+			mapper.setDateFormat(format);
+
+			ActivityInstance instance;
+
+			instance  = mapper.readValue(requestBody, ActivityInstance.class);
 			instance.setUpdatedAt(new Date());
+
 			if(dao.updateActivityInstance(instance)){
 				return instance;
 			}
