@@ -42,9 +42,9 @@
     <war destfile="${warfile}" basedir="${destdir}" needxmlfile="false"/>
   </target>
 
-  <target name="apidoc">
+  <target name="apidoc" depends="OS-WIN,OS-MAC-UNIX">
     <mkdir dir="${apidocdir}"/>
-    <exec dir="." executable="apidoc">
+    <exec dir="." executable="${apicmd}">
       <arg line="-i ./${src} -o ./${apidocdir}"/>
     </exec>
   </target>
