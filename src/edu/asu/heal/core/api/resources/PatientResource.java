@@ -19,17 +19,11 @@ public class PatientResource {
     @Context
     private UriInfo _uri;
 
-    private HealService reachService =
-            HealServiceFactory.getTheService();
+    private HealService reachService = HealServiceFactory.getTheService();
 
 
     /** @apiDefine PatientNotFoundError
-     * @apiError (Error 4xx) {404} NotFound The patient cannot be found
-     * */
-
-    /**
-     * @apiDefine PatientsNotFoundError
-     * @apiError (Error 4xx) {404} NotFound No patients exist!
+     * @apiError (Error 4xx) {404} NotFound Patient could not be found
      * */
 
     /**
@@ -43,43 +37,12 @@ public class PatientResource {
      * */
 
     /**
-     * @api {get} /patient Get Patients
+     * @api {get} /patients?trialId={trialId} Get list of all Patients
      * @apiName GetPatients
      * @apiGroup Patient
      * @apiParam {Number} [trialId] Pass trialId = 'some-unique-id' as query parameter to fetch the list of
      * patients for a particular trial; eg: `/patient?trialId=1`
-     * @apiSuccess {Object[]} data List of Patients
-     * @apiSuccess {Object[]} data.activityInstances Patient's Activity Instances
-     * @apiSuccess {DateTime} data.createdAt CreatedAt
-     * @apiSuccess {Number} data.pin Patient's pin
-     * @apiSuccess {DateTime} data.startDate Patient's Start Date of Trial
-     * @apiSuccess {String} data.state Patient's Current State in the Trial
-     * @apiSuccess {DateTime} data.updatedAt UpdatedAt
-     * @apiSuccess {String} message Response Message
-     * @apiSuccess {String} messageType Response Message Type
-     * @apiSuccess {Number} statusCode  Response Status Code
-     * @apiSuccessExample {json} Success-Response:
-     * HTTP/1.1 200 OK
-     * {
-     * "data": [
-     * {
-     * "activityInstances": [
-     * {
-     * id: 87612kjbacskhv121
-     * }
-     * ],
-     * "createdAt": "2018-02-26T07:00:00Z[UTC]",
-     * "pin": 4010,
-     * "startDate": "2018-02-26T07:00:00Z[UTC]",
-     * "state": "Active",
-     * "updatedAt": "2018-02-26T07:00:00Z[UTC]"
-     * }
-     * ],
-     * "message": "Success",
-     * "messageType": "success",
-     * "statusCode": 200
-     * }
-     * @apiUse PatientsNotFoundError
+     * @apiUse PatientNotFoundError
      */
     @GET
     @Produces("application/hal+json")
@@ -130,10 +93,12 @@ public class PatientResource {
     }
 
     /**
-     * @api {get} /patient/:id Patient Detail
+     * @api {get} /patient/:id Get detail for a specific Patient
      * @apiName GetPatientDetail
      * @apiGroup Patient
      * @apiParam {Number} id Patient's Unique Id
+     * @apiSampleRequest http://localhost:8080/ReachAPI/rest/patients/4014
+     * @apiUse InternalServerError
      * @apiUse PatientNotFoundError
      */
     @GET
