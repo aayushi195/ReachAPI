@@ -18,6 +18,7 @@ public interface HealService {
     Activity updateActivity(Activity activity);
 
     Activity deleteActivity(String activityId);
+    
 
     /****************************************  Service methods for ActivityInstance  **********************************/
     List<ActivityInstance> getActivityInstances(int patientPin);
@@ -58,11 +59,4 @@ public interface HealService {
     /****************************************  Service methods for Logger  ********************************************/
     Logger[] logMessage (Logger[] loggerInstance);
 
-    /****************************************  Other Service methods  *************************************************/
-
-    String getWorryHeadsInstance();
-
-    String getEmotionsActivityInstance(int patientPin, String emotion, int intensity);
-
-    MakeBelieveActivityInstance getActivityMakeBelieveInstanceDAO(String activityInstanceId);
 }

@@ -7,6 +7,7 @@ import edu.asu.heal.core.api.responses.HEALResponseBuilder;
 import edu.asu.heal.core.api.service.HealService;
 import edu.asu.heal.core.api.service.HealServiceFactory;
 import edu.asu.heal.reachv3.api.models.MakeBelieveActivityInstance;
+import edu.asu.heal.reachv3.api.service.ReachService;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -19,10 +20,9 @@ import java.util.List;
 @Produces(MediaType.APPLICATION_JSON)
 public class ActivityInstanceResource {
 
+	private static HealService reachService = HealServiceFactory.getTheService();
 	@Context
 	private UriInfo _uri;
-
-	private static HealService reachService = HealServiceFactory.getTheService();
 
 	/**
 	 * @apiDefine BadRequestError
@@ -74,25 +74,6 @@ public class ActivityInstanceResource {
 					.setServerURI(_uri.getBaseUri().toString())
 					.build();
 		} else {
-			if(emotion != null){
-				String emotionsActivityResponse = reachService.getEmotionsActivityInstance(patientPin, emotion, intensity);
-				if(emotionsActivityResponse == null){
-					response = builder
-							.setStatusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
-							.setData("SOME ERROR ON THE SERVER. CONTACT ADMINISTRATOR")
-							.build();
-				}else if(emotionsActivityResponse.length() == 0){
-					response = builder
-							.setStatusCode(Response.Status.BAD_REQUEST.getStatusCode())
-							.setData("THE EMOTION YOU PASSED IN IS INCORRECT")
-							.build();
-				}else{
-					response = builder
-							.setStatusCode(Response.Status.OK.getStatusCode())
-							.setData(emotionsActivityResponse)
-							.build();
-				}
-			}else{
 				List<ActivityInstance> instances = reachService.getActivityInstances(patientPin);
 				if (instances == null) {
 					response = builder
@@ -125,7 +106,6 @@ public class ActivityInstanceResource {
 							.build();
 				}
 			}
-		}
 		return Response.status(response.getStatusCode()).entity(response.toEntity()).build();
 	}
 
@@ -154,30 +134,6 @@ public class ActivityInstanceResource {
 
 		ActivityInstance instance = reachService.getActivityInstance(activityInstanceId);
 
-		if(instance.getInstanceOf().getName().equals("MakeBelieve")) {
-			
-			MakeBelieveActivityInstance makeBeleieveinstance = reachService.getActivityMakeBelieveInstanceDAO(activityInstanceId);
-			
-			if (makeBeleieveinstance == null) {
-				response = builder
-						.setStatusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
-						.setData("SOME SERVER ERROR. PLEASE CONTACT ADMINISTRATOR")
-						.build();
-			} else if (instance.equals(NullObjects.getNullActivityInstance())) {
-				response = builder
-						.setStatusCode(Response.Status.NOT_FOUND.getStatusCode())
-						.setData("THE ACTIVITY INSTANCE YOU'RE REQUESTING DOES NOT EXIST")
-						.build();
-			} else {
-				response = builder
-						.setStatusCode(Response.Status.OK.getStatusCode())
-						.setData(makeBeleieveinstance)
-						.setServerURI(_uri.getBaseUri().toString())
-						.build();
-			}
-
-		}else {
-
 			if (instance == null) {
 				response = builder
 						.setStatusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
@@ -195,7 +151,6 @@ public class ActivityInstanceResource {
 						.setServerURI(_uri.getBaseUri().toString())
 						.build();
 			}
-		}
 
 		return Response.status(response.getStatusCode()).entity(response.toEntity()).build();
 	}
@@ -359,23 +314,5 @@ public class ActivityInstanceResource {
 		}
 		return Response.status(response.getStatusCode()).build();
 
-	}
-
-	// XXX again why a new endpoint? WorryHeads is just an acivityinstance from the API perspective. Yes, we
-	// will need to route to the right service call, but we do not have to expose a new endpoint. Rather,
-	// the subtype we are looking for (WH, MB, etc.) is a query filter
-	@GET
-	@Path("/worryheads")
-	public Response fetchWorryHeadsInstance() {
-		// XXX what WH instance would this even return? A single or a collection? How would it be scoped?
-		String worryHeadsInstanceString = reachService.getWorryHeadsInstance();
-		if (worryHeadsInstanceString == null)
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Some server error. Please contact "
-					+ "administrator").build();
-
-		if (worryHeadsInstanceString.equals("Bad Request"))
-			return Response.status(Response.Status.BAD_REQUEST).build();
-
-		return Response.status(Response.Status.OK).entity(worryHeadsInstanceString).build();
 	}
 }
