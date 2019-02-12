@@ -19,29 +19,33 @@ import edu.asu.heal.reachv3.api.models.*;
 
 public class ReachServiceImpl extends AHealService implements IReachService {
 
-    private static HealService service = AHealService.getTheService();
+   // private static HealService service = AHealService.getTheService();
+    
+    public ReachServiceImpl(HealService impl) {
+		super(impl);
+	}
     
  
     /****************************************  Service methods for Activity  ******************************************/
     
     @Override
     public List<Activity> getActivities(String domain) {
-    	return service.getActivities(domain);
+    	return super.getActivities(domain);
     }
 
     @Override
     public Activity createActivity(String title, String description) {
-    	return service.createActivity(title, description);
+    	return super.createActivity(title, description);
     }
 
     @Override
     public Activity getActivity(String activityId) {
-    	return service.getActivity(activityId);
+    	return super.getActivity(activityId);
     }
 
     @Override
     public Activity updateActivity(Activity activity) {
-    	return service.updateActivity(activity);
+    	return super.updateActivity(activity);
     }
 
     @Override

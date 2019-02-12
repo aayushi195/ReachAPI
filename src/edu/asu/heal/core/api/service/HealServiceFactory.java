@@ -17,7 +17,7 @@ public class HealServiceFactory {
     * */
 
     // service bound to HealService should be instantiated
-    private static HealService _theService;
+    private static HealService _theService,_coreImpl;
 
     private static Properties properties;
 
@@ -34,7 +34,8 @@ public class HealServiceFactory {
 
     public static HealService getTheService() {
         if (_theService == null) {
-            return HealServiceFactory.initializeService(properties.getProperty("healservice.classname"));
+        	_coreImpl = DecoratorFactory.getTheService();
+            _theService= HealServiceFactory.initializeService(properties.getProperty("healservice.classname"));
         }
 
         return _theService;
@@ -44,7 +45,7 @@ public class HealServiceFactory {
         try {
             Class<?> serviceClass = Class.forName(serviceClassName);
             Constructor<?> serviceClassConstructor = serviceClass.getConstructor();
-            _theService = (HealService) serviceClassConstructor.newInstance();
+            _theService = (HealService) serviceClassConstructor.newInstance(_coreImpl);
         } catch (ClassNotFoundException ce) {
             System.out.println(ce.getMessage());
         } catch (Exception ex) {
