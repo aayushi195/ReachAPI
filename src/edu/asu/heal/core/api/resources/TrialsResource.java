@@ -20,8 +20,7 @@ public class TrialsResource {
     @Context
     private UriInfo _uri;
 
-    private static HealService reachService =
-            HealServiceFactory.getTheService();
+    private static HealService reachService = HealServiceFactory.getTheService();
 
     /**
      * @apiDefine BadRequestError
@@ -46,8 +45,8 @@ public class TrialsResource {
      * @api {get} /trials?domain={domainName} Get list of trials for a given domain
      * @apiName getTrials
      * @apiGroup Trials
-     * @apiParam {String} domain Domain name for which trials are to be fetched. Use "_" in place of space character. Case sensitive.
-     * @apiParamExample Request example: http://localhost:8080/ReachAPI/rest/trials?domain=Anxiety_Prevention
+     * @apiParam {String} domain Domain name for which trials are to be fetched.
+     * @apiSampleRequest http://localhost:8080/ReachAPI/rest/trials?domain=Preventive Anxiety
      * @apiUse BadRequestError
      * @apiUse InternalServerError
      * @apiUse NotImplementedError
@@ -114,22 +113,23 @@ public class TrialsResource {
      * @apiParam {String} startDate Start Date for the Trial
      * @apiParam {String} endDate End Date for the Trial
      * @apiParam {Number} targetCount Target Count of the Trial
-     * @apiParamExample {form-data} Request Example:
-     * domainId="Preventive Anxiety
-     * title="Compass"
-     * description="Compass trial for Preventive Anxiety domain
-     * startDate="2018-02-18 09:00:00"
-     * endDate="2018-03-17 09:00:00"
-     * targetCount=100
-     * @apiSuccess {String} text SUCCESS
+     * @apiParamExample {json} Activity Example:
+     * {
+     *      domainId=5abd64f5734d1d0cf303bda1
+     *      title="Compass"
+     *      description="Compass for Courage"
+     *      startDate="2018-02-26T07:00:00Z"
+     *      endDate="2018-04-25T07:00:00Z"
+     *      targetCount=100
+     * }
      * @apiUse BadRequestError
      * @apiUse InternalServerError
      * @apiuse TrialNotFoundError
      * @apiUse NotImplementedError
      */
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     public Response addTrial(Trial trial) {
 
         HEALResponse response;

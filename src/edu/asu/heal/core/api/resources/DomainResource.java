@@ -35,36 +35,10 @@ public class DomainResource {
      * */
 
     /**
-     * @api {get} /domain Domains
+     * @api {get} /domains Get list of all Domains
      * @apiName GetDomains
      * @apiGroup Domain
-     * @apiParam (Login) {String} pass Only logged in user can get this
-     * @apiSuccess {Object[]} domains List of Domains
-     * @apiSuccess {Object} id  Domain Id
-     * @apiSuccess {String} title Domain's Title
-     * @apiSuccess {String} description Domain's Description
-     * @apiSuccess {String} state Domain's current State
-     * @apiSuccess {Object[]} activities List of Domain activities
-     * @apiSuccess {String} activities.title Activity's Title
-     * @apiSuccess {String} activities.description Activity's Description
-     * @apiSuccess {Object[]} trials List of Domain trials
-     * @apiSuccess {String} trials.title Trial's title
-     * @apiSuccess {String} trials.description Trial's Description
-     * @apiSuccess {String} trials.startDate Trial's startDate
-     * @apiSuccess {String} trials.endDate Trial's endDate
-     * @apiSuccess {Number} trials.targetCount Target count of patients
-     * @apiSuccess {Object[]} trials.patients Patient List of Trial
-     * @apiSuccess {Number} trials.patients.pin De-Identified pin of patient
-     * @apiSuccess {Number} trials.patients.startDate Start Date of patient
-     * @apiSuccess {Number} trials.patients.endDate End Date of patient
-     * @apiSuccess {String} trials.patients.state Current State of the patient
-     * @apiSuccess {Object[]} trials.patients.activityInstances ActivityInstances List of Patient
-     * @apiSuccess {String} trials.patients.activityInstances.title ActivityInstance Title
-     * @apiSuccess {String} trials.patients.activityInstances.startTime ActivityInstance Start Time
-     * @apiSuccess {String} trials.patients.activityInstances.endTime ActivityInstance End Time
-     * @apiSuccess {String} trials.patients.activityInstances.sequence ActivityInstance Sequence
-     * @apiSuccess {String} trials.patients.activityInstances.status The status of the Activity Instance from Created | Available | In Execution (Running) | Suspended | Completed | Aborted
-     * @apiSuccess {Object} trials.patients.activityInstances.result Result for ActivityInstance of Patient
+     * @apiSampleRequest http://localhost:8080/ReachAPI/rest/domains
      * @apiUse DomainNotFoundError
      * @apiUse InternalServerError
      */
@@ -103,18 +77,12 @@ public class DomainResource {
     }
 
     /**
-     * @api {get} /domain/:id Domain Detail
+     * @api {get} /domains/:id Get a specific domain Detail
      * @apiName DomainDetail
      * @apiGroup Domain
-     * @apiParam {Number} id Domain's Unique Id
-     * @apiParam (Login) {String} pass Only logged in user can get this
-     * @apiSuccess {Object} _id List of Domains
-     * @apiSuccess {String} id.$oid  Domain Id
-     * @apiSuccess {String} title Domain's Title
-     * @apiSuccess {String} description Domain's Description
-     * @apiSuccess {String} state Domain's current State
+     * @apiParam {String} id Domain's Unique Id
+     * @apiSampleRequest http://localhost:8080/ReachAPI/rest/domains/5a937d15f85cf71f59e36411
      * @apiUse BadRequestError
-     * @apiUse UnAuthorizedError
      * @apiUse InternalServerError
      * @apiUse NotImplementedError
      */
@@ -159,11 +127,15 @@ public class DomainResource {
      * @apiGroup Domain
      * @apiParam {String} Title Title of the Domain
      * @apiParam {String} Description Description of the Domain
-     * @apiParam {String} Status The status of the Domain from Active | InActive
-     * @apiParam (Login) {String} pass Only logged in user can get this
-     * @apiSuccess {String} text SUCCESS
+     * @apiParam {String} State The status of the Domain from Active | InActive
+     * @apiParamExample {json} Activity Example:
+     * {
+     *  	 "title": "COMPASS",
+     *       "description": "Heal domain for preventive anxiety applicatons for children",
+     *       "state": "Active"
+     * }
      * @apiUse DomainNotFoundError
-     * @apiUse InternalServerError
+     * @apiUse BadRequestError
      */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
