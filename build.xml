@@ -36,9 +36,6 @@
 
   <target name="build" depends="compile,apidoc">
     <copy file="${srcweb}/web.xml" todir="${destdir}/WEB-INF"/>
-    <copy todir="${destdir}/${apidocdir}">
-      <fileset dir="${apidocdir}"/>
-    </copy>
     <war destfile="${warfile}" basedir="${destdir}" needxmlfile="false"/>
   </target>
 

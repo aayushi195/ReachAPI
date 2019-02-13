@@ -191,8 +191,6 @@ public class PatientResource {
      * "endDate": "2018-03-01 13:00:00",
      * "state": "completed"
      * }
-     * @apiSuccess {int} requestCode Status code indicating NO_CONTENT
-     * @apiSuccessExample {int} Success- Example : 204
      * @apiUse BadRequestError
      * @apiUse InternalServerError
      * @apiUse NotImplementedError
