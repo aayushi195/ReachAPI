@@ -21,8 +21,8 @@ public class DomainResource {
     @Context
     private UriInfo _uri;
 
-    private static IHealService reachService =
-            ReachServiceFactory.getTheService();
+//    private static IHealService reachService =
+//            ReachServiceFactory.getTheService();
 
     /**
      * @apiDefine DomainNotFoundError
@@ -70,7 +70,7 @@ public class DomainResource {
      */
     @GET
     public Response fetchDomains() {
-
+		IHealService reachService = ReachServiceFactory.getFactory().getTheService();
         HEALResponse response;
         HEALResponseBuilder builder;
         try{
@@ -121,7 +121,7 @@ public class DomainResource {
     @GET
     @Path("/{id}")
     public Response fetchDomain(@PathParam("id") String id) {
-
+		IHealService reachService = ReachServiceFactory.getFactory().getTheService();
         HEALResponse response;
         HEALResponseBuilder builder;
         try{
@@ -168,7 +168,8 @@ public class DomainResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addDomain(Domain domain) {
-        HEALResponse response;
+		IHealService reachService = ReachServiceFactory.getFactory().getTheService();
+    	HEALResponse response;
         HEALResponseBuilder builder;
         try{
             builder = new HEALResponseBuilder(DomainResponse.class);

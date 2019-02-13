@@ -19,8 +19,8 @@ public class PatientResource {
     @Context
     private UriInfo _uri;
 
-    private IHealService reachService =
-            ReachServiceFactory.getTheService();
+//    private IHealService reachService =
+//            ReachServiceFactory.getTheService();
 
 
     /** @apiDefine PatientNotFoundError
@@ -84,7 +84,8 @@ public class PatientResource {
     @GET
     @Produces("application/hal+json")
     public Response fetchPatients(@QueryParam("trialId") String trialId) {
-        HEALResponse response = null;
+		IHealService reachService = ReachServiceFactory.getFactory().getTheService();
+    	HEALResponse response = null;
         HEALResponseBuilder builder;
         try{
             builder = new HEALResponseBuilder(PatientResponse.class);
@@ -140,7 +141,8 @@ public class PatientResource {
     @Path("/{patientPin}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response fetchPatient(@PathParam("patientPin") int patientPin) {
-        HEALResponse response = null;
+		IHealService reachService = ReachServiceFactory.getFactory().getTheService();
+    	HEALResponse response = null;
         HEALResponseBuilder builder;
         try {
             builder = new HEALResponseBuilder(PatientResponse.class);
@@ -182,7 +184,8 @@ public class PatientResource {
      */
     @POST
     public Response createPatient(String trialId) {
-        HEALResponse response;
+		IHealService reachService = ReachServiceFactory.getFactory().getTheService();
+    	HEALResponse response;
         HEALResponseBuilder builder;
         try{
             builder = new HEALResponseBuilder(PatientResponse.class);
@@ -236,7 +239,8 @@ public class PatientResource {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updatePatients(Patient patient) {
-        HEALResponse response;
+		IHealService reachService = ReachServiceFactory.getFactory().getTheService();
+    	HEALResponse response;
         HEALResponseBuilder builder;
         try{
             builder = new HEALResponseBuilder(PatientResponse.class);

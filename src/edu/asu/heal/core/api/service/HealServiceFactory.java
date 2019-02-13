@@ -6,36 +6,34 @@ import java.util.Properties;
 
 public class HealServiceFactory {
 
-    private static Properties properties;
-    private IHealService _coreImpl;
-    private static HealServiceFactory factory;
+    private Properties properties;
+    private IHealService _healImpl;
+    private static HealServiceFactory healFactory;
 
-    private HealServiceFactory(){}
-
-    private static HealServiceFactory getFactory(){
-
-        if(factory == null){
-            factory = new HealServiceFactory();
-        }
-        return factory;
+    private HealServiceFactory(){
+    	
+    	 try {
+             InputStream temp = HealServiceFactory.class.getResourceAsStream("healservice.properties");
+             properties = new Properties();
+             properties.load(temp);
+         } catch (Exception e) {
+             System.out.println("SOME ERROR IN LOADING DECORATOR PROPERTIES");
+             e.printStackTrace();
+         }
     }
 
-   static  {
-        try {
-            InputStream temp = HealServiceFactory.class.getResourceAsStream("HealService.properties");
-            properties = new Properties();
-            properties.load(temp);
-        } catch (Exception e) {
-            System.out.println("SOME ERROR IN LOADING DECORATOR PROPERTIES");
-            e.printStackTrace();
+    public static HealServiceFactory getFactory() {
+        if(healFactory == null){
+        	healFactory = new HealServiceFactory();
         }
+        return healFactory;
     }
 
     public IHealService getTheService() {
-    	if(_coreImpl == null) {
-    	    return HealServiceFactory.initializeService(properties.getProperty("HealService.classname"));
+    	if(_healImpl == null) {
+    	    return healFactory.initializeService(properties.getProperty("healservice.classname"));
         }
-    	return _coreImpl;
+    	return _healImpl;
         }
 
 	private IHealService initializeService(String serviceClassName) {
@@ -43,7 +41,7 @@ public class HealServiceFactory {
 
             Class<?> serviceClass = Class.forName(serviceClassName);
             Constructor<?> serviceClassConstructor = serviceClass.getConstructor();
-            _coreImpl = (IHealService) serviceClassConstructor.newInstance();
+            _healImpl = (IHealService) serviceClassConstructor.newInstance();
 
         } catch (ClassNotFoundException ce) {
             System.out.println(ce.getMessage());
@@ -51,6 +49,6 @@ public class HealServiceFactory {
             System.out.println("Exception occurred: " + ex.getMessage());
         }
 
-        return _coreImpl;
+        return _healImpl;
     }
 }

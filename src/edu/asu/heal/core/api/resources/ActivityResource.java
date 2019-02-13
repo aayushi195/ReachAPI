@@ -22,8 +22,8 @@ public class ActivityResource {
 	@Context
 	private UriInfo _uri;
 
-	private static IHealService reachService =
-			ReachServiceFactory.getTheService();
+//	private static IHealService reachService =
+//			ReachServiceFactory.getTheService();
 
 	/** @apiDefine ActivityNotFoundError
 	 * @apiError (Error 4xx) {404} NotFound Activity cannot be found
@@ -46,6 +46,7 @@ public class ActivityResource {
 	@GET
 	@QueryParam("domain")
 	public Response getActivities(@QueryParam("domain") String domain) {
+		IHealService reachService = ReachServiceFactory.getFactory().getTheService();
 		List<Activity> activities = reachService.getActivities(domain);
 
 		HEALResponse response;
@@ -103,6 +104,7 @@ public class ActivityResource {
 	@GET
 	@Path("/{activityId}")
 	public Response getActivity(@PathParam("activityId") String activityId){
+		IHealService reachService = ReachServiceFactory.getFactory().getTheService();
 		HEALResponse response;
 		HEALResponseBuilder builder;
 		try{
@@ -169,6 +171,7 @@ public class ActivityResource {
 	public Response getSuggestedActivities(@QueryParam("patientPin") int patientPin,
 			@QueryParam("emotion") String emotion,
 			@QueryParam("intensity") int intensity) {
+		IHealService reachService = ReachServiceFactory.getFactory().getTheService();
 		HEALResponse response = null;
 		HEALResponseBuilder builder;
 		try{
@@ -243,6 +246,7 @@ public class ActivityResource {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createActivity(Activity activityJSON) {
+		IHealService reachService = ReachServiceFactory.getFactory().getTheService();
 		HEALResponse response;
 		HEALResponseBuilder builder;
 		try{
@@ -278,6 +282,7 @@ public class ActivityResource {
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response updateActivity(Activity activityJSON){
+		IHealService reachService = ReachServiceFactory.getFactory().getTheService();
 		HEALResponse response;
 		HEALResponseBuilder builder;
 		try{
@@ -318,6 +323,7 @@ public class ActivityResource {
 	@DELETE
 	@Path("/{id}")
 	public Response removeActivity(@PathParam("id") String activityId) {
+		IHealService reachService = ReachServiceFactory.getFactory().getTheService();
 		HEALResponse response;
 		HEALResponseBuilder builder;
 		try{

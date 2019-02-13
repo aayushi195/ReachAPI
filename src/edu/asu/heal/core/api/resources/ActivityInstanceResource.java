@@ -18,7 +18,7 @@ import java.util.List;
 @Produces(MediaType.APPLICATION_JSON)
 public class ActivityInstanceResource {
 
-	private IHealService reachService = ReachServiceFactory.getTheService();
+//	private IHealService reachService = ReachServiceFactory.getFactory().getTheService();
 	@Context
 	private UriInfo _uri;
 
@@ -57,7 +57,7 @@ public class ActivityInstanceResource {
 	public Response fetchActivityInstances(@QueryParam("patientPin") int patientPin,
 			@QueryParam("emotion") String emotion,
 			@QueryParam("intensity") int intensity) {
-		IHealService reachService = ReachServiceFactory
+		IHealService reachService = ReachServiceFactory.getFactory().getTheService();
 		HEALResponse response = null;
 		HEALResponseBuilder builder;
 		try{
@@ -125,6 +125,7 @@ public class ActivityInstanceResource {
 	@GET
 	@Path("/{id}")
 	public Response fetchActivityInstance(@PathParam("id") String activityInstanceId) {
+		IHealService reachService = ReachServiceFactory.getFactory().getTheService();
 		HEALResponse response;
 		HEALResponseBuilder builder;
 		try{
@@ -189,6 +190,7 @@ public class ActivityInstanceResource {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createActivityInstance(ActivityInstance activityInstanceJson) {
+		IHealService reachService = ReachServiceFactory.getFactory().getTheService();
 		HEALResponse response;
 		HEALResponseBuilder builder;
 		try{
@@ -246,6 +248,7 @@ public class ActivityInstanceResource {
 	@Path("/{activityInstanceId}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response updateActivityInstance(@PathParam("activityInstanceId") String activityInstanceId, String payload) {
+		IHealService reachService = ReachServiceFactory.getFactory().getTheService();
 		ActivityInstance instance = reachService.updateActivityInstance(payload);
 		HEALResponse response;
 		HEALResponseBuilder builder;
@@ -286,6 +289,7 @@ public class ActivityInstanceResource {
 	@DELETE
 	@Path("/{id}")
 	public Response removeActivityInstance(@PathParam("id") String activityInstanceId) {
+		IHealService reachService = ReachServiceFactory.getFactory().getTheService();
 		HEALResponse response;
 		HEALResponseBuilder builder;
 

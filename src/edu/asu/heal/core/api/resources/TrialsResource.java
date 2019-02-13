@@ -20,8 +20,8 @@ public class TrialsResource {
     @Context
     private UriInfo _uri;
 
-    private static IHealService reachService =
-            ReachServiceFactory.getTheService();
+//    private static IHealService reachService =
+//            ReachServiceFactory.getTheService();
 
     /**
      * @apiDefine BadRequestError
@@ -55,7 +55,8 @@ public class TrialsResource {
     @GET
     @QueryParam("domain")
     public Response getTrials(@QueryParam("domain") String domain) {
-        HEALResponse response;
+		IHealService reachService = ReachServiceFactory.getFactory().getTheService();
+    	HEALResponse response;
         HEALResponseBuilder builder;
         try{
             builder = new HEALResponseBuilder(TrialResponse.class);
@@ -131,7 +132,7 @@ public class TrialsResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response addTrial(Trial trial) {
-
+		IHealService reachService = ReachServiceFactory.getFactory().getTheService();
         HEALResponse response;
         HEALResponseBuilder builder;
         try{

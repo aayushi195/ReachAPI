@@ -19,8 +19,8 @@ public class LoggerResource {
     @Context
     private UriInfo _uri;
 
-    private static IHealService reachService =
-            ReachServiceFactory.getTheService();
+//    private static IHealService reachService =
+//            ReachServiceFactory.getTheService();
 
     /**
      * @api {post} /logger Add Logs
@@ -33,7 +33,7 @@ public class LoggerResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response storeLogs(Logger[] loggerJSON) {
-
+		IHealService reachService = ReachServiceFactory.getFactory().getTheService();
         HEALResponse response;
         HEALResponseBuilder builder;
         try{
