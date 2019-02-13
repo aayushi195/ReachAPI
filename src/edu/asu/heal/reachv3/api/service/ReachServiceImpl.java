@@ -3,25 +3,26 @@ package edu.asu.heal.reachv3.api.service;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.asu.heal.core.api.dao.DAO;
 import edu.asu.heal.core.api.dao.DAOFactory;
 import edu.asu.heal.core.api.models.*;
-import edu.asu.heal.core.api.service.AHealService;
-import edu.asu.heal.core.api.service.HealService;
+import edu.asu.heal.core.api.service.AIHealService;
+import edu.asu.heal.core.api.service.IHealService;
 import edu.asu.heal.core.api.service.SuggestedActivityiesMappingService.MappingFactory;
 import edu.asu.heal.core.api.service.SuggestedActivityiesMappingService.MappingInterface;
 import edu.asu.heal.reachv3.api.models.*;
 
 
-public class ReachServiceImpl extends AHealService implements IReachService {
+public class ReachServiceImpl extends AIHealService implements IReachService {
 
-   // private static HealService service = AHealService.getTheService();
+   // private static IHealService service = AIHealService.getTheService();
+
+    public ReachServiceImpl(){}
     
-    public ReachServiceImpl(HealService impl) {
+    public ReachServiceImpl(IHealService impl) {
 		super(impl);
 	}
     
@@ -50,13 +51,13 @@ public class ReachServiceImpl extends AHealService implements IReachService {
 
     @Override
     public Activity deleteActivity(String activityId) {
-    	return service.deleteActivity(activityId);
+    	return super.deleteActivity(activityId);
     }
 
     /****************************************  Service methods for ActivityInstance  **********************************/
     @Override
     public List<ActivityInstance> getActivityInstances(int patientPin) {
-        return service.getActivityInstances(patientPin);
+        return super.getActivityInstances(patientPin);
     }
 
      
@@ -64,7 +65,7 @@ public class ReachServiceImpl extends AHealService implements IReachService {
     public ActivityInstance getActivityInstance(String activityInstanceId) {
     	
         try {
-        	ActivityInstance rval = service.getActivityInstance(activityInstanceId);
+        	ActivityInstance rval = super.getActivityInstance(activityInstanceId);
             DAO dao = DAOFactory.getTheDAO();
 
             if(rval!=null && rval.getInstanceOf().getName().equals("MakeBelieve"))
@@ -116,7 +117,7 @@ public class ReachServiceImpl extends AHealService implements IReachService {
                 		new EmotionActivityInstance(activityInstance);
             }
 
-            return service.createActivityInstance(activityInstance);
+            return super.createActivityInstance(activityInstance);
         } catch (Exception e) {
             System.out.println("SOME ERROR CREATING NE ACTIVITY INSTANCE IN REACH SERVICE - CREATEACTIVITYINSTANCE");
             e.printStackTrace();
@@ -127,7 +128,6 @@ public class ReachServiceImpl extends AHealService implements IReachService {
 
     @Override
     public ActivityInstance updateActivityInstance(String requestBody) {
-//    	return service.updateActivityInstance(instance);
         try {
 
             DAO dao = DAOFactory.getTheDAO();
@@ -180,73 +180,73 @@ public class ReachServiceImpl extends AHealService implements IReachService {
 
     @Override
     public ActivityInstance deleteActivityInstance(String activityInstanceId) {
-    	return service.deleteActivityInstance(activityInstanceId);
+    	return super.deleteActivityInstance(activityInstanceId);
     }
 
 
     /****************************************  Service methods for Domain  ********************************************/
     @Override
     public List<Domain> getDomains() {
-    	return service.getDomains();
+    	return super.getDomains();
     }
 
     @Override
     public Domain getDomain(String id) {
-    	return service.getDomain(id);
+    	return super.getDomain(id);
     }
 
     @Override
     public Domain addDomain(String title, String description, String state) {
-    	return service.addDomain(title, description, state);
+    	return super.addDomain(title, description, state);
     }
 
     @Override
     public String addTestDomain(String title, String description, String state) {
-    	return service.addTestDomain(title, description, state);
+    	return super.addTestDomain(title, description, state);
     }
 
     /****************************************  Service methods for Patient  *******************************************/
     @Override
     public List<Patient> getPatients(String trialId) {
-    	return service.getPatients(trialId);
+    	return super.getPatients(trialId);
     }
 
     @Override
     public Patient getPatient(int patientPin) {
-    	return service.getPatient(patientPin);
+    	return super.getPatient(patientPin);
     }
 
     @Override
     public Patient createPatient(String trialId) {
-    	return service.createPatient(trialId);
+    	return super.createPatient(trialId);
     }
 
     @Override
     public Patient updatePatient(Patient patient) {
-    	return service.updatePatient(patient);
+    	return super.updatePatient(patient);
     }
 
     @Override
     public String deletePatient(String patientPin) {
-    	return service.deletePatient(patientPin);
+    	return super.deletePatient(patientPin);
     }
 
     /****************************************  Service methods for Trial  *********************************************/
 
     @Override
     public List<Trial> getTrials(String domain) {
-    	return service.getTrials(domain);
+    	return super.getTrials(domain);
     }
 
     @Override
     public Trial addTrial(Trial trialInstance) {
-    	return service.addTrial(trialInstance);
+    	return super.addTrial(trialInstance);
     }
 
     /****************************************  Service methods for Logger *********************************************/
     @Override
     public Logger[] logMessage (Logger[] loggerInstance) {
-    	return service.logMessage(loggerInstance);
+    	return super.logMessage(loggerInstance);
     }
     
     // Reach service  methods.

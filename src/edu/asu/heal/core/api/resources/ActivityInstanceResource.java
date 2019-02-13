@@ -4,9 +4,8 @@ import edu.asu.heal.core.api.models.*;
 import edu.asu.heal.core.api.responses.ActivityInstanceResponse;
 import edu.asu.heal.core.api.responses.HEALResponse;
 import edu.asu.heal.core.api.responses.HEALResponseBuilder;
-import edu.asu.heal.core.api.service.HealService;
-import edu.asu.heal.core.api.service.HealServiceFactory;
-import edu.asu.heal.reachv3.api.models.MakeBelieveActivityInstance;
+import edu.asu.heal.core.api.service.IHealService;
+import edu.asu.heal.core.api.service.ReachServiceFactory;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -19,7 +18,7 @@ import java.util.List;
 @Produces(MediaType.APPLICATION_JSON)
 public class ActivityInstanceResource {
 
-	private static HealService reachService = HealServiceFactory.getTheService();
+	private IHealService reachService = ReachServiceFactory.getTheService();
 	@Context
 	private UriInfo _uri;
 
@@ -58,6 +57,7 @@ public class ActivityInstanceResource {
 	public Response fetchActivityInstances(@QueryParam("patientPin") int patientPin,
 			@QueryParam("emotion") String emotion,
 			@QueryParam("intensity") int intensity) {
+		IHealService reachService = ReachServiceFactory
 		HEALResponse response = null;
 		HEALResponseBuilder builder;
 		try{
@@ -73,6 +73,9 @@ public class ActivityInstanceResource {
 					.setServerURI(_uri.getBaseUri().toString())
 					.build();
 		} else {
+			if(reachService == null){
+				System.out.println("Reach service in resource is null.");
+			}
 				List<ActivityInstance> instances = reachService.getActivityInstances(patientPin);
 				if (instances == null) {
 					response = builder

@@ -4,8 +4,8 @@ import edu.asu.heal.core.api.models.*;
 import edu.asu.heal.core.api.responses.HEALResponse;
 import edu.asu.heal.core.api.responses.HEALResponseBuilder;
 import edu.asu.heal.core.api.responses.PatientResponse;
-import edu.asu.heal.core.api.service.HealService;
-import edu.asu.heal.core.api.service.HealServiceFactory;
+import edu.asu.heal.core.api.service.IHealService;
+import edu.asu.heal.core.api.service.ReachServiceFactory;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -19,8 +19,8 @@ public class PatientResource {
     @Context
     private UriInfo _uri;
 
-    private HealService reachService =
-            HealServiceFactory.getTheService();
+    private IHealService reachService =
+            ReachServiceFactory.getTheService();
 
 
     /** @apiDefine PatientNotFoundError

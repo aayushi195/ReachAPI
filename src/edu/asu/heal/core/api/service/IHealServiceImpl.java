@@ -16,7 +16,7 @@ import edu.asu.heal.core.api.models.NullObjects;
 import edu.asu.heal.core.api.models.Patient;
 import edu.asu.heal.core.api.models.Trial;
 
-public class HealServiceImpl implements HealService{
+public class IHealServiceImpl implements IHealService {
 
 	private static final String DATE_FORMAT = "MM/dd/yyyy";
 
@@ -340,8 +340,8 @@ public class HealServiceImpl implements HealService{
 			Domain domain = dao.getDomain(trialInstance.getDomainId());
 			if (domain != null) {
 
-				Date startDateFormat = new SimpleDateFormat(HealServiceImpl.DATE_FORMAT).parse(trialInstance.getStartDate().toString());
-				Date endDateFormat = new SimpleDateFormat(HealServiceImpl.DATE_FORMAT).parse(trialInstance.getEndDate().toString());
+				Date startDateFormat = new SimpleDateFormat(IHealServiceImpl.DATE_FORMAT).parse(trialInstance.getStartDate().toString());
+				Date endDateFormat = new SimpleDateFormat(IHealServiceImpl.DATE_FORMAT).parse(trialInstance.getEndDate().toString());
 
 				trialInstance.setUpdatedAt(new Date());
 				trialInstance.setCreatedAt(new Date());

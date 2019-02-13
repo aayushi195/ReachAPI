@@ -4,7 +4,7 @@ import edu.asu.heal.core.api.models.*;
 
 import java.util.List;
 
-public interface HealService {
+public interface IHealService {
 
 
     /****************************************  Service methods for Activity  ******************************************/

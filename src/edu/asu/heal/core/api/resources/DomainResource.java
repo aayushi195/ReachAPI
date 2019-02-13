@@ -4,8 +4,8 @@ import edu.asu.heal.core.api.models.*;
 import edu.asu.heal.core.api.responses.DomainResponse;
 import edu.asu.heal.core.api.responses.HEALResponse;
 import edu.asu.heal.core.api.responses.HEALResponseBuilder;
-import edu.asu.heal.core.api.service.HealService;
-import edu.asu.heal.core.api.service.HealServiceFactory;
+import edu.asu.heal.core.api.service.IHealService;
+import edu.asu.heal.core.api.service.ReachServiceFactory;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -21,8 +21,8 @@ public class DomainResource {
     @Context
     private UriInfo _uri;
 
-    private static HealService reachService =
-            HealServiceFactory.getTheService();
+    private static IHealService reachService =
+            ReachServiceFactory.getTheService();
 
     /**
      * @apiDefine DomainNotFoundError

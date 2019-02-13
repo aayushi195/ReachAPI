@@ -9,16 +9,14 @@ import edu.asu.heal.core.api.models.Logger;
 import edu.asu.heal.core.api.models.Patient;
 import edu.asu.heal.core.api.models.Trial;
 
-public abstract class AHealService implements HealService{
+public abstract class AIHealService implements IHealService {
 	
-	private static HealService __service;
-	
-	protected AHealService(HealService impl) {
+	private IHealService __service;
+	protected AIHealService(){}
+	protected AIHealService(IHealService impl) {
 		__service = impl;
 		// if impl is null thn can we create new instance directly here via factory ?
-		
 	}
-
 
     /****************************************  Service methods for Activity  ******************************************/
    public List<Activity> getActivities(String domain){
@@ -60,43 +58,60 @@ public abstract class AHealService implements HealService{
     	return __service.deleteActivityInstance(activityInstanceId);
     }
 
-    ActivityInstance updateActivityInstance(String requestBody);
+    public ActivityInstance updateActivityInstance(String requestBody){
+        return __service.updateActivityInstance(requestBody);
+    }
 
     /****************************************  Service methods for Domain  ********************************************/
-    List<Domain> getDomains();
+    public List<Domain> getDomains(){
+        return __service.getDomains();
+    }
 
-    Domain getDomain(String id);
+    public Domain getDomain(String id){
+        return __service.getDomain(id);
+    }
 
-    Domain addDomain(String title, String description, String state);
+    public Domain addDomain(String title, String description, String state){
+        return __service.addDomain(title,description,state);
+    }
 
-    String addTestDomain(String title, String description, String state);
+    public String addTestDomain(String title, String description, String state){
+        return __service.addTestDomain(title, description, state);
+    }
 
     /****************************************  Service methods for Patient  *******************************************/
-    List<Patient> getPatients(String trialId);
+    public List<Patient> getPatients(String trialId){
+        return __service.getPatients(trialId);
+    }
 
-    Patient getPatient(int patientPin);
+    public Patient getPatient(int patientPin){
+        return __service.getPatient(patientPin);
+    }
 
-    Patient createPatient(String trialId);
+    public Patient createPatient(String trialId){
+        return __service.createPatient(trialId);
+    }
 
-    Patient updatePatient(Patient patient);
+    public Patient updatePatient(Patient patient){
+        return __service.updatePatient(patient);
+    }
 
-    String deletePatient(String patientPin);
+    public String deletePatient(String patientPin){
+        return __service.deletePatient(patientPin);
+    }
 
     /****************************************  Service methods for Trial  *********************************************/
-    List<Trial> getTrials(String domain);
+    public List<Trial> getTrials(String domain){
+        return __service.getTrials(domain);
+    }
 
-    Trial addTrial(Trial trialInstance);
+    public Trial addTrial(Trial trialInstance){
+        return __service.addTrial(trialInstance);
+    }
 
     /****************************************  Service methods for Logger  ********************************************/
-    Logger[] logMessage (Logger[] loggerInstance);
-
-
-//    public static HealService getTheService() {
-//        if (__service == null) {
-//        	__service = DecoratorFactory.getTheService();
-//        }
-//
-//        return __service;
-//    }
+    public Logger[] logMessage (Logger[] loggerInstance){
+        return __service.logMessage(loggerInstance);
+    }
 
 }
