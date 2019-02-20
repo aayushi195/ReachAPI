@@ -1,4 +1,4 @@
-<project name="ReachAPI" default="deploy">
+<project name="CompassAPI" default="deploy">
 
   <property file="build.properties" />
 
