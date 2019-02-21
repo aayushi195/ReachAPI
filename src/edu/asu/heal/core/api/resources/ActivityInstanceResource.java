@@ -210,6 +210,7 @@ public class ActivityInstanceResource {
 				response = builder
 						.setStatusCode(Response.Status.CREATED.getStatusCode())
 						.setData(instance)
+						.setServerURI(_uri.getBaseUri().toString())
 						.build();
 			}
 		}

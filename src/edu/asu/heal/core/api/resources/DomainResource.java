@@ -166,6 +166,7 @@ public class DomainResource {
                 response = builder
                         .setStatusCode(Response.Status.CREATED.getStatusCode())
                         .setData(createdDomain)
+                        .setServerURI(_uri.getBaseUri().toString())
                         .build();
             }
         }
