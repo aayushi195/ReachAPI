@@ -14,12 +14,12 @@ public class WorryHeadsActivityInstance extends ActivityInstance{
         this.situation = situation;
     }
 
-    public WorryHeadsActivityInstance(String activityInstanceId, Date createdAt, Date updatedAt, String description,
+    public WorryHeadsActivityInstance(String activityInstanceId, String activityId, Date createdAt, Date updatedAt, String description,
                                       Date startTime, Date endTime, Date userSubmissionTime, Date actualSubmissionTime,
-                                      ActivityInstanceType instanceOf, String state, int patientPin,
+                                      String state, int patientPin,
                                       WorryHeadsSituation situation) {
-        super(activityInstanceId, createdAt, updatedAt, description, startTime, endTime, userSubmissionTime,
-                actualSubmissionTime, instanceOf, state, patientPin);
+        super(activityInstanceId, activityId, createdAt, updatedAt, description, startTime, endTime, userSubmissionTime,
+                actualSubmissionTime, state, patientPin);
         this.situation = situation;
     }
 

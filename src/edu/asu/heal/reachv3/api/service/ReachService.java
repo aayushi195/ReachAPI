@@ -142,17 +142,17 @@ public class ReachService implements HealService {
             ActivityInstance rval;
             rval =  dao.getActivityInstance(activityInstanceId);
 
-            if(rval!=null && rval.getInstanceOf().getName().equals("MakeBelieve"))
-                rval = dao.getActivityMakeBelieveInstanceDAO(activityInstanceId);
-
-            else if(rval!=null && rval.getInstanceOf().getName().equals("WorryHeads"))
-                rval = dao.getActivityWorryHeadsInstanceDAO(activityInstanceId);
-
-            else if(rval!=null && rval.getInstanceOf().getName().equals("StandUp"))
-                rval = dao.getActivityStandUpInstanceDAO(activityInstanceId);
-
-            else if(rval!=null && rval.getInstanceOf().getName().equals("FaceIt"))
-                rval = dao.getActivityFaceInstanceDAO(activityInstanceId);
+//            if(rval!=null && rval.getInstanceOf().getName().equals("MakeBelieve"))
+//                rval = dao.getActivityMakeBelieveInstanceDAO(activityInstanceId);
+//
+//            else if(rval!=null && rval.getInstanceOf().getName().equals("WorryHeads"))
+//                rval = dao.getActivityWorryHeadsInstanceDAO(activityInstanceId);
+//
+//            else if(rval!=null && rval.getInstanceOf().getName().equals("StandUp"))
+//                rval = dao.getActivityStandUpInstanceDAO(activityInstanceId);
+//
+//            else if(rval!=null && rval.getInstanceOf().getName().equals("FaceIt"))
+//                rval = dao.getActivityFaceInstanceDAO(activityInstanceId);
 
             return rval;
         } catch (Exception e) {
