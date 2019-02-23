@@ -1,12 +1,13 @@
 package edu.asu.heal.reachv3.api.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class WorryHeadsQuestion {
 
     private List<WorryHeadsOption> options;
     private List<Integer> answerId;
-    private List<WorryHeadsResponse> responses;
+    private List<WorryHeadsResponse> responses = new ArrayList<>();
 
     public WorryHeadsQuestion(){}
 

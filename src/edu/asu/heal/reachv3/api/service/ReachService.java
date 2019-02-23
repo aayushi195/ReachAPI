@@ -142,17 +142,19 @@ public class ReachService implements HealService {
             ActivityInstance rval;
             rval =  dao.getActivityInstance(activityInstanceId);
 
-//            if(rval!=null && rval.getInstanceOf().getName().equals("MakeBelieve"))
-//                rval = dao.getActivityMakeBelieveInstanceDAO(activityInstanceId);
-//
-//            else if(rval!=null && rval.getInstanceOf().getName().equals("WorryHeads"))
-//                rval = dao.getActivityWorryHeadsInstanceDAO(activityInstanceId);
-//
-//            else if(rval!=null && rval.getInstanceOf().getName().equals("StandUp"))
-//                rval = dao.getActivityStandUpInstanceDAO(activityInstanceId);
-//
-//            else if(rval!=null && rval.getInstanceOf().getName().equals("FaceIt"))
-//                rval = dao.getActivityFaceInstanceDAO(activityInstanceId);
+            String activityName = dao.getActivityNameById(rval.getActivityId());
+
+            if(rval!=null && activityName.equals("MakeBelieve"))
+                rval = dao.getActivityMakeBelieveInstanceDAO(activityInstanceId);
+
+            else if(rval!=null && activityName.equals("WorryHeads"))
+                rval = dao.getActivityWorryHeadsInstanceDAO(activityInstanceId);
+
+            else if(rval!=null && activityName.equals("StandUp"))
+                rval = dao.getActivityStandUpInstanceDAO(activityInstanceId);
+
+            else if(rval!=null && activityName.equals("FaceIt"))
+                rval = dao.getActivityFaceInstanceDAO(activityInstanceId);
 
             return rval;
         } catch (Exception e) {
@@ -254,7 +256,8 @@ public class ReachService implements HealService {
             mapper.setDateFormat(format);
 
             JsonNode activityInstanceAsTree = mapper.readTree(requestBody);
-            String activityInstanceType = activityInstanceAsTree.get("instanceOf").get("name").asText();
+            String activityInstanceType = activityInstanceAsTree.get("activityId").asText();
+           // String activityInstanceType = activityInstanceAsTree.get("instanceOf").get("name").asText();
 
             ActivityInstance instance;
             if (activityInstanceType.equals("MakeBelieve")) { // todo Need to find a more elegant way to do this
