@@ -6,9 +6,6 @@ import edu.asu.heal.core.api.responses.HEALResponse;
 import edu.asu.heal.core.api.responses.HEALResponseBuilder;
 import edu.asu.heal.core.api.service.HealService;
 import edu.asu.heal.core.api.service.HealServiceFactory;
-import edu.asu.heal.reachv3.api.models.MakeBelieveActivityInstance;
-import edu.asu.heal.reachv3.api.service.ReachService;
-
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -44,22 +41,19 @@ public class ActivityInstanceResource {
 	 * */
 
 	/**
-	 * @api {get} /activityInstance?patientPin={patientPin}&trialId={trialId} ActivityInstances
-	 * @apiName GetActivityInstances
+	 * @api {get} /activityinstances?patientPin={patientPin} Get Activity Instances for a patient
+	 * @apiName GetActivityInstancesOfPatient
 	 * @apiGroup ActivityInstance
 	 * @apiParam {Number} patientPin Patient's Unique Id
-	 * @apiParam {Number} trialId Trial's Unique Id
-	 * @apiParam (Login) {String} pass Only logged in user can get this
+	 * @apiSampleRequest http://localhost:8080/ReachAPI/rest/activityinstances?patientPin=4015
 	 * @apiUse BadRequestError
 	 * @apiUse ActivityInstanceNotFoundError
 	 * @apiUse InternalServerError
 	 * @apiUse NotImplementedError
 	 */
 	@GET
-	public Response fetchActivityInstances(@QueryParam("patientPin") int patientPin,
-			@QueryParam("emotion") String emotion,
-			@QueryParam("intensity") int intensity) {
-		HEALResponse response = null;
+	public Response fetchActivityInstances(@QueryParam("patientPin") int patientPin) {
+		HEALResponse response;
 		HEALResponseBuilder builder;
 		try{
 			builder = new HEALResponseBuilder(ActivityInstanceResponse.class);
@@ -74,30 +68,23 @@ public class ActivityInstanceResource {
 					.setServerURI(_uri.getBaseUri().toString())
 					.build();
 		} else {
-				List<ActivityInstance> instances = reachService.getActivityInstances(patientPin);
-				if (instances == null) {
+			List<ActivityInstance> instances = reachService.getActivityInstances(patientPin);
+			if (instances == null) {
+				response = builder
+						.setStatusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
+						.setData("SOME SERVER ERROR. PLEASE CONTACT ADMINISTRATOR")
+						.build();
+			} else if (instances.isEmpty()) {
+				response = builder
+						.setStatusCode(Response.Status.OK.getStatusCode())
+						.setData("THERE ARE NO ACTIVITY INSTANCES FOR THIS PATIENT")
+						.build();
+			} else if (instances.size() == 1) {
+				if (instances.get(0).equals(NullObjects.getNullActivityInstance())) {
 					response = builder
-							.setStatusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
-							.setData("SOME SERVER ERROR. PLEASE CONTACT ADMINISTRATOR")
+							.setStatusCode(Response.Status.BAD_REQUEST.getStatusCode())
+							.setData("THE PATIENT PIN YOU'VE PASSED IN IS INCORRECT OR DOES NOT EXIST")
 							.build();
-				} else if (instances.isEmpty()) {
-					response = builder
-							.setStatusCode(Response.Status.OK.getStatusCode())
-							.setData("THERE ARE NO ACTIVITIES INSTANCES FOR THIS PATIENT")
-							.build();
-				} else if (instances.size() == 1) {
-					if (instances.get(0).equals(NullObjects.getNullActivityInstance())) {
-						response = builder
-								.setStatusCode(Response.Status.BAD_REQUEST.getStatusCode())
-								.setData("THE PATIENT PIN YOU'VE PASSED IN IS INCORRECT OR DOES NOT EXIST")
-								.build();
-					} else {
-						response = builder
-								.setStatusCode(Response.Status.OK.getStatusCode())
-								.setData(instances)
-								.setServerURI(_uri.getBaseUri().toString())
-								.build();
-					}
 				} else {
 					response = builder
 							.setStatusCode(Response.Status.OK.getStatusCode())
@@ -105,16 +92,23 @@ public class ActivityInstanceResource {
 							.setServerURI(_uri.getBaseUri().toString())
 							.build();
 				}
+			} else {
+				response = builder
+						.setStatusCode(Response.Status.OK.getStatusCode())
+						.setData(instances)
+						.setServerURI(_uri.getBaseUri().toString())
+						.build();
 			}
+		}
 		return Response.status(response.getStatusCode()).entity(response.toEntity()).build();
 	}
 
 	/**
-	 * @api {get} /activityInstance/:id ActivityInstance Detail
+	 * @api {get} /activityinstances/:id Get Activity Instances for an activityInstanceId
 	 * @apiName ActivityInstanceDetail
 	 * @apiGroup ActivityInstance
-	 * @apiParam {Number} id ActivityInstance's Unique Id
-	 * @apiParamExample http://localhost:8080/ReachAPI/rest/activityinstances/5abd71b82e027e29ca2353a0
+	 * @apiParam {String} id ActivityInstance's Unique Id
+	 * @apiSampleRequest http://localhost:8080/ReachAPI/rest/activityinstances/5c5b901a324b051370ac2f3e
 	 * @apiUse BadRequestError
 	 * @apiUse ActivityInstanceNotFoundError
 	 * @apiUse InternalServerError
@@ -134,52 +128,51 @@ public class ActivityInstanceResource {
 
 		ActivityInstance instance = reachService.getActivityInstance(activityInstanceId);
 
-			if (instance == null) {
-				response = builder
-						.setStatusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
-						.setData("SOME SERVER ERROR. PLEASE CONTACT ADMINISTRATOR")
-						.build();
-			} else if (instance.equals(NullObjects.getNullActivityInstance())) {
-				response = builder
-						.setStatusCode(Response.Status.NOT_FOUND.getStatusCode())
-						.setData("THE ACTIVITY INSTANCE YOU'RE REQUESTING DOES NOT EXIST")
-						.build();
-			} else {
-				response = builder
-						.setStatusCode(Response.Status.OK.getStatusCode())
-						.setData(instance)
-						.setServerURI(_uri.getBaseUri().toString())
-						.build();
-			}
+		if (instance == null) {
+			response = builder
+					.setStatusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
+					.setData("SOME SERVER ERROR. PLEASE CONTACT ADMINISTRATOR")
+					.build();
+		} else if (instance.equals(NullObjects.getNullActivityInstance())) {
+			response = builder
+					.setStatusCode(Response.Status.NOT_FOUND.getStatusCode())
+					.setData("THE ACTIVITY INSTANCE YOU'RE REQUESTING DOES NOT EXIST")
+					.build();
+		} else {
+			response = builder
+					.setStatusCode(Response.Status.OK.getStatusCode())
+					.setData(instance)
+					.setServerURI(_uri.getBaseUri().toString())
+					.build();
+		}
 
 		return Response.status(response.getStatusCode()).entity(response.toEntity()).build();
 	}
 
 	/**
-	 * @api {post} /activityInstance Create ActivityInstance
+	 * @api {post} /activityinstances Create an ActivityInstance
 	 * @apiName CreateActivityInstance
 	 * @apiGroup ActivityInstance
+	 * @apiParam {String} Description Description about the Activity Instance
 	 * @apiParam {DateTime} StartTime Start Time of the Activity Instance
 	 * @apiParam {DateTime} EndTime End Time of the Activity Instance
 	 * @apiParam {DateTime} UserSubmissionTime User Submission Time of the ActivityInstance
-	 * @apiParam {String} Status The status of the Activity Instance from Created | Available | In Execution (Running) | Suspended | Completed | Aborted
-	 * @apiParam {String} Sequence The sequence of the activities
-	 * @apiParam {String} ActivityTitle The title of the Activity Instance
-	 * @apiParam {String} Description Description about the Activity Instance
-	 * @apiParam (Login) {String} pass Only logged in user can get this
+	 * @apiParam {DateTime} ActualSubmissionTime Actual Submission Time of the ActivityInstance
+	 * @apiParam {Number} patientPin Patient's Unique Id
+	 * @apiParam {String} Name The name of the activity
 	 * @apiParamExample {json} Activity Instance Example:
 	 * {
-	 * "createdAt": "2018-02-26T07:00:00.000Z",
-	 * "updatedAt": "2018-02-26T07:00:00.000Z",
-	 * "startTime": "2018-02-26T07:00:00.000Z",
-	 * "endTime": "2018-02-27T07:00:00.000Z",
-	 * "instanceOf": {
-	 * "name": "Relaxation"
-	 * "activityId": 5a9499e066684905df626003
-	 * },
-	 * "state": "created",
-	 * "description": "Relaxation instance"
+	 *   "description": "SWAP activity",
+	 *   "startTime": "2019-02-07T01:05:25.286Z",
+	 *   "endTime": null,
+	 *   "userSubmissionTime": null,
+	 *   "actualSubmissionTime": null,
+	 *   "instanceOf": {
+	 *       "name": "SWAP"
+	 *    },
+	 *   "patientPin": 4015
 	 * }
+	 * @apiSampleRequest http://localhost:8080/ReachAPI/rest/activityinstances
 	 * @apiUse BadRequestError
 	 * @apiUse InternalServerError
 	 * @apiUse NotImplementedError
@@ -225,17 +218,40 @@ public class ActivityInstanceResource {
 	}
 
 	/**
-	 * @api {put} activityInstance Update ActivityInstance
+	 * @api {put} /activityinstances/:activityInstanceId Update an ActivityInstance
 	 * @apiName UpdateActivityInstance
 	 * @apiGroup ActivityInstance
+	 * @apiParam {String} ActivityInstanceId ActivityInstance's Unique Id
+	 * @apiParam {String} Description Description about the Activity Instance
+	 * @apiParam {DateTime} createdAt Created Date and Time of the Activity Instance
+	 * @apiParam {DateTime} updatedAt Updated Data and Time of the Activity Instance
 	 * @apiParam {DateTime} StartTime Start Time of the Activity Instance
 	 * @apiParam {DateTime} EndTime End Time of the Activity Instance
 	 * @apiParam {DateTime} UserSubmissionTime User Submission Time of the ActivityInstance
-	 * @apiParam {String} Status The status of the Activity Instance from Created | Available | In Execution (Running) | Suspended | Completed | Aborted
-	 * @apiParam {String} Sequence The sequence of the activities
-	 * @apiParam {String} ActivityTitle The title of the Activity Instance
-	 * @apiParam {String} Description Description about the Activity Instance
-	 * @apiParam (Login) {String} pass Only logged in user can get this
+	 * @apiParam {DateTime} ActualSubmissionTime Actual Submission Time of the ActivityInstance
+	 * @apiParam {Number} patientPin Patient's Unique Id
+	 * @apiParam {String} Name The name of the activity
+	 * @apiParam {String} state The status of the Activity Instance from Created | Available | In Execution (Running) | Suspended | Completed | Aborted
+	 * @apiParamExample {json} Activity Instance Example:
+	 * {
+	 *         "activityInstanceId": "5c5b901a324b051370ac2f3e",
+	 *         "createdAt": "2019-02-07T01:30:34.947Z",
+	 *         "updatedAt": "2019-02-07T01:30:34.947Z",
+	 *         "description": "SWAP activity",
+	 *         "startTime": "2019-02-07T01:05:25.286Z",
+	 *         "endTime": null,
+	 *         "userSubmissionTime": null,
+	 *         "actualSubmissionTime": null,
+	 *         "instanceOf": {
+	 *             "name": "SWAP",
+	 *         },
+	 *         "state": "completed",
+	 *         "patientPin": 4015,
+	 *         "situation": "Explain the principal",
+	 *         "worry": "Fear to speak",
+	 *         "action": "Practice WorryHeads"
+	 * }
+	 * @apiSampleRequest http://localhost:8080/ReachAPI/rest/activityinstances/5c5b901a324b051370ac2f3e
 	 * @apiUse BadRequestError
 	 * @apiUse InternalServerError
 	 * @apiUse NotImplementedError
@@ -271,11 +287,11 @@ public class ActivityInstanceResource {
 	}
 
 	/**
-	 * @api {delete} /activityInstance/:id Delete ActivityInstance
+	 * @api {delete} /activityinstances/:id Delete an ActivityInstance
 	 * @apiName DeleteActivityInstance
 	 * @apiGroup ActivityInstance
 	 * @apiParam {String} id ActivityInstance's unique id
-	 * @apiParamExample http://localhost:8080/ReachAPI/rest/activityinstances/5abd71b82e027e29ca2353a0
+	 * @apiSampleRequest http://localhost:8080/ReachAPI/rest/activityinstances/5c5b901a324b051370ac2f3e
 	 * @apiUse BadRequestError
 	 * @apiUse ActivityInstanceNotFoundError
 	 * @apiUse InternalServerError
@@ -316,3 +332,4 @@ public class ActivityInstanceResource {
 
 	}
 }
+

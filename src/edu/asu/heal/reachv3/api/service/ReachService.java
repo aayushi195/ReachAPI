@@ -11,9 +11,7 @@ import edu.asu.heal.core.api.responses.HEALResponse;
 import edu.asu.heal.core.api.service.HealService;
 import edu.asu.heal.core.api.service.SuggestedActivityiesMappingService.MappingFactory;
 import edu.asu.heal.core.api.service.SuggestedActivityiesMappingService.MappingInterface;
-import edu.asu.heal.reachv3.api.models.MakeBelieveActivityInstance;
-import edu.asu.heal.reachv3.api.models.WorryHeadsActivityInstance;
-
+import edu.asu.heal.reachv3.api.models.*;
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -150,6 +148,12 @@ public class ReachService implements HealService {
             else if(rval!=null && rval.getInstanceOf().getName().equals("WorryHeads"))
                 rval = dao.getActivityWorryHeadsInstanceDAO(activityInstanceId);
 
+            else if(rval!=null && rval.getInstanceOf().getName().equals("StandUp"))
+                rval = dao.getActivityStandUpInstanceDAO(activityInstanceId);
+
+            else if(rval!=null && rval.getInstanceOf().getName().equals("FaceIt"))
+                rval = dao.getActivityFaceInstanceDAO(activityInstanceId);
+
             return rval;
         } catch (Exception e) {
             System.out.println("SOME ERROR IN HEAL SERVICE getActivityInstance");
@@ -166,6 +170,8 @@ public class ReachService implements HealService {
             if (activityInstance.getState() == null) activityInstance.setState(ActivityInstanceStatus.CREATED.status());
             if (activityInstance.getUpdatedAt() == null) activityInstance.setUpdatedAt(new Date());
 
+            // Create one config file to store activity name as per service.
+            
             if(activityInstance.getInstanceOf().getName().equals("MakeBelieve")){ //todo need a more elegant way of making the check whether it is of type make believe
                 activityInstance =
                         new MakeBelieveActivityInstance(activityInstance.getActivityInstanceId(),
@@ -182,6 +188,46 @@ public class ReachService implements HealService {
                         activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
                         activityInstance.getInstanceOf(), activityInstance.getState(),
                         activityInstance.getPatientPin(), dao.getWorryHeadsSituation());
+            } else if(activityInstance.getInstanceOf().getName().equals("StandUp")){
+                activityInstance = new StandUpActivityInstance(
+                        activityInstance.getActivityInstanceId(),
+                        activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
+                        activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
+                        activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
+                        activityInstance.getInstanceOf(), activityInstance.getState(),
+                        activityInstance.getPatientPin(), dao.getStandUpSituation());
+            } else if(activityInstance.getInstanceOf().getName().equals("DailyDiary")){
+                activityInstance = new DailyDiaryActivityInstance(
+                        activityInstance.getActivityInstanceId(),
+                        activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
+                        activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
+                        activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
+                        activityInstance.getInstanceOf(), activityInstance.getState(),
+                        activityInstance.getPatientPin());
+            } else if(activityInstance.getInstanceOf().getName().equals("SWAP")){
+                activityInstance = new SwapActivityInstance(
+                        activityInstance.getActivityInstanceId(),
+                        activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
+                        activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
+                        activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
+                        activityInstance.getInstanceOf(), activityInstance.getState(),
+                        activityInstance.getPatientPin());
+            } else if(activityInstance.getInstanceOf().getName().equals("FaceIt")){
+                activityInstance = new FaceItActivityInstance(
+                        activityInstance.getActivityInstanceId(),
+                        activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
+                        activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
+                        activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
+                        activityInstance.getInstanceOf(), activityInstance.getState(),
+                        activityInstance.getPatientPin(),dao.getFaceItChallenges());
+            }else if(activityInstance.getInstanceOf().getName().equals("Emotion")){
+                activityInstance = new EmotionActivityInstance(
+                        activityInstance.getActivityInstanceId(),
+                        activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
+                        activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
+                        activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
+                        activityInstance.getInstanceOf(), activityInstance.getState(),
+                        activityInstance.getPatientPin());
             }
 
             ActivityInstance newActivityInstance = dao.createActivityInstance(activityInstance);
@@ -206,13 +252,28 @@ public class ReachService implements HealService {
             String activityInstanceType = activityInstanceAsTree.get("instanceOf").get("name").asText();
 
             ActivityInstance instance;
-            if(activityInstanceType.equals("MakeBelieve")){ // todo Need to find a more elegant way to do this
+            if (activityInstanceType.equals("MakeBelieve")) { // todo Need to find a more elegant way to do this
                 instance = mapper.readValue(requestBody, MakeBelieveActivityInstance.class);
                 instance.setUpdatedAt(new Date());
-            } else if(activityInstanceType.equals("WorryHeads")) {
+            } else if (activityInstanceType.equals("WorryHeads")) {
                 instance = mapper.readValue(requestBody, WorryHeadsActivityInstance.class);
                 instance.setUpdatedAt(new Date());
-            }else{
+            } else if (activityInstanceType.equals("DailyDiary")) {
+                instance = mapper.readValue(requestBody, DailyDiaryActivityInstance.class);
+                instance.setUpdatedAt(new Date());
+            } else if (activityInstanceType.equals("SWAP")) {
+                instance = mapper.readValue(requestBody, SwapActivityInstance.class);
+                instance.setUpdatedAt(new Date());
+            } else if (activityInstanceType.equals("StandUp")) {
+                instance = mapper.readValue(requestBody, StandUpActivityInstance.class);
+                instance.setUpdatedAt(new Date());
+            } else if (activityInstanceType.equals("FaceIt")) {
+                instance = mapper.readValue(requestBody, FaceItActivityInstance.class);
+                instance.setUpdatedAt(new Date());
+            }else if (activityInstanceType.equals("Emotion")) {
+                instance = mapper.readValue(requestBody, EmotionActivityInstance.class);
+                instance.setUpdatedAt(new Date());
+            } else{
                 instance  = mapper.readValue(requestBody, ActivityInstance.class);
                 instance.setUpdatedAt(new Date());
             }

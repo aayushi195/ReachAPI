@@ -7,28 +7,28 @@ import java.util.Date;
 import java.util.List;
 
 public class WorryHeadsActivityInstance extends ActivityInstance{
-    private List<WorryHeadsSituation> situation;
+    private WorryHeadsSituation situation;
 
     public WorryHeadsActivityInstance(){}
-    public WorryHeadsActivityInstance(List<WorryHeadsSituation> situation) {
+    public WorryHeadsActivityInstance(WorryHeadsSituation situation) {
         this.situation = situation;
     }
 
     public WorryHeadsActivityInstance(String activityInstanceId, Date createdAt, Date updatedAt, String description,
                                       Date startTime, Date endTime, Date userSubmissionTime, Date actualSubmissionTime,
                                       ActivityInstanceType instanceOf, String state, int patientPin,
-                                      List<WorryHeadsSituation> situation) {
+                                      WorryHeadsSituation situation) {
         super(activityInstanceId, createdAt, updatedAt, description, startTime, endTime, userSubmissionTime,
                 actualSubmissionTime, instanceOf, state, patientPin);
         this.situation = situation;
     }
 
 
-    public List<WorryHeadsSituation> getSituation() {
+    public WorryHeadsSituation getSituation() {
         return situation;
     }
 
-    public void setSituation(List<WorryHeadsSituation> situation) {
+    public void setSituation(WorryHeadsSituation situation) {
         this.situation = situation;
     }
 }
