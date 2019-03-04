@@ -259,26 +259,28 @@ public class ReachService implements HealService {
             String activityInstanceType = activityInstanceAsTree.get("activityId").asText();
            // String activityInstanceType = activityInstanceAsTree.get("instanceOf").get("name").asText();
 
+            String activityName = dao.getActivityNameById(activityInstanceType);
+
             ActivityInstance instance;
-            if (activityInstanceType.equals("MakeBelieve")) { // todo Need to find a more elegant way to do this
+            if (activityName.equals("MakeBelieve")) { // todo Need to find a more elegant way to do this
                 instance = mapper.readValue(requestBody, MakeBelieveActivityInstance.class);
                 instance.setUpdatedAt(new Date());
-            } else if (activityInstanceType.equals("WorryHeads")) {
+            } else if (activityName.equals("WorryHeads")) {
                 instance = mapper.readValue(requestBody, WorryHeadsActivityInstance.class);
                 instance.setUpdatedAt(new Date());
-            } else if (activityInstanceType.equals("DailyDiary")) {
+            } else if (activityName.equals("DailyDiary")) {
                 instance = mapper.readValue(requestBody, DailyDiaryActivityInstance.class);
                 instance.setUpdatedAt(new Date());
-            } else if (activityInstanceType.equals("SWAP")) {
+            } else if (activityName.equals("SWAP")) {
                 instance = mapper.readValue(requestBody, SwapActivityInstance.class);
                 instance.setUpdatedAt(new Date());
-            } else if (activityInstanceType.equals("StandUp")) {
+            } else if (activityName.equals("StandUp")) {
                 instance = mapper.readValue(requestBody, StandUpActivityInstance.class);
                 instance.setUpdatedAt(new Date());
-            } else if (activityInstanceType.equals("FaceIt")) {
+            } else if (activityName.equals("FaceIt")) {
                 instance = mapper.readValue(requestBody, FaceItActivityInstance.class);
                 instance.setUpdatedAt(new Date());
-            }else if (activityInstanceType.equals("Emotion")) {
+            }else if (activityName.equals("Emotion")) {
                 instance = mapper.readValue(requestBody, EmotionActivityInstance.class);
                 instance.setUpdatedAt(new Date());
             } else{
