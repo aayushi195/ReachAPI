@@ -370,6 +370,7 @@ public class MongoDBDAO implements DAO {
 					.projection(Projections.excludeId())
 					.first();
 
+			System.out.println("Make Believe Instance : " + instance.getExtended().toString());
 			System.out.println("ACTIVITY INSTANCE GOT FROM DB");
 			System.out.println(instance);
 			return instance ;
