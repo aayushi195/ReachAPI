@@ -227,7 +227,7 @@ public class ReachService implements HealService {
                         activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
                         activityInstance.getState(),
                         activityInstance.getPatientPin(),dao.getFaceItChallenges());
-            }else if(activityName.equals("Emotion")){
+            }else if(activityName.equals("Emotions")){
                 activityInstance = new EmotionActivityInstance(
                         activityInstance.getActivityInstanceId(),activityInstance.getActivityId(),
                         activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
