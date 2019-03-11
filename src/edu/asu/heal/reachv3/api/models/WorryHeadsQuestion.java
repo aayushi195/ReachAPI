@@ -10,7 +10,7 @@ public class WorryHeadsQuestion extends ExtendedQuestions {
     public WorryHeadsQuestion(){}
 
     public WorryHeadsQuestion(List<Options> options, List<Integer> answerIds, List<Responses> responses) {
-    	super(options,0,responses);
+    	super(options,responses);
         this.answerIds = answerIds;
     }
 

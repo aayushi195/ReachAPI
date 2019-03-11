@@ -144,18 +144,18 @@ public class ReachService implements HealService {
 
 			String activityName = dao.getActivityNameById(rval.getActivityId());
 
-			if(rval!=null && activityName.equals("MakeBelieve")) {
-				rval = dao.getActivityMakeBelieveInstanceDAO(activityInstanceId);
-			}
-
-			else if(rval!=null && activityName.equals("WorryHeads"))
-				rval = dao.getActivityWorryHeadsInstanceDAO(activityInstanceId);
-
-			else if(rval!=null && activityName.equals("StandUp"))
-				rval = dao.getActivityStandUpInstanceDAO(activityInstanceId);
-
-			else if(rval!=null && activityName.equals("FaceIt"))
-				rval = dao.getActivityFaceInstanceDAO(activityInstanceId);
+//			if(rval!=null && activityName.equals("MakeBelieve")) {
+//				rval = dao.getActivityMakeBelieveInstanceDAO(activityInstanceId);
+//			}
+//
+//			else if(rval!=null && activityName.equals("WorryHeads"))
+//				rval = dao.getActivityWorryHeadsInstanceDAO(activityInstanceId);
+//
+//			else if(rval!=null && activityName.equals("StandUp"))
+//				rval = dao.getActivityStandUpInstanceDAO(activityInstanceId);
+//
+//			else if(rval!=null && activityName.equals("FaceIt"))
+//				rval = dao.getActivityFaceInstanceDAO(activityInstanceId);
 
 			return rval;
 		} catch (Exception e) {
@@ -191,65 +191,57 @@ public class ReachService implements HealService {
 								activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
 								activityInstance.getState(),
 								activityInstance.getPatientPin(),extendedActivityInstance);
-
-				//                        new MakeBelieveActivityInstance(activityInstance.getActivityInstanceId(), activityInstance.getActivityId(),
-				//                        activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
-				//                        activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
-				//                        activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
-				//                        activityInstance.getState(),
-				//                        activityInstance.getPatientPin(), dao.getMakeBelieveSituation());
-
-
+			}else if(activityName.equals("WorryHeads")){
+				extendedActivityInstance.setSituation(dao.getWorryHeadsSituation());
+				activityInstance = new WorryHeadsActivityInstance(
+						activityInstance.getActivityInstanceId(), activityInstance.getActivityId(),
+						activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
+						activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
+						activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
+						activityInstance.getState(),
+						activityInstance.getPatientPin(), extendedActivityInstance);
+			} else if(activityName.equals("StandUp")){
+				extendedActivityInstance.setSituation(dao.getStandUpSituation());
+				activityInstance = new StandUpActivityInstance(
+						activityInstance.getActivityInstanceId(), activityInstance.getActivityId(),
+						activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
+						activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
+						activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
+						activityInstance.getState(),
+						activityInstance.getPatientPin(), extendedActivityInstance);
+			} else if(activityName.equals("DailyDiary")){
+				activityInstance = new DailyDiaryActivityInstance(
+						activityInstance.getActivityInstanceId(), activityInstance.getActivityId(),
+						activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
+						activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
+						activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
+						activityInstance.getState(),
+						activityInstance.getPatientPin());
+			} else if(activityName.equals("SWAP")){
+				activityInstance = new SwapActivityInstance(
+						activityInstance.getActivityInstanceId(), activityInstance.getActivityId(),
+						activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
+						activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
+						activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
+						activityInstance.getState(),
+						activityInstance.getPatientPin());
+			} else if(activityName.equals("FaceIt")){
+				activityInstance = new FaceItActivityInstance(
+						activityInstance.getActivityInstanceId(),activityInstance.getActivityId(),
+						activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
+						activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
+						activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
+						activityInstance.getState(),
+						activityInstance.getPatientPin(),dao.getFaceItChallenges());
+			}else if(activityName.equals("Emotion")){
+				activityInstance = new EmotionActivityInstance(
+						activityInstance.getActivityInstanceId(),activityInstance.getActivityId(),
+						activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
+						activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
+						activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
+						activityInstance.getState(),
+						activityInstance.getPatientPin());
 			}
-			//            else if(activityName.equals("WorryHeads")){
-			//                activityInstance = new WorryHeadsActivityInstance(
-			//                        activityInstance.getActivityInstanceId(), activityInstance.getActivityId(),
-			//                        activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
-			//                        activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
-			//                        activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
-			//                        activityInstance.getState(),
-			//                        activityInstance.getPatientPin(), dao.getWorryHeadsSituation());
-			//            } else if(activityName.equals("StandUp")){
-			//                activityInstance = new StandUpActivityInstance(
-			//                        activityInstance.getActivityInstanceId(), activityInstance.getActivityId(),
-			//                        activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
-			//                        activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
-			//                        activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
-			//                        activityInstance.getState(),
-			//                        activityInstance.getPatientPin(), dao.getStandUpSituation());
-			//            } else if(activityName.equals("DailyDiary")){
-			//                activityInstance = new DailyDiaryActivityInstance(
-			//                        activityInstance.getActivityInstanceId(), activityInstance.getActivityId(),
-			//                        activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
-			//                        activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
-			//                        activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
-			//                        activityInstance.getState(),
-			//                        activityInstance.getPatientPin());
-			//            } else if(activityName.equals("SWAP")){
-			//                activityInstance = new SwapActivityInstance(
-			//                        activityInstance.getActivityInstanceId(), activityInstance.getActivityId(),
-			//                        activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
-			//                        activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
-			//                        activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
-			//                        activityInstance.getState(),
-			//                        activityInstance.getPatientPin());
-			//            } else if(activityName.equals("FaceIt")){
-			//                activityInstance = new FaceItActivityInstance(
-			//                        activityInstance.getActivityInstanceId(),activityInstance.getActivityId(),
-			//                        activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
-			//                        activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
-			//                        activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
-			//                        activityInstance.getState(),
-			//                        activityInstance.getPatientPin(),dao.getFaceItChallenges());
-			//            }else if(activityName.equals("Emotion")){
-			//                activityInstance = new EmotionActivityInstance(
-			//                        activityInstance.getActivityInstanceId(),activityInstance.getActivityId(),
-			//                        activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
-			//                        activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
-			//                        activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
-			//                        activityInstance.getState(),
-			//                        activityInstance.getPatientPin());
-			//            }
 
 			ActivityInstance newActivityInstance = dao.createActivityInstance(activityInstance);
 			return newActivityInstance;

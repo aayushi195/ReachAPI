@@ -9,6 +9,8 @@ public class WorryHeadsSituation extends ExtendedSituation {
 //    private List<WorryHeadsQuestion> questions;
     private String worryTitle;
     
+    public WorryHeadsSituation() {}
+    
     public WorryHeadsSituation(int situationId, String situationTitle, List<ExtendedQuestions> questions, String worryTitle) {
 		super(situationId, situationTitle, questions);
 		this.worryTitle=worryTitle;

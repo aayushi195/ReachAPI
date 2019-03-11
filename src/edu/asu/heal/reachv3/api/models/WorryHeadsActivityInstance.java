@@ -7,28 +7,24 @@ import java.util.Date;
 import java.util.List;
 
 public class WorryHeadsActivityInstance extends ActivityInstance{
-    private WorryHeadsSituation situation;
+	private ExtendedActivityInstance extended;
 
     public WorryHeadsActivityInstance(){}
-    public WorryHeadsActivityInstance(WorryHeadsSituation situation) {
-        this.situation = situation;
+
+    public WorryHeadsActivityInstance(String activityInstanceId, String activityId, Date createdAt,
+                                       Date updatedAt, String description,
+                                       Date startTime, Date endTime, Date userSubmissionTime,
+                                       Date actualSubmissionTime,
+                                       String state, int patientPin, ExtendedActivityInstance extendedActivityInstance) {
+        super(activityInstanceId, activityId, createdAt, updatedAt, description, startTime, endTime, userSubmissionTime, actualSubmissionTime, state, patientPin);
+        this.extended=extendedActivityInstance;
     }
 
-    public WorryHeadsActivityInstance(String activityInstanceId, String activityId, Date createdAt, Date updatedAt, String description,
-                                      Date startTime, Date endTime, Date userSubmissionTime, Date actualSubmissionTime,
-                                      String state, int patientPin,
-                                      WorryHeadsSituation situation) {
-        super(activityInstanceId, activityId, createdAt, updatedAt, description, startTime, endTime, userSubmissionTime,
-                actualSubmissionTime, state, patientPin);
-        this.situation = situation;
+    public ExtendedActivityInstance getExtended() {
+        return extended;
     }
 
-
-    public WorryHeadsSituation getSituation() {
-        return situation;
-    }
-
-    public void setSituation(WorryHeadsSituation situation) {
-        this.situation = situation;
+    public void setExtended(ExtendedActivityInstance extendedActivityInstance) {
+        this.extended = extendedActivityInstance;
     }
 }

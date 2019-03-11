@@ -6,14 +6,12 @@ import java.util.List;
 public class ExtendedQuestions {
 
 	private List<Options> options;
-	private int answerId;
-	private List<Responses> responses = new ArrayList<>();
+	private List<Responses> responses;
 	
 	public ExtendedQuestions() {}
 	
-	public ExtendedQuestions(List<Options> options, int answerId, List<Responses> responses) {
+	public ExtendedQuestions(List<Options> options, List<Responses> responses) {
 		this.options = options;
-		this.answerId = answerId;
 		this.responses = responses;
 	}
 	
@@ -22,12 +20,6 @@ public class ExtendedQuestions {
 	}
 	public void setOptions(List<Options> options) {
 		this.options = options;
-	}
-	public int getAnswerId() {
-		return answerId;
-	}
-	public void setAnswerId(int answerId) {
-		this.answerId = answerId;
 	}
 	public List<Responses> getResponses() {
 		return responses;
