@@ -544,17 +544,17 @@ public class MongoDBDAO implements DAO {
 	}
 
 	@Override
-	public String getActivityId(String activityName) {
+	public String getActivityNameById(String activityId) {
 		try {
 			MongoDatabase database = MongoDBDAO.getConnectedDatabase();
 			MongoCollection<Activity> activityCollection = database.getCollection(ACTIVITIES_COLLECTION, Activity.class);
 
-			Activity activityID = activityCollection
-					.find(Filters.eq(Activity.TITLE_ATTRIBUTE,activityName))
+			Activity activity = activityCollection
+					.find(Filters.eq(Activity.ACTIVITYID_ATTRIBUTE,activityId))
 					.projection(Projections.excludeId())
 					.first();
 
-			return activityID.getActivityId();
+			return activity.getTitle();
 
 		} catch (NullPointerException ne) {
 			ne.printStackTrace();

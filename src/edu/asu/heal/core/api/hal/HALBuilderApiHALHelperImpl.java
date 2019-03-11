@@ -19,7 +19,7 @@ public class HALBuilderApiHALHelperImpl implements HALHelper{
                 .withProperty("activity_instance", activityInstance)
                 .withLink(Support.SELF, activityInstanceResourcePath + "/" + activityInstance.getActivityInstanceId())
                 .withLink("patient_pin", patientResourcePath + "/" + String.valueOf(activityInstance.getPatientPin()))
-                .withLink("activity_type", activityResourcePath + "/" + activityInstance.getInstanceOf().getActivityId());
+                .withLink("activity_type", activityResourcePath + "/" + activityInstance.getActivityId());
 
         System.out.println("REPRESENTATION HERE");  
         System.out.println(representation);
@@ -37,7 +37,7 @@ public class HALBuilderApiHALHelperImpl implements HALHelper{
                     .withProperty("activity_instance", a)
                     .withLink(Support.SELF, activityInstanceResourcePath + "/" + a.getActivityInstanceId())
                     .withLink("patient_pin", patientResourcePath + "/" + String.valueOf(a.getPatientPin()))
-                    .withLink("activity_type", activityResourcePath + "/" + a.getInstanceOf().getActivityId());
+                    .withLink("activity_type", activityResourcePath + "/" + a.getActivityId());
 
             finalRepresentation.withRepresentation("activity_instances", representation);
         }

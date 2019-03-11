@@ -16,6 +16,7 @@ public class ActivityInstance implements IHealModelType {
 
 
     private String activityInstanceId;
+    private String activityId;
     private Date createdAt;
     private Date updatedAt;
     private String description;
@@ -23,17 +24,18 @@ public class ActivityInstance implements IHealModelType {
     private Date endTime;
     private Date userSubmissionTime;
     private Date actualSubmissionTime;
-    private ActivityInstanceType instanceOf;
+ //   private ActivityInstanceType instanceOf;
     private String state;
     private int patientPin;
 
     public ActivityInstance() {
     }
 
-    public ActivityInstance(String activityInstanceId, Date createdAt, Date updatedAt, String description,
+    public ActivityInstance(String activityInstanceId, String activityId, Date createdAt, Date updatedAt, String description,
                             Date startTime, Date endTime, Date userSubmissionTime, Date actualSubmissionTime,
-                            ActivityInstanceType instanceOf, String state, int patientPin) {
+                            String state, int patientPin) {
         this.activityInstanceId = activityInstanceId;
+        this.activityId =activityId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.description = description;
@@ -41,9 +43,16 @@ public class ActivityInstance implements IHealModelType {
         this.endTime = endTime;
         this.userSubmissionTime = userSubmissionTime;
         this.actualSubmissionTime = actualSubmissionTime;
-        this.instanceOf = instanceOf;
         this.state = state;
         this.patientPin = patientPin;
+    }
+
+    public String getActivityId() {
+        return activityId;
+    }
+
+    public void setActivityId(String activityId) {
+        this.activityId = activityId;
     }
 
     public Date getCreatedAt() {
@@ -94,14 +103,6 @@ public class ActivityInstance implements IHealModelType {
         this.actualSubmissionTime = actualSubmissionTime;
     }
 
-    public ActivityInstanceType getInstanceOf() {
-        return instanceOf;
-    }
-
-    public void setInstanceOf(ActivityInstanceType instanceOf) {
-        this.instanceOf = instanceOf;
-    }
-
     public String getState() {
         return state;
     }
@@ -138,13 +139,13 @@ public class ActivityInstance implements IHealModelType {
     public String toString() {
         return "ActivityInstance{" +
                 ", activityInstanceId='" + activityInstanceId + '\'' +
+                ", activityId='" + activityId + '\'' +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 ", startTime=" + startTime +
                 ", endTime=" + endTime +
                 ", userSubmissionTime=" + userSubmissionTime +
                 ", actualSubmissionTime=" + actualSubmissionTime +
-                ", instanceOf=" + instanceOf +
                 ", state='" + state + '\'' +
                 ", description='" + description + '\'' +
                 ", patientPin='" + patientPin + '\'' +
@@ -156,6 +157,7 @@ public class ActivityInstance implements IHealModelType {
         int PRIME = 31;
         int result = 3;
         result = PRIME * result + (this.activityInstanceId == null ? 0 :this.activityInstanceId.hashCode());
+        result = PRIME * result + (this.activityId == null ? 0 :this.activityId.hashCode());
         result = PRIME * result + (this.createdAt == null ? 0: this.createdAt.hashCode());
         result = PRIME * result + (this.updatedAt == null ? 0 : this.updatedAt.hashCode());
         result = PRIME * result + (this.description == null ? 0 : this.description.hashCode());
@@ -163,7 +165,6 @@ public class ActivityInstance implements IHealModelType {
         result = PRIME * result + (this.endTime == null ? 0 :this.endTime.hashCode());
         result = PRIME * result + (this.userSubmissionTime == null ? 0 :this.userSubmissionTime.hashCode());
         result = PRIME * result + (this.actualSubmissionTime == null ? 0 :this.actualSubmissionTime.hashCode());
-        result = PRIME * result + (this.instanceOf == null ? 0 :this.instanceOf.hashCode());
         result = PRIME * result + (this.state == null ? 0 :this.state.hashCode());
         result = PRIME * result + this.patientPin;
 
@@ -178,6 +179,7 @@ public class ActivityInstance implements IHealModelType {
 
         ActivityInstance temp = (ActivityInstance) obj;
         return this.activityInstanceId.equals(temp.activityInstanceId)
+                && this.activityId.equals(temp.activityId)
                 && this.createdAt.equals(temp.createdAt)
                 && this.updatedAt.equals(temp.updatedAt)
                 && this.description.equals(temp.description)
@@ -185,7 +187,6 @@ public class ActivityInstance implements IHealModelType {
                 && this.endTime.equals(temp.endTime)
                 && this.userSubmissionTime.equals(temp.userSubmissionTime)
                 && this.actualSubmissionTime.equals(temp.actualSubmissionTime)
-                && this.instanceOf.equals(temp.instanceOf)
                 && this.state.equals(temp.state)
                 && this.patientPin == temp.patientPin;
     }

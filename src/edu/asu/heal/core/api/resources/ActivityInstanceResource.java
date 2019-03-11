@@ -188,7 +188,7 @@ public class ActivityInstanceResource {
 			ie.printStackTrace();
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
 		}
-		if (activityInstanceJson.getPatientPin() == 0 || activityInstanceJson.getInstanceOf() == null) {
+		if (activityInstanceJson.getPatientPin() == 0) {
 			response = builder
 					.setStatusCode(Response.Status.BAD_REQUEST.getStatusCode())
 					.setData("REQUEST MUST CONTAIN AT LEAST PATIENT PIN AND INSTANCE TYPE VALUE")

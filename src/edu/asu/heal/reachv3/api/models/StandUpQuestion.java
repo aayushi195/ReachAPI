@@ -1,12 +1,13 @@
 package edu.asu.heal.reachv3.api.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StandUpQuestion {
 
 	private List<StandUpOption> options;
 	private int answerId;
-	private List<StandUpResponse> responses;
+	private List<StandUpResponse> responses = new ArrayList<>();
 
 	public StandUpQuestion(){}
 

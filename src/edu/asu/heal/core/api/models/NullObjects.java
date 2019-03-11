@@ -33,7 +33,7 @@ public class NullObjects {
         instance.setEndTime(new Date(0));
         instance.setUserSubmissionTime(new Date(0));
         instance.setActualSubmissionTime(new Date(0));
-        instance.setInstanceOf(new ActivityInstanceType("NULL", "NULL"));
+        instance.setActivityId("NULL");
         instance.setState("NULL");
         instance.setDescription("NULL");
 
