@@ -5,7 +5,7 @@ public class ExtendedActivityInstance {
     private String domainName;
     private String activityTypeName;
     private String version;
-    private MakeBelieveSituation situation;
+    private ExtendedSituation situation;
 
     public ExtendedActivityInstance(){}
 
@@ -13,7 +13,14 @@ public class ExtendedActivityInstance {
         this.situation=situation;
     }
 
-    public ExtendedActivityInstance(String domainName, String activityTypeName, String version, MakeBelieveSituation situation) {
+    public ExtendedActivityInstance(StandUpSituation situation){
+        this.situation=situation;
+    }
+    
+    public ExtendedActivityInstance(WorryHeadsSituation situation){
+        this.situation=situation;
+    }
+    public ExtendedActivityInstance(String domainName, String activityTypeName, String version, ExtendedSituation situation) {
         this.domainName=domainName;
         this.activityTypeName=activityTypeName;
         this.version=version;
@@ -44,11 +51,11 @@ public class ExtendedActivityInstance {
         this.version = version;
     }
 
-    public MakeBelieveSituation getSituation() {
+    public ExtendedSituation getSituation() {
         return situation;
     }
 
-    public void setSituation(MakeBelieveSituation situation) {
+    public void setSituation(ExtendedSituation situation) {
         this.situation = situation;
     }
 

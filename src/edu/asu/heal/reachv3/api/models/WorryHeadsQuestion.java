@@ -3,42 +3,23 @@ package edu.asu.heal.reachv3.api.models;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WorryHeadsQuestion {
+public class WorryHeadsQuestion extends ExtendedQuestions {
 
-    private List<WorryHeadsOption> options;
-    private List<Integer> answerId;
-    private List<WorryHeadsResponse> responses = new ArrayList<>();
+    private List<Integer> answerIds;
 
     public WorryHeadsQuestion(){}
 
-    public WorryHeadsQuestion(List<WorryHeadsOption> options, List<Integer> answerId, List<WorryHeadsResponse> responses) {
-
-        this.options = options;
-        this.answerId = answerId;
-        this.responses = responses;
+    public WorryHeadsQuestion(List<Options> options, List<Integer> answerIds, List<Responses> responses) {
+    	super(options,0,responses);
+        this.answerIds = answerIds;
     }
 
-    public List<WorryHeadsOption> getOptions() {
-        return options;
+    public List<Integer> getAnswerIds() {
+        return answerIds;
     }
 
-    public void setOptions(List<WorryHeadsOption> options) {
-        this.options = options;
+    public void setAnswerIds(List<Integer> answerIds) {
+        this.answerIds = answerIds;
     }
 
-    public List<Integer> getAnswerId() {
-        return answerId;
-    }
-
-    public void setAnswerId(List<Integer> answerId) {
-        this.answerId = answerId;
-    }
-
-    public List<WorryHeadsResponse> getResponses() {
-        return responses;
-    }
-
-    public void setResponses(List<WorryHeadsResponse> responses) {
-        this.responses = responses;
-    }
 }
