@@ -6,12 +6,13 @@ public class MakeBelieveSituation extends ExtendedSituation {
     private String name;
 //    private int situationId;
 //    private String situationTitle;
-//    private List<MakeBelieveQuestion> questions;
+    private List<MakeBelieveQuestion> questions;
 
-    public MakeBelieveSituation() {}
+   
+	public MakeBelieveSituation() {}
     
-    public MakeBelieveSituation(int situationId, String situationTitle, List<ExtendedQuestions> questions, String name) {
-		super(situationId, situationTitle, questions);
+    public MakeBelieveSituation(int situationId, String situationTitle, List<MakeBelieveQuestion> questions, String name) {
+		super(situationId, situationTitle, null);
 		this.name=name;
 	}
 
@@ -22,5 +23,14 @@ public class MakeBelieveSituation extends ExtendedSituation {
     public void setName(String name) {
         this.name = name;
     }
+
+//	public List<MakeBelieveQuestion> getMakeBelieveQuestions() {
+//		return questions;
+//	}
+//
+//	public void setMakeBelieveQuestions(List<MakeBelieveQuestion> makeBelieveQuestions) {
+//		this.questions = makeBelieveQuestions;
+//	}
+    
 
 }

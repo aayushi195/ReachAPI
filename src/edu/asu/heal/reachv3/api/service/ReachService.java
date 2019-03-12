@@ -144,9 +144,9 @@ public class ReachService implements HealService {
 
 			String activityName = dao.getActivityNameById(rval.getActivityId());
 
-//			if(rval!=null && activityName.equals("MakeBelieve")) {
-//				rval = dao.getActivityMakeBelieveInstanceDAO(activityInstanceId);
-//			}
+			if(rval!=null && activityName.equals("MakeBelieve")) {
+				rval = dao.getActivityMakeBelieveInstanceDAO(activityInstanceId);
+			}
 //
 //			else if(rval!=null && activityName.equals("WorryHeads"))
 //				rval = dao.getActivityWorryHeadsInstanceDAO(activityInstanceId);
@@ -183,7 +183,13 @@ public class ReachService implements HealService {
 			// Create one config file to store activity name as per service.
 
 			if(activityName.equals("MakeBelieve")){ //todo need a more elegant way of making the check whether it is of type make believe
-				extendedActivityInstance.setSituation(dao.getMakeBelieveSituation());
+			//	ExtendedSituation sit = new ExtendedSituation();
+				MakeBelieveSituation situ = dao.getMakeBelieveSituation();
+		//		sit.convertTOMake(dao.getMakeBelieveSituation().getMakeBelieveQuestions());
+				
+				extendedActivityInstance.setSituation(situ);
+			//	extendedActivityInstance.getSituation().convertTOMake(situ.getMakeBelieveQuestions());
+				
 				activityInstance =
 						new MakeBelieveActivityInstance(activityInstance.getActivityInstanceId(), activityInstance.getActivityId(),
 								activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),

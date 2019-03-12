@@ -1,21 +1,24 @@
 package edu.asu.heal.reachv3.api.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ExtendedSituation {
-	
+
 	private int situationId;
 	private String situationTitle;
 	private List<ExtendedQuestions> questions;
-	
-	public ExtendedSituation() {}
-	
+
+	public ExtendedSituation() {
+		questions = new ArrayList<>();
+	}
+
 	public ExtendedSituation(int situationId, String situationTitle, List<ExtendedQuestions> questions) {
 		this.situationId = situationId;
 		this.situationTitle = situationTitle;
 		this.questions = questions;
 	}
-	
+
 	public int getSituationId() {
 		return situationId;
 	}
@@ -34,7 +37,20 @@ public class ExtendedSituation {
 	public void setQuestions(List<ExtendedQuestions> questions) {
 		this.questions = questions;
 	}
-	
-	
+
+	public void convertTOMake(List<MakeBelieveQuestion> qs) {
+		
+		if(qs == null)
+			System.out.println("NULLLLLLLLLLLLLLLLLLLLLLLLLLL .....");
+		if(questions == null)
+			questions = new ArrayList<>();
+		else
+			questions.clear();
+		for(MakeBelieveQuestion obj : qs) {
+			questions.add(obj);
+		}
+		this.setQuestions(questions);
+	}
+
 
 }
