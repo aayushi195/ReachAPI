@@ -90,7 +90,7 @@ public class ExtendedActivityInstance {
                 "domainName='" + domainName + '\'' +
                 ", activityTypeName='" + activityTypeName + '\'' +
                 ", version='" + version + '\'' +
-                ", situation='" + situation + '\'' +
+                ", situation='" + situation.toString() + '\'' +
                 '}';
     }
 }

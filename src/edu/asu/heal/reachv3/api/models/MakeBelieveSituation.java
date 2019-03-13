@@ -3,10 +3,10 @@ package edu.asu.heal.reachv3.api.models;
 import java.util.List;
 
 public class MakeBelieveSituation extends ExtendedSituation {
-    private String name;
+    public String name;
 //    private int situationId;
 //    private String situationTitle;
-    private List<MakeBelieveQuestion> questions;
+    public List<MakeBelieveQuestion> questions;
 
    
 	public MakeBelieveSituation() {}
@@ -22,6 +22,28 @@ public class MakeBelieveSituation extends ExtendedSituation {
 
     public void setName(String name) {
         this.name = name;
+    }
+    
+    public List<MakeBelieveQuestion> getQuestions() {
+		return questions;
+	}
+
+	public void setQuestions(List<MakeBelieveQuestion> questions) {
+		this.questions = questions;
+	}
+
+	public List<MakeBelieveQuestion> fetchMakeBelieveQuestions(){
+    	return questions;
+    }
+
+    @Override
+    public String toString() {
+        return "Situation : {" +
+				", situationId : '" + situationId + '\'' +
+				", situationTitle : '" + situationTitle + '\'' +
+				", questions : " + questions.toString() +
+                ", name : " + name +
+                '}';
     }
 
 //	public List<MakeBelieveQuestion> getMakeBelieveQuestions() {

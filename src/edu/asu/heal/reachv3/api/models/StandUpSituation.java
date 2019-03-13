@@ -4,10 +4,21 @@ import java.util.List;
 
 public class StandUpSituation extends ExtendedSituation{
 
+	private List<StandUpQuestion> questions;
+	
 	public StandUpSituation() {}
 	
-	public StandUpSituation(int situationId, String situationTitle, List<ExtendedQuestions> questions) {
-		super(situationId, situationTitle, questions);
+	public StandUpSituation(int situationId, String situationTitle, List<StandUpQuestion> questions) {
+		super(situationId, situationTitle, null);
+		this.questions=questions;
+	}
+
+	public List<StandUpQuestion> getQuestions() {
+		return questions;
+	}
+
+	public void setQuestions(List<StandUpQuestion> questions) {
+		this.questions = questions;
 	}
 
 	//	private int situationId;

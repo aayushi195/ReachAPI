@@ -27,4 +27,11 @@ public class Responses {
     public void setOptionId(int optionId) {
         this.optionId = optionId;
     }
+    @Override
+	public String toString() {
+		return "Responses : {" +
+				", optionId : '" + optionId + '\'' +
+				", timeStamp : '" + timeStamp + '\'' +
+				'}';
+	}
 }

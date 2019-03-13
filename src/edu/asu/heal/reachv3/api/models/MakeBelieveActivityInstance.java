@@ -27,4 +27,12 @@ public class MakeBelieveActivityInstance extends ActivityInstance{
     public void setExtended(ExtendedActivityInstance extendedActivityInstance) {
         this.extended = extendedActivityInstance;
     }
+    
+//    @Override
+//    public String toString() {
+//        return "MakeBelieveAI {" +
+//                ", extended :'" + extended.toString() + '\'' +
+//                '}';
+//    }
+
 }

@@ -358,26 +358,42 @@ public class MongoDBDAO implements DAO {
 	}
 
 	@Override
-	public MakeBelieveActivityInstance getActivityMakeBelieveInstanceDAO(String activityInstanceId) {
+	public String getActivityMakeBelieveInstanceDAO(String activityInstanceId) {
 		try {
+//			MongoDatabase database = MongoDBDAO.getConnectedDatabase();
+//			MongoCollection<MakeBelieveActivityInstance> activityInstanceMongoCollection =
+//					database.getCollection(ACTIVITYINSTANCES_COLLECTION, MakeBelieveActivityInstance.class);
+//
+//			MakeBelieveActivityInstance makeBelieveIns =  new MakeBelieveActivityInstance();
+//			MakeBelieveActivityInstance instance = activityInstanceMongoCollection
+//					.find(Filters.eq(ActivityInstance.ACTIVITYINSTANCEID_ATTRIBUTE, activityInstanceId))
+//					.projection(Projections.excludeId())
+//					.first();
+//
+//	//		System.out.println("Make Believe Instance : " + instance.getExtended().toString());
+//			System.out.println("MAKE BELIEVE INSTANCE GOT FROM DB");
+//		//	System.out.println(instance);
+//			return instance ;
+			
 			MongoDatabase database = MongoDBDAO.getConnectedDatabase();
-			MongoCollection<MakeBelieveActivityInstance> activityInstanceMongoCollection =
-					database.getCollection(ACTIVITYINSTANCES_COLLECTION, MakeBelieveActivityInstance.class);
+			// needs to incorporate Emotions model. - Task #386
+			MongoCollection<Document> activityInstanceMongoCollection =
+					database.getCollection(ACTIVITYINSTANCES_COLLECTION);//, Emotions.class);
 
-			MakeBelieveActivityInstance makeBelieveIns =  new MakeBelieveActivityInstance();
-			MakeBelieveActivityInstance instance = activityInstanceMongoCollection
-					.find(Filters.eq(ActivityInstance.ACTIVITYINSTANCEID_ATTRIBUTE, activityInstanceId))
-					.projection(Projections.excludeId())
-					.first();
+			FindIterable<Document> result =	activityInstanceMongoCollection
+					.find(Filters.eq(ActivityInstance.ACTIVITYINSTANCEID_ATTRIBUTE, activityInstanceId));
 
-			System.out.println("Make Believe Instance : " + instance.getExtended().toString());
-			System.out.println("ACTIVITY INSTANCE GOT FROM DB");
-			System.out.println(instance);
-			return instance ;
+			MongoCursor<Document> cursor = result.iterator();
+			String rval = "";
+			while(cursor.hasNext()) {
+				Document doc = cursor.next();
+				rval = doc.toJson();
+			}
+			return rval;
 		} catch (NullPointerException ne) {
 			System.out.println("SOME PROBLEM IN GETTING ACTIVITY INSTANCE WITH ID " + activityInstanceId);
 			ne.printStackTrace();
-			return (MakeBelieveActivityInstance) NullObjects.getNullActivityInstance();
+			return null;// NullObjects.getNullActivityInstance();
 		} catch (Exception e) {
 			System.out.println("SOME SERVER PROBLEM IN GETACTIVITYINSTANCEID");
 			e.printStackTrace();
@@ -414,23 +430,39 @@ public class MongoDBDAO implements DAO {
 	}
 
 	@Override
-	public WorryHeadsActivityInstance getActivityWorryHeadsInstanceDAO(String activityInstanceId) {
+	public String getActivityWorryHeadsInstanceDAO(String activityInstanceId) {
 		try {
+//			MongoDatabase database = MongoDBDAO.getConnectedDatabase();
+//			MongoCollection<WorryHeadsActivityInstance> activityInstanceMongoCollection =
+//					database.getCollection(ACTIVITYINSTANCES_COLLECTION, WorryHeadsActivityInstance.class);
+//
+//			WorryHeadsActivityInstance instance = activityInstanceMongoCollection
+//					.find(Filters.eq(ActivityInstance.ACTIVITYINSTANCEID_ATTRIBUTE, activityInstanceId))
+//					.projection(Projections.excludeId())
+//					.first();
+//
+//			System.out.println("ACTIVITY INSTANCE GOT FROM DB");
+//			return instance ;
 			MongoDatabase database = MongoDBDAO.getConnectedDatabase();
-			MongoCollection<WorryHeadsActivityInstance> activityInstanceMongoCollection =
-					database.getCollection(ACTIVITYINSTANCES_COLLECTION, WorryHeadsActivityInstance.class);
+			// needs to incorporate Emotions model. - Task #386
+			MongoCollection<Document> activityInstanceMongoCollection =
+					database.getCollection(ACTIVITYINSTANCES_COLLECTION);//, Emotions.class);
 
-			WorryHeadsActivityInstance instance = activityInstanceMongoCollection
-					.find(Filters.eq(ActivityInstance.ACTIVITYINSTANCEID_ATTRIBUTE, activityInstanceId))
-					.projection(Projections.excludeId())
-					.first();
+			FindIterable<Document> result =	activityInstanceMongoCollection
+					.find(Filters.eq(ActivityInstance.ACTIVITYINSTANCEID_ATTRIBUTE, activityInstanceId));
 
-			System.out.println("ACTIVITY INSTANCE GOT FROM DB");
-			return instance ;
+			MongoCursor<Document> cursor = result.iterator();
+			String rval = "";
+			while(cursor.hasNext()) {
+				Document doc = cursor.next();
+				rval = doc.toJson();
+			}
+			return rval;
+
 		} catch (NullPointerException ne) {
 			System.out.println("SOME PROBLEM IN GETTING ACTIVITY INSTANCE WITH ID " + activityInstanceId);
 			ne.printStackTrace();
-			return (WorryHeadsActivityInstance) NullObjects.getNullActivityInstance();
+			return null;//(WorryHeadsActivityInstance) NullObjects.getNullActivityInstance();
 		} catch (Exception e) {
 			System.out.println("SOME SERVER PROBLEM IN GETACTIVITYINSTANCEID");
 			e.printStackTrace();
@@ -467,24 +499,42 @@ public class MongoDBDAO implements DAO {
 	}
 
 	@Override
-	public StandUpActivityInstance getActivityStandUpInstanceDAO(String activityInstanceId) {
+	public String getActivityStandUpInstanceDAO(String activityInstanceId) {
 		try {
+//			MongoDatabase database = MongoDBDAO.getConnectedDatabase();
+//			MongoCollection<StandUpActivityInstance> activityInstanceMongoCollection =
+//					database.getCollection(ACTIVITYINSTANCES_COLLECTION, StandUpActivityInstance.class);
+//
+//			StandUpActivityInstance makeBelieveIns =  new StandUpActivityInstance();
+//			StandUpActivityInstance instance = activityInstanceMongoCollection
+//					.find(Filters.eq(ActivityInstance.ACTIVITYINSTANCEID_ATTRIBUTE, activityInstanceId))
+//					.projection(Projections.excludeId())
+//					.first();
+//			System.out.println("ACTIVITY INSTANCE GOT FROM DB");
+//			System.out.println(instance);
+//			return instance ;
 			MongoDatabase database = MongoDBDAO.getConnectedDatabase();
-			MongoCollection<StandUpActivityInstance> activityInstanceMongoCollection =
-					database.getCollection(ACTIVITYINSTANCES_COLLECTION, StandUpActivityInstance.class);
+			// needs to incorporate Emotions model. - Task #386
+			MongoCollection<Document> activityInstanceMongoCollection =
+					database.getCollection(ACTIVITYINSTANCES_COLLECTION);//, Emotions.class);
 
-			StandUpActivityInstance makeBelieveIns =  new StandUpActivityInstance();
-			StandUpActivityInstance instance = activityInstanceMongoCollection
-					.find(Filters.eq(ActivityInstance.ACTIVITYINSTANCEID_ATTRIBUTE, activityInstanceId))
-					.projection(Projections.excludeId())
-					.first();
-			System.out.println("ACTIVITY INSTANCE GOT FROM DB");
-			System.out.println(instance);
-			return instance ;
+			FindIterable<Document> result =	activityInstanceMongoCollection
+					.find(Filters.eq(ActivityInstance.ACTIVITYINSTANCEID_ATTRIBUTE, activityInstanceId));
+
+			MongoCursor<Document> cursor = result.iterator();
+			String rval = "";
+			List<Activity> suggestedActivities = new ArrayList<Activity>();
+
+			while(cursor.hasNext()) {
+				Document doc = cursor.next();
+				rval = doc.toJson();
+			}
+			return rval;
+
 		} catch (NullPointerException ne) {
 			System.out.println("SOME PROBLEM IN GETTING ACTIVITY INSTANCE WITH ID " + activityInstanceId);
 			ne.printStackTrace();
-			return (StandUpActivityInstance) NullObjects.getNullActivityInstance();
+			return null;// (StandUpActivityInstance) NullObjects.getNullActivityInstance();
 		} catch (Exception e) {
 			System.out.println("SOME SERVER PROBLEM IN GETACTIVITYINSTANCEID");
 			e.printStackTrace();

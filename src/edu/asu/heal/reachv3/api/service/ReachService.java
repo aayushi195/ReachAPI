@@ -18,6 +18,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+import javax.swing.plaf.synth.SynthLookAndFeel;
+
+import org.json.JSONObject;
+
 public class ReachService implements HealService {
 
 	private static final String DATE_FORMAT = "MM/dd/yyyy";
@@ -139,25 +143,79 @@ public class ReachService implements HealService {
 	public ActivityInstance getActivityInstance(String activityInstanceId) {
 		try {
 			DAO dao = DAOFactory.getTheDAO();
-			ActivityInstance rval;
-			rval =  dao.getActivityInstance(activityInstanceId);
+			ActivityInstance activityInstance;
+			activityInstance =  dao.getActivityInstance(activityInstanceId);
 
-			String activityName = dao.getActivityNameById(rval.getActivityId());
+			String activityName = dao.getActivityNameById(activityInstance.getActivityId());
 
-			if(rval!=null && activityName.equals("MakeBelieve")) {
-				rval = dao.getActivityMakeBelieveInstanceDAO(activityInstanceId);
+			ExtendedActivityInstance extendedActivityInstance = new ExtendedActivityInstance();
+			extendedActivityInstance.setDomainName("Preventive Anxiety");
+			extendedActivityInstance.setActivityTypeName(activityName);
+			extendedActivityInstance.setVersion("v1");
+
+			if(activityInstance!=null && activityName.equals("MakeBelieve")) {
+				String instance = dao.getActivityMakeBelieveInstanceDAO(activityInstanceId);
+
+				ObjectMapper mapper = new ObjectMapper();
+				SimpleDateFormat format = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss");
+				mapper.setDateFormat(format);
+
+				JSONObject obj = new JSONObject(instance);
+				JSONObject extended = new JSONObject(obj.getString("extended"));
+				MakeBelieveSituation situ = mapper.readValue(extended.getString("situation"), MakeBelieveSituation.class);
+				extendedActivityInstance.setSituation(situ);
+				activityInstance =
+						new MakeBelieveActivityInstance(activityInstance.getActivityInstanceId(), activityInstance.getActivityId(),
+								activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
+								activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
+								activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
+								activityInstance.getState(),
+								activityInstance.getPatientPin(),extendedActivityInstance);
+
+			}else if(activityInstance!=null && activityName.equals("WorryHeads")) {
+				String instance = dao.getActivityWorryHeadsInstanceDAO(activityInstanceId);
+
+				ObjectMapper mapper = new ObjectMapper();
+				SimpleDateFormat format = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss");
+				mapper.setDateFormat(format);
+
+				JSONObject obj = new JSONObject(instance);
+				JSONObject extended = new JSONObject(obj.getString("extended"));
+
+				WorryHeadsSituation situ = mapper.readValue(extended.getString("situation"), WorryHeadsSituation.class);
+				extendedActivityInstance.setSituation(situ);
+				
+				activityInstance =
+						new WorryHeadsActivityInstance(activityInstance.getActivityInstanceId(), activityInstance.getActivityId(),
+								activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
+								activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
+								activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
+								activityInstance.getState(),
+								activityInstance.getPatientPin(),extendedActivityInstance);
+			}else if(activityInstance!=null && activityName.equals("StandUp")) {
+				String instance = dao.getActivityStandUpInstanceDAO(activityInstanceId);
+
+				ObjectMapper mapper = new ObjectMapper();
+				SimpleDateFormat format = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss");
+				mapper.setDateFormat(format);
+
+				JSONObject obj = new JSONObject(instance);
+				JSONObject extended = new JSONObject(obj.getString("extended"));
+
+				StandUpSituation situ = mapper.readValue(extended.getString("situation"), StandUpSituation.class);
+				extendedActivityInstance.setSituation(situ);
+				activityInstance =
+						new StandUpActivityInstance(activityInstance.getActivityInstanceId(), activityInstance.getActivityId(),
+								activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
+								activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
+								activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
+								activityInstance.getState(),
+								activityInstance.getPatientPin(),extendedActivityInstance);
 			}
-//
-//			else if(rval!=null && activityName.equals("WorryHeads"))
-//				rval = dao.getActivityWorryHeadsInstanceDAO(activityInstanceId);
-//
-//			else if(rval!=null && activityName.equals("StandUp"))
-//				rval = dao.getActivityStandUpInstanceDAO(activityInstanceId);
-//
-//			else if(rval!=null && activityName.equals("FaceIt"))
-//				rval = dao.getActivityFaceInstanceDAO(activityInstanceId);
-
-			return rval;
+			//			else if(rval!=null && activityName.equals("FaceIt"))
+			//				rval = dao.getActivityFaceInstanceDAO(activityInstanceId);
+		
+			return activityInstance;
 		} catch (Exception e) {
 			System.out.println("SOME ERROR IN HEAL SERVICE getActivityInstance");
 			e.printStackTrace();
@@ -183,13 +241,13 @@ public class ReachService implements HealService {
 			// Create one config file to store activity name as per service.
 
 			if(activityName.equals("MakeBelieve")){ //todo need a more elegant way of making the check whether it is of type make believe
-			//	ExtendedSituation sit = new ExtendedSituation();
+				//	ExtendedSituation sit = new ExtendedSituation();
 				MakeBelieveSituation situ = dao.getMakeBelieveSituation();
-		//		sit.convertTOMake(dao.getMakeBelieveSituation().getMakeBelieveQuestions());
-				
+				//		sit.convertTOMake(dao.getMakeBelieveSituation().getMakeBelieveQuestions());
+
 				extendedActivityInstance.setSituation(situ);
-			//	extendedActivityInstance.getSituation().convertTOMake(situ.getMakeBelieveQuestions());
-				
+				//	extendedActivityInstance.getSituation().convertTOMake(situ.getMakeBelieveQuestions());
+
 				activityInstance =
 						new MakeBelieveActivityInstance(activityInstance.getActivityInstanceId(), activityInstance.getActivityId(),
 								activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
@@ -198,7 +256,8 @@ public class ReachService implements HealService {
 								activityInstance.getState(),
 								activityInstance.getPatientPin(),extendedActivityInstance);
 			}else if(activityName.equals("WorryHeads")){
-				extendedActivityInstance.setSituation(dao.getWorryHeadsSituation());
+				WorryHeadsSituation situ = dao.getWorryHeadsSituation();
+				extendedActivityInstance.setSituation(situ);
 				activityInstance = new WorryHeadsActivityInstance(
 						activityInstance.getActivityInstanceId(), activityInstance.getActivityId(),
 						activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
@@ -273,34 +332,65 @@ public class ReachService implements HealService {
 
 			String activityName = dao.getActivityNameById(activityInstanceType);
 
-			ActivityInstance instance;
+			JSONObject obj = new JSONObject(requestBody);
+			JSONObject extended = new JSONObject(obj.getString("extended"));
+			ExtendedActivityInstance extendedActivityInstance = new ExtendedActivityInstance();
+			extendedActivityInstance.setDomainName(extended.getString("domainName"));
+			extendedActivityInstance.setActivityTypeName(activityName);
+			extendedActivityInstance.setVersion(extended.getString("version"));
+
+			ActivityInstance activityInstance ;//= mapper.readValue(requestBody, ActivityInstance.class);
+
 			if (activityName.equals("MakeBelieve")) { // todo Need to find a more elegant way to do this
-				instance = mapper.readValue(requestBody, MakeBelieveActivityInstance.class);
-				instance.setUpdatedAt(new Date());
+				MakeBelieveSituation situ = mapper.readValue(extended.getString("situation"), MakeBelieveSituation.class);
+				extendedActivityInstance.setSituation(situ);
+				activityInstance =
+						new MakeBelieveActivityInstance(obj.getString(ActivityInstance.ACTIVITYINSTANCEID_ATTRIBUTE),
+								obj.getString(ActivityInstance.ACTIVITYID_ATTRIBUTE), 
+								new Date(),	new Date(),	obj.getString(ActivityInstance.DESCRIPTION_ATTRIBUTE),
+								new Date(), new Date(),	new Date(), new Date(),
+								obj.getString(ActivityInstance.STATE_ATTRIBUTE),
+								obj.getInt(ActivityInstance.PATIENT_PIN),extendedActivityInstance);
 			} else if (activityName.equals("WorryHeads")) {
-				instance = mapper.readValue(requestBody, WorryHeadsActivityInstance.class);
-				instance.setUpdatedAt(new Date());
-			} else if (activityName.equals("DailyDiary")) {
-				instance = mapper.readValue(requestBody, DailyDiaryActivityInstance.class);
-				instance.setUpdatedAt(new Date());
-			} else if (activityName.equals("SWAP")) {
-				instance = mapper.readValue(requestBody, SwapActivityInstance.class);
-				instance.setUpdatedAt(new Date());
-			} else if (activityName.equals("StandUp")) {
-				instance = mapper.readValue(requestBody, StandUpActivityInstance.class);
-				instance.setUpdatedAt(new Date());
-			} else if (activityName.equals("FaceIt")) {
-				instance = mapper.readValue(requestBody, FaceItActivityInstance.class);
-				instance.setUpdatedAt(new Date());
-			}else if (activityName.equals("Emotion")) {
-				instance = mapper.readValue(requestBody, EmotionActivityInstance.class);
-				instance.setUpdatedAt(new Date());
+				WorryHeadsSituation situ = mapper.readValue(extended.getString("situation"), WorryHeadsSituation.class);
+				extendedActivityInstance.setSituation(situ);
+				activityInstance =
+						new WorryHeadsActivityInstance(obj.getString(ActivityInstance.ACTIVITYINSTANCEID_ATTRIBUTE),
+								obj.getString(ActivityInstance.ACTIVITYID_ATTRIBUTE), 
+								new Date(),	new Date(),	obj.getString(ActivityInstance.DESCRIPTION_ATTRIBUTE),
+								new Date(), new Date(),	new Date(), new Date(),
+								obj.getString(ActivityInstance.STATE_ATTRIBUTE),
+								obj.getInt(ActivityInstance.PATIENT_PIN),extendedActivityInstance);
+				} else if (activityName.equals("StandUp")) {
+					StandUpSituation situ = mapper.readValue(extended.getString("situation"), StandUpSituation.class);
+					extendedActivityInstance.setSituation(situ);
+					activityInstance =
+							new StandUpActivityInstance(obj.getString(ActivityInstance.ACTIVITYINSTANCEID_ATTRIBUTE),
+									obj.getString(ActivityInstance.ACTIVITYID_ATTRIBUTE), 
+									new Date(),	new Date(),	obj.getString(ActivityInstance.DESCRIPTION_ATTRIBUTE),
+									new Date(), new Date(),	new Date(), new Date(),
+									obj.getString(ActivityInstance.STATE_ATTRIBUTE),
+									obj.getInt(ActivityInstance.PATIENT_PIN),extendedActivityInstance);
+				//				instance = mapper.readValue(requestBody, DailyDiaryActivityInstance.class);
+				//				instance.setUpdatedAt(new Date());
+				//			} else if (activityName.equals("SWAP")) {
+				//				instance = mapper.readValue(requestBody, SwapActivityInstance.class);
+				//				instance.setUpdatedAt(new Date());
+				//			} else if (activityName.equals("StandUp")) {
+				//				instance = mapper.readValue(requestBody, StandUpActivityInstance.class);
+				//				instance.setUpdatedAt(new Date());
+				//			} else if (activityName.equals("FaceIt")) {
+				//				instance = mapper.readValue(requestBody, FaceItActivityInstance.class);
+				//				instance.setUpdatedAt(new Date());
+				//			}else if (activityName.equals("Emotion")) {
+				//				instance = mapper.readValue(requestBody, EmotionActivityInstance.class);
+				//				instance.setUpdatedAt(new Date());
 			} else{
-				instance  = mapper.readValue(requestBody, ActivityInstance.class);
-				instance.setUpdatedAt(new Date());
+				activityInstance  = mapper.readValue(requestBody, ActivityInstance.class);
+				activityInstance.setUpdatedAt(new Date());
 			}
-			if(dao.updateActivityInstance(instance)){
-				return instance;
+			if(dao.updateActivityInstance(activityInstance)){
+				return activityInstance;
 			}
 			return NullObjects.getNullActivityInstance();
 		} catch (NullPointerException ne){

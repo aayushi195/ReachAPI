@@ -5,8 +5,8 @@ import java.util.List;
 
 public class ExtendedQuestions {
 
-	private List<Options> options;
-	private List<Responses> responses;
+	protected List<Options> options;
+	protected List<Responses> responses;
 	
 	public ExtendedQuestions() {}
 	
@@ -28,4 +28,11 @@ public class ExtendedQuestions {
 		this.responses = responses;
 	}
 
+	@Override
+	public String toString() {
+		return "Questions : {" +
+				", Options : '" + options.toString() + '\'' +
+				", Response : '" + responses.toString() + '\'' +
+				'}';
+	}
 }
