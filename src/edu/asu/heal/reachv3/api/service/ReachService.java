@@ -24,7 +24,7 @@ import org.json.JSONObject;
 
 public class ReachService implements HealService {
 
-	private static final String DATE_FORMAT = "MM/dd/yyyy";
+private static final String DATE_FORMAT = "MM/dd/yyyy";
 
 	/****************************************  Service methods for Activity  ******************************************/
 	@Override
