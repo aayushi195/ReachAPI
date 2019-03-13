@@ -82,4 +82,12 @@ public interface DAO {
 
     String getActivityNameById(String activityId);
 
+    DailyDiarySituation getDailyDiarySituation();
+
+    String getActivityDailyDiaryInstanceDAO(String activityInstanceId);
+
+    SwapSituation getSwapSituation();
+
+    String getActivitySwapInstanceDAO(String activityInstanceId);
+
 }
