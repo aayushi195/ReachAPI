@@ -13,6 +13,8 @@ public class ActivityInstance implements IHealModelType {
     public static String STATE_ATTRIBUTE = "state";
     public static String DESCRIPTION_ATTRIBUTE = "description";
     public static String ACTIVITYINSTANCEID_ATTRIBUTE = "activityInstanceId";
+    public static String ACTIVITYID_ATTRIBUTE = "activityId";
+    public static String PATIENT_PIN = "patientPin";
 
 
     private String activityInstanceId;
