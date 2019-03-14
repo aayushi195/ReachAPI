@@ -11,6 +11,8 @@ import edu.asu.heal.core.api.responses.HEALResponse;
 import edu.asu.heal.core.api.service.HealService;
 import edu.asu.heal.core.api.service.SuggestedActivityiesMappingService.MappingFactory;
 import edu.asu.heal.core.api.service.SuggestedActivityiesMappingService.MappingInterface;
+import edu.asu.heal.reachv3.api.modelFactory.ModelException;
+import edu.asu.heal.reachv3.api.modelFactory.ModelFactory;
 import edu.asu.heal.reachv3.api.models.*;
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
@@ -25,6 +27,17 @@ import org.json.JSONObject;
 public class ReachService implements HealService {
 
 	private static final String DATE_FORMAT = "MM/dd/yyyy";
+	private ModelFactory __modelFactory =null;
+	
+	public ReachService() {
+		try {
+			__modelFactory = new ModelFactory();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+	}
 
 	/****************************************  Service methods for Activity  ******************************************/
 	@Override
@@ -273,97 +286,7 @@ public class ReachService implements HealService {
 	@Override
 	public ActivityInstance createActivityInstance(ActivityInstance activityInstance) {
 		try {
-			DAO dao = DAOFactory.getTheDAO();
-			if (activityInstance.getCreatedAt() == null) activityInstance.setCreatedAt(new Date());
-			if (activityInstance.getState() == null) activityInstance.setState(ActivityInstanceStatus.CREATED.status());
-			if (activityInstance.getUpdatedAt() == null) activityInstance.setUpdatedAt(new Date());
-
-			String activityName = dao.getActivityNameById(activityInstance.getActivityId());
-			ExtendedActivityInstance extendedActivityInstance = new ExtendedActivityInstance();
-			extendedActivityInstance.setDomainName("Preventive Anxiety");
-			extendedActivityInstance.setActivityTypeName(activityName);
-			extendedActivityInstance.setVersion("v1");
-
-			// Create one config file to store activity name as per service.
-
-			if(activityName.equals("MakeBelieve")){ //todo need a more elegant way of making the check whether it is of type make believe
-				MakeBelieveSituation situation = dao.getMakeBelieveSituation();
-				extendedActivityInstance.setSituation(situation);
-
-				activityInstance =
-						new MakeBelieveActivityInstance(activityInstance.getActivityInstanceId(), activityInstance.getActivityId(),
-								activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
-								activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
-								activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
-								activityInstance.getState(),
-								activityInstance.getPatientPin(),extendedActivityInstance);
-
-			} else if(activityName.equals("WorryHeads")){
-				WorryHeadsSituation situation = dao.getWorryHeadsSituation();
-				extendedActivityInstance.setSituation(situation);
-				activityInstance = new WorryHeadsActivityInstance(
-						activityInstance.getActivityInstanceId(), activityInstance.getActivityId(),
-						activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
-						activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
-						activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
-						activityInstance.getState(),
-						activityInstance.getPatientPin(), extendedActivityInstance);
-
-			} else if(activityName.equals("StandUp")){
-				extendedActivityInstance.setSituation(dao.getStandUpSituation());
-				activityInstance = new StandUpActivityInstance(
-						activityInstance.getActivityInstanceId(), activityInstance.getActivityId(),
-						activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
-						activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
-						activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
-						activityInstance.getState(),
-						activityInstance.getPatientPin(), extendedActivityInstance);
-
-			} else if(activityName.equals("DailyDiary")){
-				extendedActivityInstance.setSituation(dao.getDailyDiarySituation());
-				activityInstance = new DailyDiaryActivityInstance(
-						activityInstance.getActivityInstanceId(), activityInstance.getActivityId(),
-						activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
-						activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
-						activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
-						activityInstance.getState(),
-						activityInstance.getPatientPin(), extendedActivityInstance);
-			} else if(activityName.equals("SWAP")){
-				extendedActivityInstance.setSituation(dao.getSwapSituation());
-				activityInstance = new SwapActivityInstance(
-						activityInstance.getActivityInstanceId(), activityInstance.getActivityId(),
-						activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
-						activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
-						activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
-						activityInstance.getState(),
-						activityInstance.getPatientPin(),extendedActivityInstance);
-			} else if(activityName.equals("FaceIt")){
-				activityInstance = new FaceItActivityInstance(
-						activityInstance.getActivityInstanceId(),activityInstance.getActivityId(),
-						activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
-						activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
-						activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
-						activityInstance.getState(),
-						activityInstance.getPatientPin(),dao.getFaceItChallenges());
-			} else if(activityName.equals("Emotion")){
-				activityInstance = new EmotionActivityInstance(
-						activityInstance.getActivityInstanceId(),activityInstance.getActivityId(),
-						activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
-						activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
-						activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
-						activityInstance.getState(),
-						activityInstance.getPatientPin());
-			} else if(activityName.equals("Relaxation")){
-				activityInstance = new RelaxationActivityInstance(
-						activityInstance.getActivityInstanceId(),activityInstance.getActivityId(),
-						activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
-						activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
-						activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
-						activityInstance.getState(),
-						activityInstance.getPatientPin(),extendedActivityInstance);
-			}
-
-			ActivityInstance newActivityInstance = dao.createActivityInstance(activityInstance);
+			ActivityInstance newActivityInstance = __modelFactory.createActivityInstance(activityInstance);
 			return newActivityInstance;
 		} catch (Exception e) {
 			System.out.println("SOME ERROR CREATING NE ACTIVITY INSTANCE IN REACH SERVICE - CREATEACTIVITYINSTANCE");
