@@ -72,12 +72,13 @@ public class ActivityInstanceResource {
 			if (instances == null) {
 				response = builder
 						.setStatusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
-						.setData("SOME SERVER ERROR. PLEASE CONTACT ADMINISTRATOR")
+						.setData(NullObjects.getNullActivityInstance())
 						.build();
 			} else if (instances.isEmpty()) {
+				instances.add(NullObjects.getNullActivityInstance());
 				response = builder
 						.setStatusCode(Response.Status.OK.getStatusCode())
-						.setData("THERE ARE NO ACTIVITY INSTANCES FOR THIS PATIENT")
+						.setData(instances)
 						.build();
 			} else if (instances.size() == 1) {
 				if (instances.get(0).equals(NullObjects.getNullActivityInstance())) {
