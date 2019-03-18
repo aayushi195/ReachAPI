@@ -11,16 +11,11 @@ import edu.asu.heal.core.api.responses.HEALResponse;
 import edu.asu.heal.core.api.service.HealService;
 import edu.asu.heal.core.api.service.SuggestedActivityiesMappingService.MappingFactory;
 import edu.asu.heal.core.api.service.SuggestedActivityiesMappingService.MappingInterface;
-import edu.asu.heal.reachv3.api.modelFactory.ModelException;
 import edu.asu.heal.reachv3.api.modelFactory.ModelFactory;
 import edu.asu.heal.reachv3.api.models.*;
-import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
-
-import javax.swing.plaf.synth.SynthLookAndFeel;
 
 import org.json.JSONObject;
 
@@ -28,7 +23,7 @@ public class ReachService implements HealService {
 
 	private static final String DATE_FORMAT = "MM/dd/yyyy";
 	private ModelFactory __modelFactory =null;
-	
+
 	public ReachService() {
 		try {
 			__modelFactory = new ModelFactory();
@@ -36,7 +31,7 @@ public class ReachService implements HealService {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	
+
 	}
 
 	/****************************************  Service methods for Activity  ******************************************/
@@ -197,7 +192,7 @@ public class ReachService implements HealService {
 
 				WorryHeadsSituation situation = mapper.readValue(extended.getString("situation"), WorryHeadsSituation.class);
 				extendedActivityInstance.setSituation(situation);
-				
+
 				activityInstance =
 						new WorryHeadsActivityInstance(activityInstance.getActivityInstanceId(), activityInstance.getActivityId(),
 								activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
@@ -274,7 +269,7 @@ public class ReachService implements HealService {
 			}
 			//			else if(rval!=null && activityName.equals("FaceIt"))
 			//				rval = dao.getActivityFaceInstanceDAO(activityInstanceId);
-		
+
 			return activityInstance;
 		} catch (Exception e) {
 			System.out.println("SOME ERROR IN HEAL SERVICE getActivityInstance");
@@ -299,97 +294,8 @@ public class ReachService implements HealService {
 	@Override
 	public ActivityInstance updateActivityInstance(String requestBody) {
 		try {
-			DAO dao = DAOFactory.getTheDAO();
-			ObjectMapper mapper = new ObjectMapper();
-			SimpleDateFormat format = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss");
-			mapper.setDateFormat(format);
-
-			JsonNode activityInstanceAsTree = mapper.readTree(requestBody);
-			String activityInstanceType = activityInstanceAsTree.get("activityId").asText();
-
-			String activityName = dao.getActivityNameById(activityInstanceType);
-
-			JSONObject obj = new JSONObject(requestBody);
-			JSONObject extended = new JSONObject(obj.getString("extended"));
-			ExtendedActivityInstance extendedActivityInstance = new ExtendedActivityInstance();
-			extendedActivityInstance.setDomainName(extended.getString("domainName"));
-			extendedActivityInstance.setActivityTypeName(activityName);
-			extendedActivityInstance.setVersion(extended.getString("version"));
-
-			ActivityInstance activityInstance ;
-
-			if (activityName.equals("MakeBelieve")) { // todo Need to find a more elegant way to do this
-				MakeBelieveSituation situation = mapper.readValue(extended.getString("situation"), MakeBelieveSituation.class);
-				extendedActivityInstance.setSituation(situation);
-				activityInstance =
-						new MakeBelieveActivityInstance(obj.getString(ActivityInstance.ACTIVITYINSTANCEID_ATTRIBUTE),
-								obj.getString(ActivityInstance.ACTIVITYID_ATTRIBUTE), 
-								new Date(),	new Date(),	obj.getString(ActivityInstance.DESCRIPTION_ATTRIBUTE),
-								new Date(), new Date(),	new Date(), new Date(),
-								obj.getString(ActivityInstance.STATE_ATTRIBUTE),
-								obj.getInt(ActivityInstance.PATIENT_PIN),extendedActivityInstance);
-			} else if (activityName.equals("WorryHeads")) {
-				WorryHeadsSituation situation = mapper.readValue(extended.getString("situation"), WorryHeadsSituation.class);
-				extendedActivityInstance.setSituation(situation);
-				activityInstance =
-						new WorryHeadsActivityInstance(obj.getString(ActivityInstance.ACTIVITYINSTANCEID_ATTRIBUTE),
-								obj.getString(ActivityInstance.ACTIVITYID_ATTRIBUTE), 
-								new Date(),	new Date(),	obj.getString(ActivityInstance.DESCRIPTION_ATTRIBUTE),
-								new Date(), new Date(),	new Date(), new Date(),
-								obj.getString(ActivityInstance.STATE_ATTRIBUTE),
-								obj.getInt(ActivityInstance.PATIENT_PIN),extendedActivityInstance);
-				} else if (activityName.equals("StandUp")) {
-					StandUpSituation situation = mapper.readValue(extended.getString("situation"), StandUpSituation.class);
-					extendedActivityInstance.setSituation(situation);
-					activityInstance =
-						new StandUpActivityInstance(obj.getString(ActivityInstance.ACTIVITYINSTANCEID_ATTRIBUTE),
-								obj.getString(ActivityInstance.ACTIVITYID_ATTRIBUTE),
-								new Date(), new Date(), obj.getString(ActivityInstance.DESCRIPTION_ATTRIBUTE),
-								new Date(), new Date(), new Date(), new Date(),
-								obj.getString(ActivityInstance.STATE_ATTRIBUTE),
-								obj.getInt(ActivityInstance.PATIENT_PIN), extendedActivityInstance);
-				} else if(activityName.equals("DailyDiary")){
-					DailyDiarySituation situation = mapper.readValue(extended.getString("situation"), DailyDiarySituation.class);
-					extendedActivityInstance.setSituation(situation);
-					activityInstance =
-							new DailyDiaryActivityInstance(obj.getString(ActivityInstance.ACTIVITYINSTANCEID_ATTRIBUTE),
-									obj.getString(ActivityInstance.ACTIVITYID_ATTRIBUTE),
-									new Date(), new Date(), obj.getString(ActivityInstance.DESCRIPTION_ATTRIBUTE),
-									new Date(), new Date(), new Date(), new Date(),
-									obj.getString(ActivityInstance.STATE_ATTRIBUTE),
-									obj.getInt(ActivityInstance.PATIENT_PIN), extendedActivityInstance);
-				//			} else if (activityName.equals("FaceIt")) {
-				//				instance = mapper.readValue(requestBody, FaceItActivityInstance.class);
-				//				instance.setUpdatedAt(new Date());
-				//			}else if (activityName.equals("Emotion")) {
-				//				instance = mapper.readValue(requestBody, EmotionActivityInstance.class);
-				//				instance.setUpdatedAt(new Date());
-			} else if (activityName.equals("Relaxation")) {
-				activityInstance =
-						new RelaxationActivityInstance(obj.getString(ActivityInstance.ACTIVITYINSTANCEID_ATTRIBUTE),
-								obj.getString(ActivityInstance.ACTIVITYID_ATTRIBUTE),
-								new Date(), new Date(), obj.getString(ActivityInstance.DESCRIPTION_ATTRIBUTE),
-								new Date(), new Date(), new Date(), new Date(),
-								obj.getString(ActivityInstance.STATE_ATTRIBUTE),
-								obj.getInt(ActivityInstance.PATIENT_PIN), extendedActivityInstance);
-			} else if (activityName.equals("SWAP")) {
-				SwapSituation situation = mapper.readValue(extended.getString("situation"), SwapSituation.class);
-				extendedActivityInstance.setSituation(situation);
-				activityInstance =
-						new SwapActivityInstance(obj.getString(ActivityInstance.ACTIVITYINSTANCEID_ATTRIBUTE),
-								obj.getString(ActivityInstance.ACTIVITYID_ATTRIBUTE),
-								new Date(), new Date(), obj.getString(ActivityInstance.DESCRIPTION_ATTRIBUTE),
-								new Date(), new Date(), new Date(), new Date(),
-								obj.getString(ActivityInstance.STATE_ATTRIBUTE),
-								obj.getInt(ActivityInstance.PATIENT_PIN), extendedActivityInstance);
-			} else{
-				activityInstance  = mapper.readValue(requestBody, ActivityInstance.class);
-				activityInstance.setUpdatedAt(new Date());
-			}
-			if(dao.updateActivityInstance(activityInstance)){
-				return activityInstance;
-			}
-			return NullObjects.getNullActivityInstance();
+			ActivityInstance activityInstance = __modelFactory.updateActivityInstance(requestBody);
+			return activityInstance;
 		} catch (NullPointerException ne){
 			return NullObjects.getNullActivityInstance();
 		}catch (Exception e) {
