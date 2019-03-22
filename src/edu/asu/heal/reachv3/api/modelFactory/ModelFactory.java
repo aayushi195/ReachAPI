@@ -2,13 +2,16 @@ package edu.asu.heal.reachv3.api.modelFactory;
 
 import java.util.Date;
 import java.util.List;
-
+import org.json.JSONObject;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.asu.heal.core.api.dao.DAO;
 import edu.asu.heal.core.api.dao.DAOFactory;
 import edu.asu.heal.core.api.models.Activity;
 import edu.asu.heal.core.api.models.ActivityInstance;
 import edu.asu.heal.core.api.models.ActivityInstanceStatus;
 import edu.asu.heal.core.api.models.NullObjects;
+import edu.asu.heal.core.api.models.Patient;
 import edu.asu.heal.reachv3.api.models.DailyDiaryActivityInstance;
 import edu.asu.heal.reachv3.api.models.EmotionActivityInstance;
 import edu.asu.heal.reachv3.api.models.ExtendedActivityInstance;
@@ -128,7 +131,67 @@ public class ModelFactory {
 		}
 
 	}
+  
+	//************************************ PATIENTS ***********************************************
+	public List<Patient> getPatients(String trialId) {
+		try {
+			List<Patient> result;
+			if (trialId == null) {
+				// return list of all patients present
+				result = dao.getPatients();
+			} else {
+				// return list of patients for given trialId
+				result = dao.getPatients(trialId);
+			}
+			return result;
+		} catch (Exception e) {
+			System.out.println("SOME PROBLEM WITH REACH SERVICE - GET PATIENTS");
+      e.printStackTrace();
+			return null;
+    }
+  }
+  
+  public Patient getPatient(int patientPin) {
+		try {
+			return dao.getPatient(patientPin);
+		} catch (Exception e) {
+      e.printStackTrace();
+			return null;
+		}
+	}
+  
+  public Patient createPatient(String trialId) {
+		try {
+			return dao.createPatient(trialId);
+    } catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+  
+  public Patient updatePatient(Patient patient) {
+		try {
+			Patient patientInDatabase = dao.getPatient(patient.getPin());
+			if (patientInDatabase == null || patientInDatabase.equals(NullObjects.getNullPatient()))
+				return patientInDatabase;
 
+			patientInDatabase.setStartDate(
+					patient.getStartDate() != null ? patient.getStartDate() : patientInDatabase.getStartDate());
+			patientInDatabase.setEndDate(
+					patient.getEndDate() != null ? patient.getEndDate() : patientInDatabase.getEndDate());
+			patientInDatabase.setState(
+					patient.getState() != null ? patient.getState() : patientInDatabase.getState());
+			patientInDatabase.setCreatedAt(
+					patient.getCreatedAt() != null ? patient.getCreatedAt() : patientInDatabase.getCreatedAt());
+			patientInDatabase.setUpdatedAt(new Date());
+
+			return dao.updatePatient(patientInDatabase);
+		} catch (Exception e) {
+			System.out.println("SOME PROBLEM IN UPDATE PATIENT IN REACHSERVICE");
+      e.printStackTrace();
+			return null;
+		}
+	}
 
 	// ************************************* ACTVITY ****************************************************
 	public List<Activity> getActivities(String domain) {
@@ -141,7 +204,7 @@ public class ModelFactory {
 			return null;
 		}
 	}
-
+	
 	public Activity createActivity(String title, String description) {
 		try {
 			Activity newActivity = new Activity();
@@ -158,7 +221,7 @@ public class ModelFactory {
 			return null;
 		}
 	}
-
+	
 	public Activity getActivity(String activityId) {
 		try {
 			return dao.getActivity(activityId);
@@ -187,7 +250,7 @@ public class ModelFactory {
 			return null;
 		}
 	}
-
+  
 	public Activity deleteActivity(String activityId) {
 		try {
 			return dao.deleteActivity(activityId);
@@ -197,6 +260,5 @@ public class ModelFactory {
 			return null;
 		}
 	}
-
 }
 

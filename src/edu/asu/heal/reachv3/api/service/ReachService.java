@@ -426,18 +426,7 @@ public class ReachService implements HealService {
 	@Override
 	public List<Patient> getPatients(String trialId) {
 		try {
-			DAO dao = DAOFactory.getTheDAO();
-			List<Patient> result;
-
-			if (trialId == null) {
-				// return list of all patients present
-				result = dao.getPatients();
-			} else {
-				// return list of patients for given trialId
-				result = dao.getPatients(trialId);
-			}
-
-			return result;
+			return __modelFactory.getPatients(trialId);
 		} catch (Exception e) {
 			System.out.println("SOME PROBLEM WITH REACH SERVICE - GET PATIENTS");
 			e.printStackTrace();
@@ -448,8 +437,7 @@ public class ReachService implements HealService {
 	@Override
 	public Patient getPatient(int patientPin) {
 		try {
-			DAO dao = DAOFactory.getTheDAO();
-			return dao.getPatient(patientPin);
+			return __modelFactory.getPatient(patientPin);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -459,8 +447,7 @@ public class ReachService implements HealService {
 	@Override
 	public Patient createPatient(String trialId) {
 		try {
-			DAO dao = DAOFactory.getTheDAO();
-			return dao.createPatient(trialId);
+			return __modelFactory.createPatient(trialId);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -470,22 +457,7 @@ public class ReachService implements HealService {
 	@Override
 	public Patient updatePatient(Patient patient) {
 		try {
-			DAO dao = DAOFactory.getTheDAO();
-			Patient patientInDatabase = dao.getPatient(patient.getPin());
-			if (patientInDatabase == null || patientInDatabase.equals(NullObjects.getNullPatient()))
-				return patientInDatabase;
-
-			patientInDatabase.setStartDate(
-					patient.getStartDate() != null ? patient.getStartDate() : patientInDatabase.getStartDate());
-			patientInDatabase.setEndDate(
-					patient.getEndDate() != null ? patient.getEndDate() : patientInDatabase.getEndDate());
-			patientInDatabase.setState(
-					patient.getState() != null ? patient.getState() : patientInDatabase.getState());
-			patientInDatabase.setCreatedAt(
-					patient.getCreatedAt() != null ? patient.getCreatedAt() : patientInDatabase.getCreatedAt());
-			patientInDatabase.setUpdatedAt(new Date());
-
-			return dao.updatePatient(patientInDatabase);
+			return __modelFactory.updatePatient(patient);
 		} catch (Exception e) {
 			System.out.println("SOME PROBLEM IN UPDATE PATIENT IN REACHSERVICE");
 			e.printStackTrace();
