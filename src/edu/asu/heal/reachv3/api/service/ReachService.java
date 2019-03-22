@@ -1,27 +1,18 @@
 package edu.asu.heal.reachv3.api.service;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.asu.heal.core.api.dao.DAO;
 import edu.asu.heal.core.api.dao.DAOFactory;
 import edu.asu.heal.core.api.models.*;
-import edu.asu.heal.core.api.responses.HEALResponse;
 import edu.asu.heal.core.api.service.HealService;
 import edu.asu.heal.core.api.service.SuggestedActivityiesMappingService.MappingFactory;
 import edu.asu.heal.core.api.service.SuggestedActivityiesMappingService.MappingInterface;
-import edu.asu.heal.reachv3.api.modelFactory.ModelException;
 import edu.asu.heal.reachv3.api.modelFactory.ModelFactory;
 import edu.asu.heal.reachv3.api.models.*;
-import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
-
-import javax.swing.plaf.synth.SynthLookAndFeel;
-
 import org.json.JSONObject;
 
 public class ReachService implements HealService {
@@ -43,10 +34,7 @@ public class ReachService implements HealService {
 	@Override
 	public List<Activity> getActivities(String domain) {
 		try {
-			DAO dao = DAOFactory.getTheDAO();
-			List<Activity> result = dao.getActivities(domain);
-
-			return result;
+			return  __modelFactory.getActivities(domain);
 		} catch (Exception e) {
 			System.out.println("SOME ERROR IN GETACTIVITIES() IN REACHSERVICE CLASS");
 			e.printStackTrace();
@@ -57,15 +45,7 @@ public class ReachService implements HealService {
 	@Override
 	public Activity createActivity(String title, String description) {
 		try {
-			DAO dao = DAOFactory.getTheDAO();
-			Activity newActivity = new Activity();
-			newActivity.setTitle(title);
-			newActivity.setDescription(description);
-			newActivity.setUpdatedAt(new Date());
-			newActivity.setCreatedAt(new Date());
-			Activity createdActivity = dao.createActivity(newActivity);
-
-			return createdActivity;
+			return __modelFactory.createActivity(title,description);
 		} catch (Exception e) {
 			System.out.println("SOME PROBLEM IN REACH SERVICE - CREATEACTIVITY");
 			e.printStackTrace();
@@ -76,8 +56,7 @@ public class ReachService implements HealService {
 	@Override
 	public Activity getActivity(String activityId) {
 		try {
-			DAO dao = DAOFactory.getTheDAO();
-			return dao.getActivity(activityId);
+			return __modelFactory.getActivity(activityId);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -87,18 +66,7 @@ public class ReachService implements HealService {
 	@Override
 	public Activity updateActivity(Activity activity) {
 		try {
-			DAO dao = DAOFactory.getTheDAO();
-			Activity activityInDatabase = dao.getActivity(activity.getActivityId());
-			if (activityInDatabase == null || activityInDatabase.equals(NullObjects.getNullActivity()))
-				return activityInDatabase;
-
-			activityInDatabase.setTitle(
-					activity.getTitle() != null ? activity.getTitle() : activityInDatabase.getTitle());
-			activityInDatabase.setDescription(
-					activity.getDescription() != null ? activity.getDescription() : activityInDatabase.getDescription());
-			activityInDatabase.setUpdatedAt(new Date());
-
-			return dao.updateActivity(activityInDatabase);
+			return __modelFactory.updateActivity(activity);
 		} catch (Exception e) {
 			System.out.println("SOME PROBLEM IN UPDATE ACTIVITY IN REACHSERVICE");
 			e.printStackTrace();
@@ -109,8 +77,7 @@ public class ReachService implements HealService {
 	@Override
 	public Activity deleteActivity(String activityId) {
 		try {
-			DAO dao = DAOFactory.getTheDAO();
-			return dao.deleteActivity(activityId);
+			return __modelFactory.deleteActivity(activityId);
 		} catch (Exception e) {
 			System.out.println("SOME PROBLEM IN REACH SERVICE DELETE ACTIVITY INSTANCE");
 			e.printStackTrace();
@@ -121,12 +88,8 @@ public class ReachService implements HealService {
 	/****************************************  Service methods for ActivityInstance  **********************************/
 	@Override
 	public List<ActivityInstance> getActivityInstances(int patientPin) {
-		List<ActivityInstance> response = null;
 		try {
-			DAO dao = DAOFactory.getTheDAO();
-			List<ActivityInstance> instances = dao.getScheduledActivities(patientPin);
-
-			return instances;
+			return __modelFactory.getActivityInstances(patientPin);
 		} catch (Exception e) {
 			System.out.println("SOME ERROR IN GETACTIVITYINSTANCES() IN REACHSERVICE");
 			e.printStackTrace();
@@ -511,7 +474,6 @@ public class ReachService implements HealService {
 
 	@Override
 	public List<Trial> getTrials(String domain) {
-		HEALResponse response = null;
 		try {
 			DAO dao = DAOFactory.getTheDAO();
 			List<Trial> trials = null;
