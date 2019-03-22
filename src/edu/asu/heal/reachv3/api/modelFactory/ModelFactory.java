@@ -1,20 +1,15 @@
 package edu.asu.heal.reachv3.api.modelFactory;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import org.json.JSONObject;
-
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.List;
 
 import edu.asu.heal.core.api.dao.DAO;
 import edu.asu.heal.core.api.dao.DAOFactory;
+import edu.asu.heal.core.api.models.Activity;
 import edu.asu.heal.core.api.models.ActivityInstance;
 import edu.asu.heal.core.api.models.ActivityInstanceStatus;
 import edu.asu.heal.core.api.models.NullObjects;
 import edu.asu.heal.reachv3.api.models.DailyDiaryActivityInstance;
-import edu.asu.heal.reachv3.api.models.DailyDiarySituation;
 import edu.asu.heal.reachv3.api.models.EmotionActivityInstance;
 import edu.asu.heal.reachv3.api.models.ExtendedActivityInstance;
 import edu.asu.heal.reachv3.api.models.FaceItActivityInstance;
@@ -22,9 +17,7 @@ import edu.asu.heal.reachv3.api.models.MakeBelieveActivityInstance;
 import edu.asu.heal.reachv3.api.models.MakeBelieveSituation;
 import edu.asu.heal.reachv3.api.models.RelaxationActivityInstance;
 import edu.asu.heal.reachv3.api.models.StandUpActivityInstance;
-import edu.asu.heal.reachv3.api.models.StandUpSituation;
 import edu.asu.heal.reachv3.api.models.SwapActivityInstance;
-import edu.asu.heal.reachv3.api.models.SwapSituation;
 import edu.asu.heal.reachv3.api.models.WorryHeadsActivityInstance;
 import edu.asu.heal.reachv3.api.models.WorryHeadsSituation;
 
@@ -36,6 +29,17 @@ public class ModelFactory {
 			dao = DAOFactory.getTheDAO();
 		} catch (Exception de) {
 			throw new ModelException("Unable to initialize the DAO", de);
+		}
+	}
+
+	// ******************************** ACTIVITY INSTANCE *************************************************
+	public List<ActivityInstance> getActivityInstances(int patientPin) {
+		try {
+			return dao.getScheduledActivities(patientPin);
+		} catch (Exception e) {
+			System.out.println("SOME ERROR IN GETACTIVITYINSTANCES() IN REACHSERVICE");
+			e.printStackTrace();
+			return null;
 		}
 	}
 
@@ -123,6 +127,75 @@ public class ModelFactory {
 			throw new ModelException("SOME ERROR CREATING NE ACTIVITY INSTANCE IN MODEL FACTORY - CREATEACTIVITYINSTANCE", e);
 		}
 
+	}
+
+
+	// ************************************* ACTVITY ****************************************************
+	public List<Activity> getActivities(String domain) {
+		try {
+			List<Activity> result = dao.getActivities(domain);
+			return result;
+		} catch (Exception e) {
+			System.out.println("SOME ERROR IN GETACTIVITIES() IN REACHSERVICE CLASS");
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public Activity createActivity(String title, String description) {
+		try {
+			Activity newActivity = new Activity();
+			newActivity.setTitle(title);
+			newActivity.setDescription(description);
+			newActivity.setUpdatedAt(new Date());
+			newActivity.setCreatedAt(new Date());
+			Activity createdActivity = dao.createActivity(newActivity);
+
+			return createdActivity;
+		} catch (Exception e) {
+			System.out.println("SOME PROBLEM IN REACH SERVICE - CREATEACTIVITY");
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public Activity getActivity(String activityId) {
+		try {
+			return dao.getActivity(activityId);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public Activity updateActivity(Activity activity) {
+		try {
+			Activity activityInDatabase = dao.getActivity(activity.getActivityId());
+			if (activityInDatabase == null || activityInDatabase.equals(NullObjects.getNullActivity()))
+				return activityInDatabase;
+
+			activityInDatabase.setTitle(
+					activity.getTitle() != null ? activity.getTitle() : activityInDatabase.getTitle());
+			activityInDatabase.setDescription(
+					activity.getDescription() != null ? activity.getDescription() : activityInDatabase.getDescription());
+			activityInDatabase.setUpdatedAt(new Date());
+
+			return dao.updateActivity(activityInDatabase);
+		} catch (Exception e) {
+			System.out.println("SOME PROBLEM IN UPDATE ACTIVITY IN REACHSERVICE");
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public Activity deleteActivity(String activityId) {
+		try {
+			return dao.deleteActivity(activityId);
+		} catch (Exception e) {
+			System.out.println("SOME PROBLEM IN REACH SERVICE DELETE ACTIVITY INSTANCE");
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 }
