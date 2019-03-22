@@ -701,6 +701,37 @@ public class MongoDBDAO implements DAO {
 	}
 
 	@Override
+	public String getActivityEmotionInstanceDAO(String activityInstanceId) {
+		try{
+			MongoDatabase database = MongoDBDAO.getConnectedDatabase();
+			// needs to incorporate Emotions model. - Task #386
+			MongoCollection<Document> activityInstanceMongoCollection =
+					database.getCollection(ACTIVITYINSTANCES_COLLECTION);
+
+			FindIterable<Document> result =	activityInstanceMongoCollection
+					.find(Filters.eq(ActivityInstance.ACTIVITYINSTANCEID_ATTRIBUTE, activityInstanceId));
+
+			MongoCursor<Document> cursor = result.iterator();
+			String rval = "";
+
+			while(cursor.hasNext()) {
+				Document doc = cursor.next();
+				rval = doc.toJson();
+			}
+			return rval;
+
+		} catch (NullPointerException ne) {
+			System.out.println("SOME PROBLEM IN GETTING ACTIVITY INSTANCE WITH ID " + activityInstanceId);
+			ne.printStackTrace();
+			return null;
+		} catch (Exception e) {
+			System.out.println("SOME SERVER PROBLEM IN GETACTIVITYINSTANCEID");
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	@Override
 	public boolean updateActivityInstance(ActivityInstance instance) {
 		try {
 			MongoDatabase database = MongoDBDAO.getConnectedDatabase();

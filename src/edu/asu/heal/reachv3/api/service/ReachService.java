@@ -1,7 +1,5 @@
 package edu.asu.heal.reachv3.api.service;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.asu.heal.core.api.dao.DAO;
 import edu.asu.heal.core.api.dao.DAOFactory;
 import edu.asu.heal.core.api.models.*;
@@ -9,15 +7,10 @@ import edu.asu.heal.core.api.service.HealService;
 import edu.asu.heal.core.api.service.SuggestedActivityiesMappingService.MappingFactory;
 import edu.asu.heal.core.api.service.SuggestedActivityiesMappingService.MappingInterface;
 import edu.asu.heal.reachv3.api.modelFactory.ModelFactory;
-import edu.asu.heal.reachv3.api.models.*;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import org.json.JSONObject;
 
 public class ReachService implements HealService {
 
-	private static final String DATE_FORMAT = "MM/dd/yyyy";
 	private ModelFactory __modelFactory =null;
 
 	public ReachService() {
