@@ -90,4 +90,6 @@ public interface DAO {
 
     String getActivitySwapInstanceDAO(String activityInstanceId);
 
+    String getActivityEmotionInstanceDAO(String activityInstanceId);
+
 }

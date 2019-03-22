@@ -6,7 +6,6 @@ import java.util.List;
 
 import edu.asu.heal.core.api.models.*;
 import edu.asu.heal.reachv3.api.models.*;
-import edu.asu.heal.reachv3.api.service.ReachService;
 import org.json.JSONObject;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -43,6 +42,7 @@ public class ModelFactory {
 			if (activityInstance.getUpdatedAt() == null) activityInstance.setUpdatedAt(new Date());
 
 			String activityName = dao.getActivityNameById(activityInstance.getActivityId());
+			System.out.println("ActivityName : " + activityName);
 			ExtendedActivityInstance extendedActivityInstance = new ExtendedActivityInstance();
 			extendedActivityInstance.setDomainName("Preventive Anxiety");
 			extendedActivityInstance.setActivityTypeName(activityName);
@@ -241,14 +241,21 @@ public class ModelFactory {
 						activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
 						activityInstance.getState(),
 						activityInstance.getPatientPin(),dao.getFaceItChallenges());
-			} else if(activityName.equals("Emotion")){
+			} else if(activityName.equals("Emotions")){
+				System.out.println("Inside Emotions");
+				EmotionSituation situation;
+				if(situationJson == null)
+					situation = new EmotionSituation();
+				else
+					situation = mapper.readValue(situationJson, EmotionSituation.class);
+				extendedActivityInstance.setSituation(situation);
 				activityInstance = new EmotionActivityInstance(
 						activityInstance.getActivityInstanceId(),activityInstance.getActivityId(),
 						activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
 						activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
 						activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
 						activityInstance.getState(),
-						activityInstance.getPatientPin());
+						activityInstance.getPatientPin(),extendedActivityInstance);
 			} else if(activityName.equals("Relaxation")){
 				activityInstance = new RelaxationActivityInstance(
 						activityInstance.getActivityInstanceId(),activityInstance.getActivityId(),
@@ -376,6 +383,25 @@ public class ModelFactory {
 				extendedActivityInstance.setSituation(situation);
 				activityInstance =
 						new DailyDiaryActivityInstance(activityInstance.getActivityInstanceId(), activityInstance.getActivityId(),
+								activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
+								activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
+								activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
+								activityInstance.getState(),
+								activityInstance.getPatientPin(),extendedActivityInstance);
+			} else if(activityInstance!=null && activityName.equals("Emotions")) {
+				String instance = dao.getActivityEmotionInstanceDAO(activityInstanceId);
+
+				ObjectMapper mapper = new ObjectMapper();
+				SimpleDateFormat format = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss");
+				mapper.setDateFormat(format);
+
+				JSONObject obj = new JSONObject(instance);
+				JSONObject extended = new JSONObject(obj.getString("extended"));
+
+				EmotionSituation situation = mapper.readValue(extended.getString("situation"), EmotionSituation.class);
+				extendedActivityInstance.setSituation(situation);
+				activityInstance =
+						new EmotionActivityInstance(activityInstance.getActivityInstanceId(), activityInstance.getActivityId(),
 								activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
 								activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
 								activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),

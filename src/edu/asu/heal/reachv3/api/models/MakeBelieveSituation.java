@@ -4,8 +4,6 @@ import java.util.List;
 
 public class MakeBelieveSituation extends ExtendedSituation {
     public String name;
-//    private int situationId;
-//    private String situationTitle;
     public List<MakeBelieveQuestion> questions;
 
    
