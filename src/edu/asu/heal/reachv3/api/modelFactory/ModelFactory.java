@@ -1,9 +1,10 @@
 package edu.asu.heal.reachv3.api.modelFactory;
 
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-
+import java.util.Properties;
 import edu.asu.heal.core.api.models.*;
 import edu.asu.heal.reachv3.api.models.*;
 import org.json.JSONObject;
@@ -15,6 +16,37 @@ import edu.asu.heal.core.api.dao.DAOFactory;
 public class ModelFactory {
 	private DAO dao;
 	private static final String DATE_FORMAT = "MM/dd/yyyy";
+	private static Properties _properties;
+	private static String MAKEBELIEVE_ACTIVITYNAME,EMOTIONS_ACTIVITYNAME,SWAP_ACTIVITYNAME,
+			STANDUP_ACTIVITYNAME, FACEIT_ACTIVITYNAME, RELAXATION_ACTIVITYNAME, WORRYHEADS_ACTIVITYNAME,
+			DAILYDIARY_ACTIVITYNAME;
+
+	static {
+		_properties = new Properties();
+		try {
+			InputStream propFile = ModelFactory.class.getResourceAsStream("activityName.properties");
+			_properties.load(propFile);
+			propFile.close();
+
+			MAKEBELIEVE_ACTIVITYNAME = _properties.getProperty("makeBelieve.name");
+			EMOTIONS_ACTIVITYNAME = _properties.getProperty("emotions.name");
+			SWAP_ACTIVITYNAME = _properties.getProperty("swap.name");
+			STANDUP_ACTIVITYNAME = _properties.getProperty("standUp.name");
+			FACEIT_ACTIVITYNAME = _properties.getProperty("faceIt.name");
+			RELAXATION_ACTIVITYNAME = _properties.getProperty("relaxation.name");
+			WORRYHEADS_ACTIVITYNAME = _properties.getProperty("worryHeads.name");
+			DAILYDIARY_ACTIVITYNAME = _properties.getProperty("dailyDiary.name");
+
+
+		} catch (Throwable t) {
+			t.printStackTrace();
+			try {
+				throw new Exception(t);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
 	public ModelFactory() throws ModelException {
 		try {
@@ -42,13 +74,11 @@ public class ModelFactory {
 			if (activityInstance.getUpdatedAt() == null) activityInstance.setUpdatedAt(new Date());
 
 			String activityName = dao.getActivityNameById(activityInstance.getActivityId());
-			System.out.println("ActivityName : " + activityName);
+
 			ExtendedActivityInstance extendedActivityInstance = new ExtendedActivityInstance();
 			extendedActivityInstance.setDomainName("Preventive Anxiety");
 			extendedActivityInstance.setActivityTypeName(activityName);
 			extendedActivityInstance.setVersion("v1");
-
-			// Create one config file to store activity name as per service.
 
 			activityInstance = getActitvityInstanceOfType(activityName,activityInstance,extendedActivityInstance,null);
 
@@ -163,7 +193,7 @@ public class ModelFactory {
 			ObjectMapper mapper = new ObjectMapper();
 			SimpleDateFormat format = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss");
 			mapper.setDateFormat(format);
-			if(activityName.equals("MakeBelieve")){ //todo need a more elegant way of making the check whether it is of type make believe
+			if(activityName.equals(MAKEBELIEVE_ACTIVITYNAME)){
 				MakeBelieveSituation situation;
 				if(situationJson == null)
 					situation = dao.getMakeBelieveSituation();
@@ -177,7 +207,7 @@ public class ModelFactory {
 						activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
 						activityInstance.getState(),
 						activityInstance.getPatientPin(),extendedActivityInstance);
-			} else if(activityName.equals("WorryHeads")){
+			} else if(activityName.equals(WORRYHEADS_ACTIVITYNAME)){
 				WorryHeadsSituation situation;
 				if(situationJson == null)
 					situation = dao.getWorryHeadsSituation();
@@ -191,7 +221,7 @@ public class ModelFactory {
 						activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
 						activityInstance.getState(),
 						activityInstance.getPatientPin(), extendedActivityInstance);
-			} else if(activityName.equals("StandUp")){
+			} else if(activityName.equals(STANDUP_ACTIVITYNAME)){
 				StandUpSituation situation;
 				if(situationJson == null)
 					situation = dao.getStandUpSituation();
@@ -205,7 +235,7 @@ public class ModelFactory {
 						activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
 						activityInstance.getState(),
 						activityInstance.getPatientPin(), extendedActivityInstance);
-			} else if(activityName.equals("DailyDiary")){
+			} else if(activityName.equals(DAILYDIARY_ACTIVITYNAME)){
 				DailyDiarySituation situation;
 				if(situationJson == null)
 					situation = dao.getDailyDiarySituation();
@@ -219,7 +249,7 @@ public class ModelFactory {
 						activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
 						activityInstance.getState(),
 						activityInstance.getPatientPin(), extendedActivityInstance);
-			} else if(activityName.equals("SWAP")){
+			} else if(activityName.equals(SWAP_ACTIVITYNAME)){
 				SwapSituation situation;
 				if(situationJson == null)
 					situation = dao.getSwapSituation();
@@ -233,7 +263,7 @@ public class ModelFactory {
 						activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
 						activityInstance.getState(),
 						activityInstance.getPatientPin(),extendedActivityInstance);
-			} else if(activityName.equals("FaceIt")){
+			} else if(activityName.equals(FACEIT_ACTIVITYNAME)){
 				activityInstance = new FaceItActivityInstance(
 						activityInstance.getActivityInstanceId(),activityInstance.getActivityId(),
 						activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
@@ -241,8 +271,7 @@ public class ModelFactory {
 						activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
 						activityInstance.getState(),
 						activityInstance.getPatientPin(),dao.getFaceItChallenges());
-			} else if(activityName.equals("Emotions")){
-				System.out.println("Inside Emotions");
+			} else if(activityName.equals(EMOTIONS_ACTIVITYNAME)){
 				EmotionSituation situation;
 				if(situationJson == null)
 					situation = new EmotionSituation();
@@ -256,7 +285,7 @@ public class ModelFactory {
 						activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
 						activityInstance.getState(),
 						activityInstance.getPatientPin(),extendedActivityInstance);
-			} else if(activityName.equals("Relaxation")){
+			} else if(activityName.equals(RELAXATION_ACTIVITYNAME)){
 				activityInstance = new RelaxationActivityInstance(
 						activityInstance.getActivityInstanceId(),activityInstance.getActivityId(),
 						activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
@@ -267,7 +296,7 @@ public class ModelFactory {
 			}
 			return activityInstance;
 		}catch(Exception e) {
-			throw new ModelException("EXCEPTION in getActitvityInstanceOfType .",e);
+			throw new ModelException("EXCEPTION in getActitvityInstanceOfType.",e);
 		}
 	}
   
@@ -283,7 +312,7 @@ public class ModelFactory {
 			extendedActivityInstance.setActivityTypeName(activityName);
 			extendedActivityInstance.setVersion("v1");
 
-			if(activityInstance!=null && activityName.equals("MakeBelieve")) {
+			if(activityInstance!=null && activityName.equals(MAKEBELIEVE_ACTIVITYNAME)) {
 				String instance = dao.getActivityMakeBelieveInstanceDAO(activityInstanceId);
 
 				ObjectMapper mapper = new ObjectMapper();
@@ -302,7 +331,7 @@ public class ModelFactory {
 								activityInstance.getState(),
 								activityInstance.getPatientPin(),extendedActivityInstance);
 
-			} else if(activityInstance!=null && activityName.equals("WorryHeads")) {
+			} else if(activityInstance!=null && activityName.equals(WORRYHEADS_ACTIVITYNAME)) {
 				String instance = dao.getActivityWorryHeadsInstanceDAO(activityInstanceId);
 
 				ObjectMapper mapper = new ObjectMapper();
@@ -323,7 +352,7 @@ public class ModelFactory {
 								activityInstance.getState(),
 								activityInstance.getPatientPin(),extendedActivityInstance);
 
-			} else if(activityInstance!=null && activityName.equals("StandUp")) {
+			} else if(activityInstance!=null && activityName.equals(STANDUP_ACTIVITYNAME)) {
 				String instance = dao.getActivityStandUpInstanceDAO(activityInstanceId);
 
 				ObjectMapper mapper = new ObjectMapper();
@@ -342,7 +371,7 @@ public class ModelFactory {
 								activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
 								activityInstance.getState(),
 								activityInstance.getPatientPin(),extendedActivityInstance);
-			} else if(activityInstance!=null && activityName.equals("DailyDiary")) {
+			} else if(activityInstance!=null && activityName.equals(DAILYDIARY_ACTIVITYNAME)) {
 				String instance = dao.getActivityDailyDiaryInstanceDAO(activityInstanceId);
 
 				ObjectMapper mapper = new ObjectMapper();
@@ -361,7 +390,7 @@ public class ModelFactory {
 								activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
 								activityInstance.getState(),
 								activityInstance.getPatientPin(),extendedActivityInstance);
-			} else if(activityInstance!=null && activityName.equals("Relaxation")) {
+			} else if(activityInstance!=null && activityName.equals(RELAXATION_ACTIVITYNAME)) {
 				activityInstance =
 						new DailyDiaryActivityInstance(activityInstance.getActivityInstanceId(), activityInstance.getActivityId(),
 								activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
@@ -369,7 +398,7 @@ public class ModelFactory {
 								activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
 								activityInstance.getState(),
 								activityInstance.getPatientPin(),extendedActivityInstance);
-			} else if(activityInstance!=null && activityName.equals("SWAP")) {
+			} else if(activityInstance!=null && activityName.equals(SWAP_ACTIVITYNAME)) {
 				String instance = dao.getActivitySwapInstanceDAO(activityInstanceId);
 
 				ObjectMapper mapper = new ObjectMapper();
@@ -388,7 +417,7 @@ public class ModelFactory {
 								activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
 								activityInstance.getState(),
 								activityInstance.getPatientPin(),extendedActivityInstance);
-			} else if(activityInstance!=null && activityName.equals("Emotions")) {
+			} else if(activityInstance!=null && activityName.equals(EMOTIONS_ACTIVITYNAME)) {
 				String instance = dao.getActivityEmotionInstanceDAO(activityInstanceId);
 
 				ObjectMapper mapper = new ObjectMapper();
