@@ -1,28 +1,16 @@
 package edu.asu.heal.reachv3.api.modelFactory;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+
+import edu.asu.heal.core.api.models.*;
+import edu.asu.heal.reachv3.api.models.*;
 import org.json.JSONObject;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.asu.heal.core.api.dao.DAO;
 import edu.asu.heal.core.api.dao.DAOFactory;
-import edu.asu.heal.core.api.models.Activity;
-import edu.asu.heal.core.api.models.ActivityInstance;
-import edu.asu.heal.core.api.models.ActivityInstanceStatus;
-import edu.asu.heal.core.api.models.NullObjects;
-import edu.asu.heal.core.api.models.Patient;
-import edu.asu.heal.reachv3.api.models.DailyDiaryActivityInstance;
-import edu.asu.heal.reachv3.api.models.EmotionActivityInstance;
-import edu.asu.heal.reachv3.api.models.ExtendedActivityInstance;
-import edu.asu.heal.reachv3.api.models.FaceItActivityInstance;
-import edu.asu.heal.reachv3.api.models.MakeBelieveActivityInstance;
-import edu.asu.heal.reachv3.api.models.MakeBelieveSituation;
-import edu.asu.heal.reachv3.api.models.RelaxationActivityInstance;
-import edu.asu.heal.reachv3.api.models.StandUpActivityInstance;
-import edu.asu.heal.reachv3.api.models.SwapActivityInstance;
-import edu.asu.heal.reachv3.api.models.WorryHeadsActivityInstance;
-import edu.asu.heal.reachv3.api.models.WorryHeadsSituation;
 
 public class ModelFactory {
 	private DAO dao = null;
@@ -525,6 +513,38 @@ public class ModelFactory {
 			return dao.deleteActivity(activityId);
 		} catch (Exception e) {
 			System.out.println("SOME PROBLEM IN REACH SERVICE DELETE ACTIVITY INSTANCE");
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	// ************************************* DOMAIN ****************************************************
+	public List<Domain> getDomains() {
+		try {
+			return dao.getDomains();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public Domain getDomain(String id) {
+		try {
+			return dao.getDomain(id);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public Domain createDomain(String title, String description, String state) {
+		try {
+			Domain instance = new Domain(title, description, state);
+			instance.setCreatedAt(new Date());
+			if (instance.getState() == null) instance.setState(DomainState.CREATED.state());
+
+			return dao.createDomain(instance);
+		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
