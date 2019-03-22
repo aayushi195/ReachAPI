@@ -253,15 +253,7 @@ public class ReachService implements HealService {
 	@Override
 	public List<Trial> getTrials(String domain) {
 		try {
-			DAO dao = DAOFactory.getTheDAO();
-			List<Trial> trials = null;
-
-			if (domain == null)
-				trials = dao.getTrials();
-			else
-				trials = dao.getTrials(domain);
-
-			return trials;
+			return __modelFactory.getTrials(domain);
 		} catch (Exception e) {
 			System.out.println("SOME ERROR IN GETTRIALS() IN REACHSERVICE CLASS");
 			e.printStackTrace();
@@ -272,26 +264,7 @@ public class ReachService implements HealService {
 	@Override
 	public Trial addTrial(Trial trialInstance) {
 		try {
-			DAO dao = DAOFactory.getTheDAO();
-
-			// check if the domain exist, if yes get the id of domain
-			Domain domain = dao.getDomain(trialInstance.getDomainId());
-			if (domain != null) {
-
-				Date startDateFormat = new SimpleDateFormat(ReachService.DATE_FORMAT).parse(trialInstance.getStartDate().toString());
-				Date endDateFormat = new SimpleDateFormat(ReachService.DATE_FORMAT).parse(trialInstance.getEndDate().toString());
-
-				trialInstance.setUpdatedAt(new Date());
-				trialInstance.setCreatedAt(new Date());
-				trialInstance.setStartDate(startDateFormat);
-				trialInstance.setEndDate(endDateFormat);
-				trialInstance.setDomainId(domain.getDomainId());
-
-				return dao.createTrial(trialInstance);
-			} else {
-				return NullObjects.getNullTrial();
-			}
-
+			return __modelFactory.addTrial(trialInstance);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

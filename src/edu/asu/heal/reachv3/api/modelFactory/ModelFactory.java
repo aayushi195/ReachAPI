@@ -6,6 +6,7 @@ import java.util.List;
 
 import edu.asu.heal.core.api.models.*;
 import edu.asu.heal.reachv3.api.models.*;
+import edu.asu.heal.reachv3.api.service.ReachService;
 import org.json.JSONObject;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,7 +14,8 @@ import edu.asu.heal.core.api.dao.DAO;
 import edu.asu.heal.core.api.dao.DAOFactory;
 
 public class ModelFactory {
-	private DAO dao = null;
+	private DAO dao;
+	private static final String DATE_FORMAT = "MM/dd/yyyy";
 
 	public ModelFactory() throws ModelException {
 		try {
@@ -544,6 +546,52 @@ public class ModelFactory {
 			if (instance.getState() == null) instance.setState(DomainState.CREATED.state());
 
 			return dao.createDomain(instance);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	// ************************************* TRIALS ****************************************************
+
+	public List<Trial> getTrials(String domain) {
+		try {
+			List<Trial> trials = null;
+
+			if (domain == null)
+				trials = dao.getTrials();
+			else
+				trials = dao.getTrials(domain);
+
+			return trials;
+		} catch (Exception e) {
+			System.out.println("SOME ERROR IN GETTRIALS() IN REACHSERVICE CLASS");
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public Trial addTrial(Trial trialInstance) {
+		try {
+			DAO dao = DAOFactory.getTheDAO();
+
+			Domain domain = dao.getDomain(trialInstance.getDomainId());
+			if (domain != null) {
+
+				Date startDateFormat = new SimpleDateFormat(DATE_FORMAT).parse(trialInstance.getStartDate().toString());
+				Date endDateFormat = new SimpleDateFormat(DATE_FORMAT).parse(trialInstance.getEndDate().toString());
+
+				trialInstance.setUpdatedAt(new Date());
+				trialInstance.setCreatedAt(new Date());
+				trialInstance.setStartDate(startDateFormat);
+				trialInstance.setEndDate(endDateFormat);
+				trialInstance.setDomainId(domain.getDomainId());
+
+				return dao.createTrial(trialInstance);
+			} else {
+				return NullObjects.getNullTrial();
+			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
