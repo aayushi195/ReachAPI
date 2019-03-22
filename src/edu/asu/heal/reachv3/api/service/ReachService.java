@@ -172,9 +172,7 @@ public class ReachService implements HealService {
 	@Override
 	public List<Domain> getDomains() {
 		try {
-			DAO dao = DAOFactory.getTheDAO();
-
-			return dao.getDomains();
+			return __modelFactory.getDomains();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -184,9 +182,7 @@ public class ReachService implements HealService {
 	@Override
 	public Domain getDomain(String id) {
 		try {
-			DAO dao = DAOFactory.getTheDAO();
-
-			return dao.getDomain(id);
+			return __modelFactory.getDomain(id);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -197,21 +193,11 @@ public class ReachService implements HealService {
 	public Domain addDomain(String title, String description, String state) {
 
 		try {
-			DAO dao = DAOFactory.getTheDAO();
-			Domain instance = new Domain(title, description, state);
-			instance.setCreatedAt(new Date());
-			if (instance.getState() == null) instance.setState(DomainState.CREATED.state());
-
-			return dao.createDomain(instance);
+			return __modelFactory.createDomain(title,description,state);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
-	}
-
-	@Override
-	public String addTestDomain(String title, String description, String state) {
-		return null;
 	}
 
 	/****************************************  Service methods for Patient  *******************************************/
