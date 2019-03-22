@@ -41,7 +41,7 @@ public class ModelFactory {
 			if (activityInstance.getUpdatedAt() == null) activityInstance.setUpdatedAt(new Date());
 
 			String activityName = dao.getActivityNameById(activityInstance.getActivityId());
-			System.out.println("ActivityName : " + activityName);
+
 			ExtendedActivityInstance extendedActivityInstance = new ExtendedActivityInstance();
 			extendedActivityInstance.setDomainName("Preventive Anxiety");
 			extendedActivityInstance.setActivityTypeName(activityName);
@@ -299,7 +299,8 @@ public class ModelFactory {
   		}
   		
   	}
-	//************************************ PATIENTS ***********************************************
+
+  	//************************************ PATIENTS ***********************************************
 	public List<Patient> getPatients(String trialId) {
 		try {
 			List<Patient> result;
