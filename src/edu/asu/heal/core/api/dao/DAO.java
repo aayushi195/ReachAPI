@@ -66,15 +66,9 @@ public interface DAO {
 
     MakeBelieveSituation getMakeBelieveSituation();
 
-    String getActivityMakeBelieveInstanceDAO(String activityInstanceId);
-
     WorryHeadsSituation getWorryHeadsSituation();
 
-    String getActivityWorryHeadsInstanceDAO(String activityInstanceId);
-
     StandUpSituation getStandUpSituation();
-
-    String getActivityStandUpInstanceDAO(String activityInstanceId);
 
     List<FaceItChallenges> getFaceItChallenges();
 
@@ -84,12 +78,8 @@ public interface DAO {
 
     DailyDiarySituation getDailyDiarySituation();
 
-    String getActivityDailyDiaryInstanceDAO(String activityInstanceId);
-
     SwapSituation getSwapSituation();
-
-    String getActivitySwapInstanceDAO(String activityInstanceId);
-
-    String getActivityEmotionInstanceDAO(String activityInstanceId);
+    
+    String getActivityInstanceAsStringDAO (String activityInstanceId);
 
 }
