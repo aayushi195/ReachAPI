@@ -114,24 +114,6 @@ public class ModelFactory {
 		}
 	}
 
-	public ActivityInstance getActivityInstance(String activityInstanceId) throws ModelException{
-		try {
-			ActivityInstance activityInstance;
-			activityInstance =  dao.getActivityInstance(activityInstanceId);
-			String activityName = dao.getActivityNameById(activityInstance.getActivityId());
-			ExtendedActivityInstance extendedActivityInstance = new ExtendedActivityInstance();
-			extendedActivityInstance.setDomainName("Preventive Anxiety");
-			extendedActivityInstance.setActivityTypeName(activityName);
-			extendedActivityInstance.setVersion("v1");
-			String situationStr = getSituationString(activityInstanceId);	
-			activityInstance = getActitvityInstanceOfType(activityName,activityInstance,extendedActivityInstance,situationStr);
-			return activityInstance;
-		}catch(Exception e) {
-			throw new ModelException("SOME ERROR IN GET ACTIVITY INSTANCE IN MODEL FACTORY",e);
-    }
-  }
-  
-	
 	public ActivityInstance getActivityInstanceFromJSON(String requestBody) {	
 
 		try {
@@ -193,8 +175,7 @@ public class ModelFactory {
 
 	}
 
-	public ActivityInstance getActitvityInstanceOfType(String activityName, ActivityInstance activityInstance,
-			ExtendedActivityInstance extendedActivityInstance, String situationJson) throws ModelException{
+	public ActivityInstance getActitvityInstanceOfType(String activityName, ActivityInstance activityInstance, ExtendedActivityInstance extendedActivityInstance, String situationJson) throws ModelException{
 
 		try{
 			ObjectMapper mapper = new ObjectMapper();
@@ -307,7 +288,7 @@ public class ModelFactory {
 		}
 	}
   
-  public String getSituationString(String activityInstanceId) throws ModelException {
+  	public String getSituationString(String activityInstanceId) throws ModelException {
   		try {
   		    String instance = dao.getActivityInstanceAsStringDAO(activityInstanceId);
 
@@ -327,10 +308,10 @@ public class ModelFactory {
   		    }
       }
 
-  	public ActivityInstance getActivityInstance(String activityInstanceId) throws ModelException{
+  	public ActivityInstance getActivityInstance(String activityInstanceId) throws ModelException {
 		try {
 			ActivityInstance activityInstance;
-			activityInstance =  dao.getActivityInstance(activityInstanceId);
+			activityInstance = dao.getActivityInstance(activityInstanceId);
 
 			String activityName = dao.getActivityNameById(activityInstance.getActivityId());
 
@@ -338,14 +319,15 @@ public class ModelFactory {
 			extendedActivityInstance.setDomainName("Preventive Anxiety");
 			extendedActivityInstance.setActivityTypeName(activityName);
 			extendedActivityInstance.setVersion("v1");
-      
-      String situationStr = getSituationString(activityInstanceId);	
-			activityInstance = getActitvityInstanceOfType(activityName,activityInstance,extendedActivityInstance,situationStr);
+
+			String situationStr = getSituationString(activityInstanceId);
+			activityInstance = getActitvityInstanceOfType(activityName, activityInstance, extendedActivityInstance, situationStr);
 			return activityInstance;
-      
-      } catch(Exception e) {
-			throw new ModelException("SOME ERROR IN GET ACTIVITY INSTANCE IN MODEL FACTORY",e);
-    }
+
+		} catch (Exception e) {
+			throw new ModelException("SOME ERROR IN GET ACTIVITY INSTANCE IN MODEL FACTORY", e);
+		}
+	}
 
   	//************************************ PATIENTS ***********************************************
 	public List<Patient> getPatients(String trialId) {
@@ -366,7 +348,7 @@ public class ModelFactory {
     }
   }
   
-  public Patient getPatient(int patientPin) {
+  	public Patient getPatient(int patientPin) {
 		try {
 			return dao.getPatient(patientPin);
 		} catch (Exception e) {
@@ -375,7 +357,7 @@ public class ModelFactory {
 		}
 	}
   
-  public Patient createPatient(String trialId) {
+  	public Patient createPatient(String trialId) {
 		try {
 			return dao.createPatient(trialId);
     } catch (Exception e) {
@@ -384,7 +366,7 @@ public class ModelFactory {
 		}
 	}
   
-  public Patient updatePatient(Patient patient) {
+  	public Patient updatePatient(Patient patient) {
 		try {
 			Patient patientInDatabase = dao.getPatient(patient.getPin());
 			if (patientInDatabase == null || patientInDatabase.equals(NullObjects.getNullPatient()))
