@@ -8,7 +8,6 @@ import java.util.Properties;
 import edu.asu.heal.core.api.models.*;
 import edu.asu.heal.reachv3.api.models.*;
 import org.json.JSONObject;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.asu.heal.core.api.dao.DAO;
 import edu.asu.heal.core.api.dao.DAOFactory;
@@ -91,31 +90,21 @@ public class ModelFactory {
 
 	public ActivityInstance updateActivityInstance(String requestBody) throws ModelException{
 		try {
-			ObjectMapper mapper = new ObjectMapper();
-			SimpleDateFormat format = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss");
-			mapper.setDateFormat(format);
-
-			JsonNode activityInstanceAsTree = mapper.readTree(requestBody);
-			String activityInstanceType = activityInstanceAsTree.get("activityId").asText();
-
-			String activityName = dao.getActivityNameById(activityInstanceType);
-
-			JSONObject obj = new JSONObject(requestBody);
-			JSONObject extended = new JSONObject(obj.getString("extended"));
-			ExtendedActivityInstance extendedActivityInstance = new ExtendedActivityInstance();
-			extendedActivityInstance.setDomainName(extended.getString(ExtendedActivityInstance.DOMAIN_NAME));
-			extendedActivityInstance.setActivityTypeName(activityName);
-			extendedActivityInstance.setVersion(extended.getString(ExtendedActivityInstance.VERSION));
-
-			String situationJson = extended.getString(ExtendedActivityInstance.SITUATION_ATTRIBUTE);
-
 			ActivityInstance activityInstance = getActivityInstanceFromJSON(requestBody);
+			String activityName = dao.getActivityNameById(activityInstance.getActivityId());
+			ExtendedActivityInstance extendedActivityInstance = new ExtendedActivityInstance();
+			extendedActivityInstance.setDomainName("Preventive Anxiety");
+			extendedActivityInstance.setActivityTypeName(activityName);
+			extendedActivityInstance.setVersion("v1");
+
+			String situationJson = getSituationString(activityInstance.getActivityInstanceId());
 			
 			if(activityInstance == null) {
 				return NullObjects.getNullActivityInstance();
 			}
 
-			activityInstance = getActitvityInstanceOfType(activityName,activityInstance,extendedActivityInstance,situationJson);
+			activityInstance = getActitvityInstanceOfType(activityName,activityInstance,
+					extendedActivityInstance,situationJson);
 			if(dao.updateActivityInstance(activityInstance)){
 				return activityInstance;
 			}
@@ -186,8 +175,7 @@ public class ModelFactory {
 
 	}
 
-	public ActivityInstance getActitvityInstanceOfType(String activityName, ActivityInstance activityInstance,
-			ExtendedActivityInstance extendedActivityInstance, String situationJson) throws ModelException{
+	public ActivityInstance getActitvityInstanceOfType(String activityName, ActivityInstance activityInstance, ExtendedActivityInstance extendedActivityInstance, String situationJson) throws ModelException{
 
 		try{
 			ObjectMapper mapper = new ObjectMapper();
@@ -300,10 +288,30 @@ public class ModelFactory {
 		}
 	}
   
-  	public ActivityInstance getActivityInstance(String activityInstanceId) throws ModelException{
+  	public String getSituationString(String activityInstanceId) throws ModelException {
+  		try {
+  		    String instance = dao.getActivityInstanceAsStringDAO(activityInstanceId);
+
+		      ObjectMapper mapper = new ObjectMapper();
+		      SimpleDateFormat format = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss");
+          mapper.setDateFormat(format);
+        
+          JSONObject obj = new JSONObject(instance);
+			    JSONObject extended = new JSONObject(obj.getString("extended"));
+        
+          if(extended.has(ExtendedActivityInstance.SITUATION_ATTRIBUTE))
+			      return extended.getString("situation");
+		      else
+			      return null;
+  		    } catch(Exception e) {
+  			    throw new ModelException("SOME ERROR IN GET SITUATION STRING  IN MODEL FACTORY",e);
+  		    }
+      }
+
+  	public ActivityInstance getActivityInstance(String activityInstanceId) throws ModelException {
 		try {
 			ActivityInstance activityInstance;
-			activityInstance =  dao.getActivityInstance(activityInstanceId);
+			activityInstance = dao.getActivityInstance(activityInstanceId);
 
 			String activityName = dao.getActivityNameById(activityInstance.getActivityId());
 
@@ -312,141 +320,16 @@ public class ModelFactory {
 			extendedActivityInstance.setActivityTypeName(activityName);
 			extendedActivityInstance.setVersion("v1");
 
-			if(activityInstance!=null && activityName.equals(MAKEBELIEVE_ACTIVITYNAME)) {
-				String instance = dao.getActivityMakeBelieveInstanceDAO(activityInstanceId);
-
-				ObjectMapper mapper = new ObjectMapper();
-				SimpleDateFormat format = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss");
-				mapper.setDateFormat(format);
-
-				JSONObject obj = new JSONObject(instance);
-				JSONObject extended = new JSONObject(obj.getString("extended"));
-				MakeBelieveSituation situation = mapper.readValue(extended.getString("situation"), MakeBelieveSituation.class);
-				extendedActivityInstance.setSituation(situation);
-				activityInstance =
-						new MakeBelieveActivityInstance(activityInstance.getActivityInstanceId(), activityInstance.getActivityId(),
-								activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
-								activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
-								activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
-								activityInstance.getState(),
-								activityInstance.getPatientPin(),extendedActivityInstance);
-
-			} else if(activityInstance!=null && activityName.equals(WORRYHEADS_ACTIVITYNAME)) {
-				String instance = dao.getActivityWorryHeadsInstanceDAO(activityInstanceId);
-
-				ObjectMapper mapper = new ObjectMapper();
-				SimpleDateFormat format = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss");
-				mapper.setDateFormat(format);
-
-				JSONObject obj = new JSONObject(instance);
-				JSONObject extended = new JSONObject(obj.getString("extended"));
-
-				WorryHeadsSituation situation = mapper.readValue(extended.getString("situation"), WorryHeadsSituation.class);
-				extendedActivityInstance.setSituation(situation);
-
-				activityInstance =
-						new WorryHeadsActivityInstance(activityInstance.getActivityInstanceId(), activityInstance.getActivityId(),
-								activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
-								activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
-								activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
-								activityInstance.getState(),
-								activityInstance.getPatientPin(),extendedActivityInstance);
-
-			} else if(activityInstance!=null && activityName.equals(STANDUP_ACTIVITYNAME)) {
-				String instance = dao.getActivityStandUpInstanceDAO(activityInstanceId);
-
-				ObjectMapper mapper = new ObjectMapper();
-				SimpleDateFormat format = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss");
-				mapper.setDateFormat(format);
-
-				JSONObject obj = new JSONObject(instance);
-				JSONObject extended = new JSONObject(obj.getString("extended"));
-
-				StandUpSituation situation = mapper.readValue(extended.getString("situation"), StandUpSituation.class);
-				extendedActivityInstance.setSituation(situation);
-				activityInstance =
-						new StandUpActivityInstance(activityInstance.getActivityInstanceId(), activityInstance.getActivityId(),
-								activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
-								activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
-								activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
-								activityInstance.getState(),
-								activityInstance.getPatientPin(),extendedActivityInstance);
-			} else if(activityInstance!=null && activityName.equals(DAILYDIARY_ACTIVITYNAME)) {
-				String instance = dao.getActivityDailyDiaryInstanceDAO(activityInstanceId);
-
-				ObjectMapper mapper = new ObjectMapper();
-				SimpleDateFormat format = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss");
-				mapper.setDateFormat(format);
-
-				JSONObject obj = new JSONObject(instance);
-				JSONObject extended = new JSONObject(obj.getString("extended"));
-
-				DailyDiarySituation situation = mapper.readValue(extended.getString("situation"), DailyDiarySituation.class);
-				extendedActivityInstance.setSituation(situation);
-				activityInstance =
-						new DailyDiaryActivityInstance(activityInstance.getActivityInstanceId(), activityInstance.getActivityId(),
-								activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
-								activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
-								activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
-								activityInstance.getState(),
-								activityInstance.getPatientPin(),extendedActivityInstance);
-			} else if(activityInstance!=null && activityName.equals(RELAXATION_ACTIVITYNAME)) {
-				activityInstance =
-						new DailyDiaryActivityInstance(activityInstance.getActivityInstanceId(), activityInstance.getActivityId(),
-								activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
-								activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
-								activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
-								activityInstance.getState(),
-								activityInstance.getPatientPin(),extendedActivityInstance);
-			} else if(activityInstance!=null && activityName.equals(SWAP_ACTIVITYNAME)) {
-				String instance = dao.getActivitySwapInstanceDAO(activityInstanceId);
-
-				ObjectMapper mapper = new ObjectMapper();
-				SimpleDateFormat format = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss");
-				mapper.setDateFormat(format);
-
-				JSONObject obj = new JSONObject(instance);
-				JSONObject extended = new JSONObject(obj.getString("extended"));
-
-				SwapSituation situation = mapper.readValue(extended.getString("situation"), SwapSituation.class);
-				extendedActivityInstance.setSituation(situation);
-				activityInstance =
-						new DailyDiaryActivityInstance(activityInstance.getActivityInstanceId(), activityInstance.getActivityId(),
-								activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
-								activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
-								activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
-								activityInstance.getState(),
-								activityInstance.getPatientPin(),extendedActivityInstance);
-			} else if(activityInstance!=null && activityName.equals(EMOTIONS_ACTIVITYNAME)) {
-				String instance = dao.getActivityEmotionInstanceDAO(activityInstanceId);
-
-				ObjectMapper mapper = new ObjectMapper();
-				SimpleDateFormat format = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss");
-				mapper.setDateFormat(format);
-
-				JSONObject obj = new JSONObject(instance);
-				JSONObject extended = new JSONObject(obj.getString("extended"));
-
-				EmotionSituation situation = mapper.readValue(extended.getString("situation"), EmotionSituation.class);
-				extendedActivityInstance.setSituation(situation);
-				activityInstance =
-						new EmotionActivityInstance(activityInstance.getActivityInstanceId(), activityInstance.getActivityId(),
-								activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
-								activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
-								activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
-								activityInstance.getState(),
-								activityInstance.getPatientPin(),extendedActivityInstance);
-			}
-			//			else if(rval!=null && activityName.equals("FaceIt"))
-			//				rval = dao.getActivityFaceInstanceDAO(activityInstanceId);
-
+			String situationStr = getSituationString(activityInstanceId);
+			activityInstance = getActitvityInstanceOfType(activityName, activityInstance, extendedActivityInstance, situationStr);
 			return activityInstance;
-		}catch(Exception e) {
-			throw new ModelException("SOME ERROR IN HEAL SERVICE MODEL FACTORY",e);
-    }
-  }
-  
-	//************************************ PATIENTS ***********************************************
+
+		} catch (Exception e) {
+			throw new ModelException("SOME ERROR IN GET ACTIVITY INSTANCE IN MODEL FACTORY", e);
+		}
+	}
+
+  	//************************************ PATIENTS ***********************************************
 	public List<Patient> getPatients(String trialId) {
 		try {
 			List<Patient> result;
@@ -465,7 +348,7 @@ public class ModelFactory {
     }
   }
   
-  public Patient getPatient(int patientPin) {
+  	public Patient getPatient(int patientPin) {
 		try {
 			return dao.getPatient(patientPin);
 		} catch (Exception e) {
@@ -474,7 +357,7 @@ public class ModelFactory {
 		}
 	}
   
-  public Patient createPatient(String trialId) {
+  	public Patient createPatient(String trialId) {
 		try {
 			return dao.createPatient(trialId);
     } catch (Exception e) {
@@ -483,7 +366,7 @@ public class ModelFactory {
 		}
 	}
   
-  public Patient updatePatient(Patient patient) {
+  	public Patient updatePatient(Patient patient) {
 		try {
 			Patient patientInDatabase = dao.getPatient(patient.getPin());
 			if (patientInDatabase == null || patientInDatabase.equals(NullObjects.getNullPatient()))
