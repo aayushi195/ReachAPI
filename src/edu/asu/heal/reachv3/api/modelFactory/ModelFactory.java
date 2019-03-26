@@ -121,6 +121,10 @@ public class ModelFactory {
 	public ActivityInstance getActivityInstanceFromJSON(String requestBody) {	
 
 		try {
+		//	ObjectMapper mapper = new ObjectMapper();
+			SimpleDateFormat format = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss");
+		//	mapper.setDateFormat(format);
+
 			JSONObject obj = new JSONObject(requestBody);
 			String activityInstanceId = null, activityId = null, description = null, state =null;
 			int patientPin = -1;
@@ -128,7 +132,7 @@ public class ModelFactory {
 					actualSubmissionTime = null;
 			Date updatedAt = new Date();
 
-			if(obj.has(ActivityInstance.ACTIVITYINSTANCEID_ATTRIBUTE) 
+			if(obj.has(ActivityInstance.ACTIVITYINSTANCEID_ATTRIBUTE)
 					&& !obj.getString(ActivityInstance.ACTIVITYINSTANCEID_ATTRIBUTE).equals("null") ) {
 				activityInstanceId = obj.getString(ActivityInstance.ACTIVITYINSTANCEID_ATTRIBUTE);
 			}
@@ -146,22 +150,31 @@ public class ModelFactory {
 			}
 			if(obj.has(ActivityInstance.CREATEDAT_ATTRIBUTE)
 					&& !obj.getString(ActivityInstance.CREATEDAT_ATTRIBUTE).equals("null")) {
-				createdAt = new Date(Long.parseLong(obj.getString(ActivityInstance.CREATEDAT_ATTRIBUTE)));
+
+				createdAt = format.parse(obj.getString(ActivityInstance.CREATEDAT_ATTRIBUTE));
+				//createdAt = new Date(Long.parseLong(obj.getString(ActivityInstance.CREATEDAT_ATTRIBUTE)));
 			}
 			if(obj.has(ActivityInstance.STARTTIME_ATTRIBUTE)
 					&& !obj.getString(ActivityInstance.STARTTIME_ATTRIBUTE).equals("null")) {
-				startTime = new Date(Long.parseLong(obj.getString(ActivityInstance.STARTTIME_ATTRIBUTE)));
+				startTime = format.parse(obj.getString(ActivityInstance.STARTTIME_ATTRIBUTE));
+				//startTime = new Date(Long.parseLong(obj.getString(ActivityInstance.STARTTIME_ATTRIBUTE)));
 			}
 			if(obj.has(ActivityInstance.ENDTIME_ATTRIBUTE)
 					&& !obj.getString(ActivityInstance.ENDTIME_ATTRIBUTE).equals("null")) {
-				endTime = new Date(Long.parseLong(obj.getString(ActivityInstance.ENDTIME_ATTRIBUTE)));
+				System.out.println("3");
+				endTime = format.parse(obj.getString(ActivityInstance.ENDTIME_ATTRIBUTE));
+				//endTime = new Date(Long.parseLong(obj.getString(ActivityInstance.ENDTIME_ATTRIBUTE)));
 			}
 			if(obj.has(ActivityInstance.USERSUBMISSIONTIME_ATTRIBUTE)
 					&& !obj.getString(ActivityInstance.USERSUBMISSIONTIME_ATTRIBUTE).equals("null")) {
-				userSubmissionTime = new Date(Long.parseLong(obj.getString(ActivityInstance.USERSUBMISSIONTIME_ATTRIBUTE)));
+				System.out.println("4");
+				userSubmissionTime = format.parse(obj.getString(ActivityInstance.USERSUBMISSIONTIME_ATTRIBUTE));
+				//userSubmissionTime = new Date(Long.parseLong(obj.getString(ActivityInstance.USERSUBMISSIONTIME_ATTRIBUTE)));
 			}
 			if(obj.has(ActivityInstance.ACTUALSUBMISSIONTIME_ATTRIBUTE)
 					&& !obj.getString(ActivityInstance.ACTUALSUBMISSIONTIME_ATTRIBUTE).equals("null")) {
+				System.out.println("5");
+				actualSubmissionTime = format.parse(obj.getString(ActivityInstance.ACTUALSUBMISSIONTIME_ATTRIBUTE));
 				actualSubmissionTime = new Date(Long.parseLong(obj.getString(ActivityInstance.ACTUALSUBMISSIONTIME_ATTRIBUTE)));
 			}
 			if(obj.has(ActivityInstance.PATIENT_PIN)
