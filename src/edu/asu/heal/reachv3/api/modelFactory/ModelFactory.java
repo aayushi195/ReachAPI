@@ -18,7 +18,7 @@ public class ModelFactory {
 	private static Properties _properties;
 	private static String MAKEBELIEVE_ACTIVITYNAME,EMOTIONS_ACTIVITYNAME,SWAP_ACTIVITYNAME,
 			STANDUP_ACTIVITYNAME, FACEIT_ACTIVITYNAME, RELAXATION_ACTIVITYNAME, WORRYHEADS_ACTIVITYNAME,
-			DAILYDIARY_ACTIVITYNAME;
+			DAILYDIARY_ACTIVITYNAME, VERSION, DOMAIN_NAME, EXTENDED_PART;
 
 	static {
 		_properties = new Properties();
@@ -35,6 +35,9 @@ public class ModelFactory {
 			RELAXATION_ACTIVITYNAME = _properties.getProperty("relaxation.name");
 			WORRYHEADS_ACTIVITYNAME = _properties.getProperty("worryHeads.name");
 			DAILYDIARY_ACTIVITYNAME = _properties.getProperty("dailyDiary.name");
+			VERSION = _properties.getProperty("version.name");
+			DOMAIN_NAME = _properties.getProperty("domain.name");
+			EXTENDED_PART = _properties.getProperty("extended.name");
 
 
 		} catch (Throwable t) {
@@ -75,9 +78,9 @@ public class ModelFactory {
 			String activityName = dao.getActivityNameById(activityInstance.getActivityId());
 
 			ExtendedActivityInstance extendedActivityInstance = new ExtendedActivityInstance();
-			extendedActivityInstance.setDomainName("Preventive Anxiety");
+			extendedActivityInstance.setDomainName(DOMAIN_NAME);
 			extendedActivityInstance.setActivityTypeName(activityName);
-			extendedActivityInstance.setVersion("v1");
+			extendedActivityInstance.setVersion(VERSION);
 
 			activityInstance = getActitvityInstanceOfType(activityName,activityInstance,extendedActivityInstance,null);
 
@@ -93,18 +96,19 @@ public class ModelFactory {
 			ActivityInstance activityInstance = getActivityInstanceFromJSON(requestBody);
 			String activityName = dao.getActivityNameById(activityInstance.getActivityId());
 			ExtendedActivityInstance extendedActivityInstance = new ExtendedActivityInstance();
-			extendedActivityInstance.setDomainName("Preventive Anxiety");
+			extendedActivityInstance.setDomainName(DOMAIN_NAME);
 			extendedActivityInstance.setActivityTypeName(activityName);
-			extendedActivityInstance.setVersion("v1");
+			extendedActivityInstance.setVersion(VERSION);
 
-			String situationJson = getSituationString(activityInstance.getActivityInstanceId());
+			String situationJson = getSituationString(null,requestBody);
 			
-			if(activityInstance == null) {
+			if(activityInstance == null || situationJson == null) {
 				return NullObjects.getNullActivityInstance();
 			}
 
 			activityInstance = getActitvityInstanceOfType(activityName,activityInstance,
 					extendedActivityInstance,situationJson);
+
 			if(dao.updateActivityInstance(activityInstance)){
 				return activityInstance;
 			}
@@ -182,6 +186,7 @@ public class ModelFactory {
 			SimpleDateFormat format = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss");
 			mapper.setDateFormat(format);
 			if(activityName.equals(MAKEBELIEVE_ACTIVITYNAME)){
+
 				MakeBelieveSituation situation;
 				if(situationJson == null)
 					situation = dao.getMakeBelieveSituation();
@@ -288,21 +293,28 @@ public class ModelFactory {
 		}
 	}
   
-  	public String getSituationString(String activityInstanceId) throws ModelException {
+  	public String getSituationString(String activityInstanceId,String requestBody) throws ModelException {
   		try {
-  		    String instance = dao.getActivityInstanceAsStringDAO(activityInstanceId);
+  			String instance = null;
+  			if(activityInstanceId!=null){
+				instance = dao.getActivityInstanceAsStringDAO(activityInstanceId);
+			}else if(requestBody != null){
+  				instance = requestBody;
+			}
+  		   if(instance != null) {
+			   ObjectMapper mapper = new ObjectMapper();
+			   SimpleDateFormat format = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss");
+			   mapper.setDateFormat(format);
 
-		      ObjectMapper mapper = new ObjectMapper();
-		      SimpleDateFormat format = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss");
-          mapper.setDateFormat(format);
-        
-          JSONObject obj = new JSONObject(instance);
-			    JSONObject extended = new JSONObject(obj.getString("extended"));
-        
-          if(extended.has(ExtendedActivityInstance.SITUATION_ATTRIBUTE))
-			      return extended.getString("situation");
-		      else
-			      return null;
+			   JSONObject obj = new JSONObject(instance);
+			   JSONObject extended = new JSONObject(obj.getString("extended"));
+
+			   if (extended.has(ExtendedActivityInstance.SITUATION_ATTRIBUTE))
+				   return extended.getString(ExtendedActivityInstance.SITUATION_ATTRIBUTE);
+			   else
+				   return null;
+		   }else
+		   	return null;
   		    } catch(Exception e) {
   			    throw new ModelException("SOME ERROR IN GET SITUATION STRING  IN MODEL FACTORY",e);
   		    }
@@ -316,11 +328,11 @@ public class ModelFactory {
 			String activityName = dao.getActivityNameById(activityInstance.getActivityId());
 
 			ExtendedActivityInstance extendedActivityInstance = new ExtendedActivityInstance();
-			extendedActivityInstance.setDomainName("Preventive Anxiety");
+			extendedActivityInstance.setDomainName(DOMAIN_NAME);
 			extendedActivityInstance.setActivityTypeName(activityName);
-			extendedActivityInstance.setVersion("v1");
+			extendedActivityInstance.setVersion(VERSION);
 
-			String situationStr = getSituationString(activityInstanceId);
+			String situationStr = getSituationString(activityInstanceId,null);
 			activityInstance = getActitvityInstanceOfType(activityName, activityInstance, extendedActivityInstance, situationStr);
 			return activityInstance;
 
