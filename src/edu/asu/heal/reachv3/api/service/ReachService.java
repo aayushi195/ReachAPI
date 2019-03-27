@@ -20,9 +20,9 @@ public class ReachService implements HealService {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 	}
 
+  private static final String DATE_FORMAT = "MM/dd/yyyy";
 	/****************************************  Service methods for Activity  ******************************************/
 	@Override
 	public List<Activity> getActivities(String domain) {
