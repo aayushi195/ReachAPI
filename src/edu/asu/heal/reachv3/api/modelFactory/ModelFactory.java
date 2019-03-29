@@ -71,6 +71,8 @@ public class ModelFactory {
 
 	public ActivityInstance createActivityInstance(ActivityInstance activityInstance) throws ModelException{
 		try {
+			SimpleDateFormat format = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss");
+			System.out.println(new Date());
 			if (activityInstance.getCreatedAt() == null) activityInstance.setCreatedAt(new Date());
 			if (activityInstance.getState() == null) activityInstance.setState(ActivityInstanceStatus.CREATED.status());
 			if (activityInstance.getUpdatedAt() == null) activityInstance.setUpdatedAt(new Date());
@@ -150,18 +152,17 @@ public class ModelFactory {
 			}
 			if(obj.has(ActivityInstance.CREATEDAT_ATTRIBUTE)
 					&& !obj.getString(ActivityInstance.CREATEDAT_ATTRIBUTE).equals("null")) {
-
-				createdAt = format.parse(obj.getString(ActivityInstance.CREATEDAT_ATTRIBUTE));
-				//createdAt = new Date(Long.parseLong(obj.getString(ActivityInstance.CREATEDAT_ATTRIBUTE)));
+			//	createdAt = format.parse(obj.getString(ActivityInstance.CREATEDAT_ATTRIBUTE));
+				createdAt = new Date(Long.parseLong(obj.getString(ActivityInstance.CREATEDAT_ATTRIBUTE)));
 			}
 			if(obj.has(ActivityInstance.STARTTIME_ATTRIBUTE)
 					&& !obj.getString(ActivityInstance.STARTTIME_ATTRIBUTE).equals("null")) {
-				startTime = format.parse(obj.getString(ActivityInstance.STARTTIME_ATTRIBUTE));
-				//startTime = new Date(Long.parseLong(obj.getString(ActivityInstance.STARTTIME_ATTRIBUTE)));
+				System.out.println("1");
+				//startTime = format.parse(obj.getString(ActivityInstance.STARTTIME_ATTRIBUTE));
+				startTime = new Date(Long.parseLong(obj.getString(ActivityInstance.STARTTIME_ATTRIBUTE)));
 			}
 			if(obj.has(ActivityInstance.ENDTIME_ATTRIBUTE)
 					&& !obj.getString(ActivityInstance.ENDTIME_ATTRIBUTE).equals("null")) {
-				System.out.println("3");
 				endTime = format.parse(obj.getString(ActivityInstance.ENDTIME_ATTRIBUTE));
 				//endTime = new Date(Long.parseLong(obj.getString(ActivityInstance.ENDTIME_ATTRIBUTE)));
 			}
