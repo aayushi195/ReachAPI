@@ -152,8 +152,10 @@ public class ModelFactory {
 			}
 			if(obj.has(ActivityInstance.CREATEDAT_ATTRIBUTE)
 					&& !obj.getString(ActivityInstance.CREATEDAT_ATTRIBUTE).equals("null")) {
-			//	createdAt = format.parse(obj.getString(ActivityInstance.CREATEDAT_ATTRIBUTE));
-				createdAt = new Date(Long.parseLong(obj.getString(ActivityInstance.CREATEDAT_ATTRIBUTE)));
+				System.out.println("-----------------Model Factory----------");
+				System.out.println("++++++++++++   : " + obj.getString(ActivityInstance.CREATEDAT_ATTRIBUTE));
+				createdAt = format.parse(obj.getString(ActivityInstance.CREATEDAT_ATTRIBUTE));
+			//	createdAt = new Date(Long.parseLong(obj.getString(ActivityInstance.CREATEDAT_ATTRIBUTE)));
 			}
 			if(obj.has(ActivityInstance.STARTTIME_ATTRIBUTE)
 					&& !obj.getString(ActivityInstance.STARTTIME_ATTRIBUTE).equals("null")) {
@@ -176,7 +178,7 @@ public class ModelFactory {
 					&& !obj.getString(ActivityInstance.ACTUALSUBMISSIONTIME_ATTRIBUTE).equals("null")) {
 				System.out.println("5");
 				actualSubmissionTime = format.parse(obj.getString(ActivityInstance.ACTUALSUBMISSIONTIME_ATTRIBUTE));
-				actualSubmissionTime = new Date(Long.parseLong(obj.getString(ActivityInstance.ACTUALSUBMISSIONTIME_ATTRIBUTE)));
+			//	actualSubmissionTime = new Date(Long.parseLong(obj.getString(ActivityInstance.ACTUALSUBMISSIONTIME_ATTRIBUTE)));
 			}
 			if(obj.has(ActivityInstance.PATIENT_PIN)
 					&& obj.getInt(ActivityInstance.PATIENT_PIN) != -1) {
