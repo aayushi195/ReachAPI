@@ -15,6 +15,7 @@ import edu.asu.heal.core.api.dao.DAOFactory;
 public class ModelFactory {
 	private DAO dao;
 	private static final String DATE_FORMAT = "MM/dd/yyyy";
+	private static final String DATE_FORMAT_AI="MMM dd, yyyy HH:mm:ss";
 	private static Properties _properties;
 	private static String MAKEBELIEVE_ACTIVITYNAME,EMOTIONS_ACTIVITYNAME,SWAP_ACTIVITYNAME,
 			STANDUP_ACTIVITYNAME, FACEIT_ACTIVITYNAME, RELAXATION_ACTIVITYNAME, WORRYHEADS_ACTIVITYNAME,
@@ -71,7 +72,7 @@ public class ModelFactory {
 
 	public ActivityInstance createActivityInstance(ActivityInstance activityInstance) throws ModelException{
 		try {
-			SimpleDateFormat format = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss");
+			SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT_AI);
 			System.out.println(new Date());
 			if (activityInstance.getCreatedAt() == null) activityInstance.setCreatedAt(new Date());
 			if (activityInstance.getState() == null) activityInstance.setState(ActivityInstanceStatus.CREATED.status());
@@ -104,7 +105,7 @@ public class ModelFactory {
 
 			String situationJson = getSituationString(null,requestBody);
 			
-			if(activityInstance == null || situationJson == null) {
+			if(activityInstance == null) {
 				return NullObjects.getNullActivityInstance();
 			}
 
@@ -124,7 +125,7 @@ public class ModelFactory {
 
 		try {
 		//	ObjectMapper mapper = new ObjectMapper();
-			SimpleDateFormat format = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss");
+			SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT_AI);
 		//	mapper.setDateFormat(format);
 
 			JSONObject obj = new JSONObject(requestBody);
@@ -199,7 +200,7 @@ public class ModelFactory {
 
 		try{
 			ObjectMapper mapper = new ObjectMapper();
-			SimpleDateFormat format = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss");
+			SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT_AI);
 			mapper.setDateFormat(format);
 			if(activityName.equals(MAKEBELIEVE_ACTIVITYNAME)){
 
@@ -295,6 +296,7 @@ public class ModelFactory {
 						activityInstance.getState(),
 						activityInstance.getPatientPin(),extendedActivityInstance);
 			} else if(activityName.equals(RELAXATION_ACTIVITYNAME)){
+				extendedActivityInstance.setSituation(null);
 				activityInstance = new RelaxationActivityInstance(
 						activityInstance.getActivityInstanceId(),activityInstance.getActivityId(),
 						activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
@@ -319,7 +321,7 @@ public class ModelFactory {
 			}
   		   if(instance != null) {
 			   ObjectMapper mapper = new ObjectMapper();
-			   SimpleDateFormat format = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss");
+			   SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT_AI);
 			   mapper.setDateFormat(format);
 
 			   JSONObject obj = new JSONObject(instance);
