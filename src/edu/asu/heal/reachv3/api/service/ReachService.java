@@ -169,6 +169,10 @@ public class ReachService implements HealService {
             if (activityInstance.getCreatedAt() == null) activityInstance.setCreatedAt(new Date());
             if (activityInstance.getState() == null) activityInstance.setState(ActivityInstanceStatus.CREATED.status());
             if (activityInstance.getUpdatedAt() == null) activityInstance.setUpdatedAt(new Date());
+            if (activityInstance.getInstanceOf().getActivityId() == null) {
+                activityInstance.getInstanceOf()
+                        .setActivityId(dao.getActivityId(activityInstance.getInstanceOf().getName()));
+            }
 
             // Create one config file to store activity name as per service.
             

@@ -18,8 +18,8 @@ doc
 
 
 # Ingone 
-ReachAPI.war
-ReachAPI/
+CompassAPI.war
+CompassAPI/
 WebContent/
 .classpath
 .project
