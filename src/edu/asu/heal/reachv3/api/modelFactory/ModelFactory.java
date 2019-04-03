@@ -153,14 +153,11 @@ public class ModelFactory {
 			}
 			if(obj.has(ActivityInstance.CREATEDAT_ATTRIBUTE)
 					&& !obj.getString(ActivityInstance.CREATEDAT_ATTRIBUTE).equals("null")) {
-				System.out.println("-----------------Model Factory----------");
-				System.out.println("++++++++++++   : " + obj.getString(ActivityInstance.CREATEDAT_ATTRIBUTE));
 				createdAt = format.parse(obj.getString(ActivityInstance.CREATEDAT_ATTRIBUTE));
 			//	createdAt = new Date(Long.parseLong(obj.getString(ActivityInstance.CREATEDAT_ATTRIBUTE)));
 			}
 			if(obj.has(ActivityInstance.STARTTIME_ATTRIBUTE)
 					&& !obj.getString(ActivityInstance.STARTTIME_ATTRIBUTE).equals("null")) {
-				System.out.println("1");
 				//startTime = format.parse(obj.getString(ActivityInstance.STARTTIME_ATTRIBUTE));
 				startTime = new Date(Long.parseLong(obj.getString(ActivityInstance.STARTTIME_ATTRIBUTE)));
 			}
@@ -171,13 +168,11 @@ public class ModelFactory {
 			}
 			if(obj.has(ActivityInstance.USERSUBMISSIONTIME_ATTRIBUTE)
 					&& !obj.getString(ActivityInstance.USERSUBMISSIONTIME_ATTRIBUTE).equals("null")) {
-				System.out.println("4");
 				userSubmissionTime = format.parse(obj.getString(ActivityInstance.USERSUBMISSIONTIME_ATTRIBUTE));
 				//userSubmissionTime = new Date(Long.parseLong(obj.getString(ActivityInstance.USERSUBMISSIONTIME_ATTRIBUTE)));
 			}
 			if(obj.has(ActivityInstance.ACTUALSUBMISSIONTIME_ATTRIBUTE)
 					&& !obj.getString(ActivityInstance.ACTUALSUBMISSIONTIME_ATTRIBUTE).equals("null")) {
-				System.out.println("5");
 				actualSubmissionTime = format.parse(obj.getString(ActivityInstance.ACTUALSUBMISSIONTIME_ATTRIBUTE));
 			//	actualSubmissionTime = new Date(Long.parseLong(obj.getString(ActivityInstance.ACTUALSUBMISSIONTIME_ATTRIBUTE)));
 			}
