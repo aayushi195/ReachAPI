@@ -38,8 +38,6 @@ public interface HealService {
 
     Domain addDomain(String title, String description, String state);
 
-    String addTestDomain(String title, String description, String state);
-
     /****************************************  Service methods for Patient  *******************************************/
     List<Patient> getPatients(String trialId);
 

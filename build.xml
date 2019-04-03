@@ -32,6 +32,7 @@
     <copy file="${src}/${halpackage}/hal.properties" todir="${destdir}/WEB-INF/classes/${halpackage}"/>
     <copy file="${src}/${mapperservicepackage}/mapper.properties" todir="${destdir}/WEB-INF/classes/${mapperservicepackage}" />
     <copy file="${src}/${activitysuggestionpackage}/emotions.properties" todir="${destdir}/WEB-INF/classes/${activitysuggestionpackage}" />
+    <copy file="${src}/${modelfactorypackage}/activityName.properties" todir="${destdir}/WEB-INF/classes/${modelfactorypackage}" />
   </target>
 
   <target name="build" depends="compile,apidoc">

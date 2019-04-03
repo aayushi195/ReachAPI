@@ -50,8 +50,6 @@ public class MongoDBDAO implements DAO {
 
 	private static String __mongoDBName;
 	private static String __mongoURI;
-	private Properties properties1 = new Properties();
-	private Map<String, List<String>> emotionsMap = new HashMap<>();
 
 
 	public MongoDBDAO(Properties properties) {
@@ -360,35 +358,6 @@ public class MongoDBDAO implements DAO {
 	}
 
 	@Override
-	public String getActivityMakeBelieveInstanceDAO(String activityInstanceId) {
-		try {
-			MongoDatabase database = MongoDBDAO.getConnectedDatabase();
-			// needs to incorporate Emotions model. - Task #386
-			MongoCollection<Document> activityInstanceMongoCollection =
-					database.getCollection(ACTIVITYINSTANCES_COLLECTION);//, Emotions.class);
-
-			FindIterable<Document> result =	activityInstanceMongoCollection
-					.find(Filters.eq(ActivityInstance.ACTIVITYINSTANCEID_ATTRIBUTE, activityInstanceId));
-
-			MongoCursor<Document> cursor = result.iterator();
-			String rval = "";
-			while(cursor.hasNext()) {
-				Document doc = cursor.next();
-				rval = doc.toJson();
-			}
-			return rval;
-		} catch (NullPointerException ne) {
-			System.out.println("SOME PROBLEM IN GETTING ACTIVITY INSTANCE WITH ID " + activityInstanceId);
-			ne.printStackTrace();
-			return null;
-		} catch (Exception e) {
-			System.out.println("SOME SERVER PROBLEM IN GETACTIVITYINSTANCEID");
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	@Override
 	public WorryHeadsSituation getWorryHeadsSituation() {
 		try{
 			MongoDatabase database = MongoDBDAO.getConnectedDatabase();
@@ -417,36 +386,6 @@ public class MongoDBDAO implements DAO {
 	}
 
 	@Override
-	public String getActivityWorryHeadsInstanceDAO(String activityInstanceId) {
-		try {
-			MongoDatabase database = MongoDBDAO.getConnectedDatabase();
-			// needs to incorporate Emotions model. - Task #386
-			MongoCollection<Document> activityInstanceMongoCollection =
-					database.getCollection(ACTIVITYINSTANCES_COLLECTION);//, Emotions.class);
-
-			FindIterable<Document> result =	activityInstanceMongoCollection
-					.find(Filters.eq(ActivityInstance.ACTIVITYINSTANCEID_ATTRIBUTE, activityInstanceId));
-
-			MongoCursor<Document> cursor = result.iterator();
-			String rval = "";
-			while(cursor.hasNext()) {
-				Document doc = cursor.next();
-				rval = doc.toJson();
-			}
-			return rval;
-
-		} catch (NullPointerException ne) {
-			System.out.println("SOME PROBLEM IN GETTING ACTIVITY INSTANCE WITH ID " + activityInstanceId);
-			ne.printStackTrace();
-			return null;//(WorryHeadsActivityInstance) NullObjects.getNullActivityInstance();
-		} catch (Exception e) {
-			System.out.println("SOME SERVER PROBLEM IN GETACTIVITYINSTANCEID");
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	@Override
 	public StandUpSituation getStandUpSituation() {
 		try{
 			MongoDatabase database = MongoDBDAO.getConnectedDatabase();
@@ -469,38 +408,6 @@ public class MongoDBDAO implements DAO {
 			return null;
 		}catch (Exception e){
 			System.out.println("Some problem in getting Make believe situation");
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	@Override
-	public String getActivityStandUpInstanceDAO(String activityInstanceId) {
-		try {
-			MongoDatabase database = MongoDBDAO.getConnectedDatabase();
-			// needs to incorporate Emotions model. - Task #386
-			MongoCollection<Document> activityInstanceMongoCollection =
-					database.getCollection(ACTIVITYINSTANCES_COLLECTION);//, Emotions.class);
-
-			FindIterable<Document> result =	activityInstanceMongoCollection
-					.find(Filters.eq(ActivityInstance.ACTIVITYINSTANCEID_ATTRIBUTE, activityInstanceId));
-
-			MongoCursor<Document> cursor = result.iterator();
-			String rval = "";
-			List<Activity> suggestedActivities = new ArrayList<Activity>();
-
-			while(cursor.hasNext()) {
-				Document doc = cursor.next();
-				rval = doc.toJson();
-			}
-			return rval;
-
-		} catch (NullPointerException ne) {
-			System.out.println("SOME PROBLEM IN GETTING ACTIVITY INSTANCE WITH ID " + activityInstanceId);
-			ne.printStackTrace();
-			return null;// (StandUpActivityInstance) NullObjects.getNullActivityInstance();
-		} catch (Exception e) {
-			System.out.println("SOME SERVER PROBLEM IN GETACTIVITYINSTANCEID");
 			e.printStackTrace();
 			return null;
 		}
@@ -611,37 +518,6 @@ public class MongoDBDAO implements DAO {
 	}
 
 	@Override
-	public String getActivityDailyDiaryInstanceDAO(String activityInstanceId) {
-		try{
-			MongoDatabase database = MongoDBDAO.getConnectedDatabase();
-			// needs to incorporate Emotions model. - Task #386
-			MongoCollection<Document> activityInstanceMongoCollection =
-				database.getCollection(ACTIVITYINSTANCES_COLLECTION);
-
-			FindIterable<Document> result =	activityInstanceMongoCollection
-				.find(Filters.eq(ActivityInstance.ACTIVITYINSTANCEID_ATTRIBUTE, activityInstanceId));
-
-			MongoCursor<Document> cursor = result.iterator();
-			String rval = "";
-
-			while(cursor.hasNext()) {
-				Document doc = cursor.next();
-				rval = doc.toJson();
-			}
-			return rval;
-
-			} catch (NullPointerException ne) {
-				System.out.println("SOME PROBLEM IN GETTING ACTIVITY INSTANCE WITH ID " + activityInstanceId);
-				ne.printStackTrace();
-				return null;
-			} catch (Exception e) {
-				System.out.println("SOME SERVER PROBLEM IN GETACTIVITYINSTANCEID");
-				e.printStackTrace();
-				return null;
-			}
-	}
-
-	@Override
 	public SwapSituation getSwapSituation() {
 		try{
 			MongoDatabase database = MongoDBDAO.getConnectedDatabase();
@@ -664,37 +540,6 @@ public class MongoDBDAO implements DAO {
 			return null;
 		}catch (Exception e){
 			System.out.println("Some problem in getting SWAP situation");
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	@Override
-	public String getActivitySwapInstanceDAO(String activityInstanceId) {
-		try{
-			MongoDatabase database = MongoDBDAO.getConnectedDatabase();
-			// needs to incorporate Emotions model. - Task #386
-			MongoCollection<Document> activityInstanceMongoCollection =
-					database.getCollection(ACTIVITYINSTANCES_COLLECTION);
-
-			FindIterable<Document> result =	activityInstanceMongoCollection
-					.find(Filters.eq(ActivityInstance.ACTIVITYINSTANCEID_ATTRIBUTE, activityInstanceId));
-
-			MongoCursor<Document> cursor = result.iterator();
-			String rval = "";
-
-			while(cursor.hasNext()) {
-				Document doc = cursor.next();
-				rval = doc.toJson();
-			}
-			return rval;
-
-		} catch (NullPointerException ne) {
-			System.out.println("SOME PROBLEM IN GETTING ACTIVITY INSTANCE WITH ID " + activityInstanceId);
-			ne.printStackTrace();
-			return null;
-		} catch (Exception e) {
-			System.out.println("SOME SERVER PROBLEM IN GETACTIVITYINSTANCEID");
 			e.printStackTrace();
 			return null;
 		}
@@ -1014,6 +859,37 @@ public class MongoDBDAO implements DAO {
 			return null;
 		}
 
+	}
+	
+	@Override
+	public String getActivityInstanceAsStringDAO(String activityInstanceId) {
+		try{
+			MongoDatabase database = MongoDBDAO.getConnectedDatabase();
+			// needs to incorporate Emotions model. - Task #386
+			MongoCollection<Document> activityInstanceMongoCollection =
+					database.getCollection(ACTIVITYINSTANCES_COLLECTION);
+
+			FindIterable<Document> result =	activityInstanceMongoCollection
+					.find(Filters.eq(ActivityInstance.ACTIVITYINSTANCEID_ATTRIBUTE, activityInstanceId));
+
+			MongoCursor<Document> cursor = result.iterator();
+			String rval = "";
+
+			while(cursor.hasNext()) {
+				Document doc = cursor.next();
+				rval = doc.toJson();
+			}
+			return rval;
+
+		} catch (NullPointerException ne) {
+			System.out.println("SOME PROBLEM IN GETTING ACTIVITY INSTANCE WITH ID " + activityInstanceId);
+			ne.printStackTrace();
+			return null;
+		} catch (Exception e) {
+			System.out.println("SOME SERVER PROBLEM IN GETACTIVITYINSTANCEID");
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 }

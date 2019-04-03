@@ -2,6 +2,11 @@ package edu.asu.heal.reachv3.api.models;
 
 public class ExtendedActivityInstance {
 
+	public static String DOMAIN_NAME = "domainName";
+    public static String ACTIVITY_TYPE_NAME = "activityTypeName";
+    public static String VERSION = "version";
+    public static String SITUATION_ATTRIBUTE = "situation";
+    
     private String domainName;
     private String activityTypeName;
     private String version;
