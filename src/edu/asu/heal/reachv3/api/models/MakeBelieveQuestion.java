@@ -1,12 +1,13 @@
 package edu.asu.heal.reachv3.api.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MakeBelieveQuestion {
     private String type;
     private List<MakeBelieveOption> options;
     private int answerId;
-    private List<MakeBelieveResponse> responses;
+    private List<MakeBelieveResponse> responses = new ArrayList<>();
 
     public MakeBelieveQuestion(){}
 

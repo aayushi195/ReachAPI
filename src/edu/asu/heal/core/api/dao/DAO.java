@@ -80,6 +80,6 @@ public interface DAO {
 
     FaceItActivityInstance getActivityFaceInstanceDAO(String activityInstanceId);
 
-    String getActivityId(String activityName);
+    String getActivityNameById(String activityId);
 
 }

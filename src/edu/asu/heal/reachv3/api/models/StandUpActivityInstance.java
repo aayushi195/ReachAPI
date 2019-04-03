@@ -15,12 +15,12 @@ public class StandUpActivityInstance extends ActivityInstance{
 		this.situation = situation;
 	}
 
-	public StandUpActivityInstance(String activityInstanceId, Date createdAt, Date updatedAt, String description,
+	public StandUpActivityInstance(String activityInstanceId, String activityId, Date createdAt, Date updatedAt, String description,
 								   Date startTime, Date endTime, Date userSubmissionTime, Date actualSubmissionTime,
-								   ActivityInstanceType instanceOf, String state, int patientPin,
+								   String state, int patientPin,
 								   StandUpSituation situation) {
-		super(activityInstanceId, createdAt, updatedAt, description, startTime, endTime, userSubmissionTime,
-				actualSubmissionTime, instanceOf, state, patientPin);
+		super(activityInstanceId, activityId, createdAt, updatedAt, description, startTime, endTime, userSubmissionTime,
+				actualSubmissionTime, state, patientPin);
 		this.situation = situation;
 	}
 

@@ -14,12 +14,12 @@ public class FaceItActivityInstance extends ActivityInstance {
 
 	public FaceItActivityInstance(List<FaceItChallenges> faceItChallenges){ this.faceItChallenges = faceItChallenges;}
 
-	public FaceItActivityInstance(String activityInstanceId, Date createdAt, Date updatedAt, String description,
+	public FaceItActivityInstance(String activityInstanceId, String activityId, Date createdAt, Date updatedAt, String description,
 								  Date startTime, Date endTime, Date userSubmissionTime, Date actualSubmissionTime,
-								  ActivityInstanceType instanceOf, String state, int patientPin,
+								  String state, int patientPin,
 								  List<FaceItChallenges> faceItChallenges) {
-	     super(activityInstanceId, createdAt, updatedAt, description, startTime, endTime, 
-	    		 userSubmissionTime, actualSubmissionTime, instanceOf, state, patientPin);
+	     super(activityInstanceId,activityId, createdAt, updatedAt, description, startTime, endTime,
+	    		 userSubmissionTime, actualSubmissionTime, state, patientPin);
 	    this.faceItChallenges=faceItChallenges;
 	}
 
