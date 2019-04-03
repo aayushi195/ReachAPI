@@ -1,13 +1,13 @@
 package edu.asu.heal.reachv3.api.models;
 
-public class StandUpOption {
+public class Options {
 
 	private int optionId;
 	private String title;
 
-	public StandUpOption() {}
+	public Options() {}
 
-	public StandUpOption(int optionId, String title) {
+	public Options(int optionId, String title) {
 		this.optionId = optionId;
 		this.title = title;
 	}
@@ -27,5 +27,13 @@ public class StandUpOption {
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+	
+	@Override
+	public String toString() {
+		return "Options : {" +
+				", optionId : '" + optionId + '\'' +
+				", title : '" + title + '\'' +
+				'}';
 	}
 }

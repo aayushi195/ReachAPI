@@ -1,12 +1,13 @@
 package edu.asu.heal.reachv3.api.models;
 
-public class MakeBelieveResponse {
-    private long timeStamp;
+public class Responses {
+
+	private long timeStamp;
     private int optionId;
 
-    public MakeBelieveResponse() {}
+    public Responses() {}
 
-    public MakeBelieveResponse(long timeStamp, int optionId) {
+    public Responses(long timeStamp, int optionId) {
         this.timeStamp = timeStamp;
         this.optionId = optionId;
     }
@@ -26,4 +27,11 @@ public class MakeBelieveResponse {
     public void setOptionId(int optionId) {
         this.optionId = optionId;
     }
+    @Override
+	public String toString() {
+		return "Responses : {" +
+				", optionId : '" + optionId + '\'' +
+				", timeStamp : '" + timeStamp + '\'' +
+				'}';
+	}
 }

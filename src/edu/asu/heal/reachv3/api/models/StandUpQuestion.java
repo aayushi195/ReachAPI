@@ -3,26 +3,38 @@ package edu.asu.heal.reachv3.api.models;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StandUpQuestion {
+public class StandUpQuestion extends ExtendedQuestions {
 
-	private List<StandUpOption> options;
-	private int answerId;
-	private List<StandUpResponse> responses = new ArrayList<>();
-
-	public StandUpQuestion(){}
-
-	public StandUpQuestion(List<StandUpOption> options, int answerId, List<StandUpResponse> responses) {
-		this.options = options;
-		this.answerId = answerId;
-		this.responses = responses;
+	protected int answerId;
+	protected List<Options> options;
+	protected List<Responses> responses;
+	
+	public StandUpQuestion(){
+		options = new ArrayList<>();
+		responses = new ArrayList<>();
 	}
 
-	public List<StandUpOption> getOptions() {
+	public StandUpQuestion(List<Options> options, int answerId, List<Responses> responses) {
+	//	super(options,responses);
+		this.answerId=answerId;
+		this.options=options;
+		this.responses=responses;
+	}
+
+	public List<Options> getOptions() {
 		return options;
 	}
 
-	public void setOptions(List<StandUpOption> options) {
+	public void setOptions(List<Options> options) {
 		this.options = options;
+	}
+
+	public List<Responses> getResponses() {
+		return responses;
+	}
+
+	public void setResponses(List<Responses> responses) {
+		this.responses = responses;
 	}
 
 	public int getAnswerId() {
@@ -31,14 +43,6 @@ public class StandUpQuestion {
 
 	public void setAnswerId(int answerId) {
 		this.answerId = answerId;
-	}
-
-	public List<StandUpResponse> getResponses() {
-		return responses;
-	}
-
-	public void setResponses(List<StandUpResponse> responses) {
-		this.responses = responses;
 	}
 		
 }
