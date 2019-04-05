@@ -1,12 +1,14 @@
 package edu.asu.heal.reachv3.api.modelFactory;
 
-import java.io.InputStream;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 import edu.asu.heal.core.api.models.*;
 import edu.asu.heal.reachv3.api.models.*;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.asu.heal.core.api.dao.DAO;
@@ -481,6 +483,65 @@ public class ModelFactory {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	public HashMap<String, Boolean> getScheduleOfModules(){
+
+		try{
+		    JSONObject moduleData;
+
+            HashMap<String,Boolean> rval = new HashMap<>();
+			Date date = new Date();
+
+			String data = readFile("scheduleOfModules.json");
+
+            moduleData = new JSONObject(data);
+            JSONArray arr = moduleData.getJSONArray("schedule");
+
+            for(int i=0; i<arr.length();i++){
+
+                String startDate = arr.getJSONObject(i).getString("startDate");
+                String endDate = arr.getJSONObject(i).getString("endDate");
+
+                Date start_Date = new Date(startDate);
+                Date end_date = new Date(endDate);
+
+                String module = arr.getJSONObject(i).getString("module");
+
+                if((start_Date.before(date) || start_Date.equals(date))
+                        && (end_date.after(date) || end_date.equals(date))){
+                    rval.put(module,true);
+                }
+                else{
+                    rval.put(module,false);
+                }
+
+            }
+
+			return rval;
+		} catch (Exception e){
+			e.printStackTrace();
+			return null;
+		}
+
+	}
+
+	public static String readFile(String filename) {
+		String result = "";
+		try {
+			InputStream inputStream = ModelFactory.class.getResourceAsStream(filename);
+			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+			StringBuilder stringBuilder = new StringBuilder();
+			String line = bufferedReader.readLine();
+			while (line != null) {
+				stringBuilder.append(line);
+				line = bufferedReader.readLine();
+			}
+			result = stringBuilder.toString();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 
 	// ************************************* DOMAIN ****************************************************
