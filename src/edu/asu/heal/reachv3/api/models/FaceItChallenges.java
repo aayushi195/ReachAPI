@@ -1,6 +1,11 @@
 package edu.asu.heal.reachv3.api.models;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 public class FaceItChallenges {
 
@@ -8,11 +13,14 @@ public class FaceItChallenges {
     private String questionText;
     private int answerId;
     private String status;
+    
+    @JsonDeserialize(using= DateDeserializer.class)
+ //   @JsonSerialize(using=DateSerializer.class)
     private Date lastModified;
 
     public FaceItChallenges() {}
 
-    public FaceItChallenges(int questionId, String questionText, int answerId, String status) {
+    public FaceItChallenges(int questionId, String questionText, int answerId, String status, String lastModified) {
         this.questionId = questionId;
         this.questionText = questionText;
         this.answerId = answerId;

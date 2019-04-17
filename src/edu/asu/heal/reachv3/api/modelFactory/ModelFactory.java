@@ -11,6 +11,9 @@ import edu.asu.heal.reachv3.api.models.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.util.StdDateFormat;
+
 import edu.asu.heal.core.api.dao.DAO;
 import edu.asu.heal.core.api.dao.DAOFactory;
 
@@ -129,7 +132,7 @@ public class ModelFactory {
 		//	ObjectMapper mapper = new ObjectMapper();
 			SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT_AI);
 		//	mapper.setDateFormat(format);
-
+			String strNum;	
 			JSONObject obj = new JSONObject(requestBody);
 			String activityInstanceId = null, activityId = null, description = null, state =null;
 			int patientPin = -1;
@@ -155,27 +158,44 @@ public class ModelFactory {
 			}
 			if(obj.has(ActivityInstance.CREATEDAT_ATTRIBUTE)
 					&& !obj.getString(ActivityInstance.CREATEDAT_ATTRIBUTE).equals("null")) {
-				createdAt = format.parse(obj.getString(ActivityInstance.CREATEDAT_ATTRIBUTE));
+				strNum =obj.getString(ActivityInstance.CREATEDAT_ATTRIBUTE);
+				if(isLong(strNum)) 
+					createdAt = new Date(Long.parseLong(obj.getString(ActivityInstance.CREATEDAT_ATTRIBUTE)));
+				else
+					createdAt = format.parse(obj.getString(ActivityInstance.CREATEDAT_ATTRIBUTE));
 			//	createdAt = new Date(Long.parseLong(obj.getString(ActivityInstance.CREATEDAT_ATTRIBUTE)));
 			}
 			if(obj.has(ActivityInstance.STARTTIME_ATTRIBUTE)
 					&& !obj.getString(ActivityInstance.STARTTIME_ATTRIBUTE).equals("null")) {
-				//startTime = format.parse(obj.getString(ActivityInstance.STARTTIME_ATTRIBUTE));
-				startTime = new Date(Long.parseLong(obj.getString(ActivityInstance.STARTTIME_ATTRIBUTE)));
+				strNum = obj.getString(ActivityInstance.STARTTIME_ATTRIBUTE);
+				if(isLong(strNum))
+					startTime = new Date(Long.parseLong(obj.getString(ActivityInstance.STARTTIME_ATTRIBUTE)));
+				else
+					startTime = format.parse(obj.getString(ActivityInstance.STARTTIME_ATTRIBUTE));
 			}
 			if(obj.has(ActivityInstance.ENDTIME_ATTRIBUTE)
 					&& !obj.getString(ActivityInstance.ENDTIME_ATTRIBUTE).equals("null")) {
-				endTime = format.parse(obj.getString(ActivityInstance.ENDTIME_ATTRIBUTE));
-				//endTime = new Date(Long.parseLong(obj.getString(ActivityInstance.ENDTIME_ATTRIBUTE)));
+				strNum = obj.getString(ActivityInstance.ENDTIME_ATTRIBUTE);
+				if(isLong(strNum))
+					endTime = new Date(Long.parseLong(obj.getString(ActivityInstance.ENDTIME_ATTRIBUTE)));
+				else
+					endTime = format.parse(obj.getString(ActivityInstance.ENDTIME_ATTRIBUTE));
 			}
 			if(obj.has(ActivityInstance.USERSUBMISSIONTIME_ATTRIBUTE)
 					&& !obj.getString(ActivityInstance.USERSUBMISSIONTIME_ATTRIBUTE).equals("null")) {
-				userSubmissionTime = format.parse(obj.getString(ActivityInstance.USERSUBMISSIONTIME_ATTRIBUTE));
-				//userSubmissionTime = new Date(Long.parseLong(obj.getString(ActivityInstance.USERSUBMISSIONTIME_ATTRIBUTE)));
+				strNum = obj.getString(ActivityInstance.USERSUBMISSIONTIME_ATTRIBUTE);
+				if(isLong(strNum))
+					userSubmissionTime = new Date(Long.parseLong(obj.getString(ActivityInstance.USERSUBMISSIONTIME_ATTRIBUTE)));
+				else
+					userSubmissionTime = format.parse(obj.getString(ActivityInstance.USERSUBMISSIONTIME_ATTRIBUTE));
 			}
 			if(obj.has(ActivityInstance.ACTUALSUBMISSIONTIME_ATTRIBUTE)
 					&& !obj.getString(ActivityInstance.ACTUALSUBMISSIONTIME_ATTRIBUTE).equals("null")) {
-				actualSubmissionTime = format.parse(obj.getString(ActivityInstance.ACTUALSUBMISSIONTIME_ATTRIBUTE));
+				strNum = obj.getString(ActivityInstance.ACTUALSUBMISSIONTIME_ATTRIBUTE);
+				if(isLong(strNum))
+					actualSubmissionTime = new Date(Long.parseLong(obj.getString(ActivityInstance.ACTUALSUBMISSIONTIME_ATTRIBUTE)));
+				else
+					actualSubmissionTime = format.parse(obj.getString(ActivityInstance.ACTUALSUBMISSIONTIME_ATTRIBUTE));
 			//	actualSubmissionTime = new Date(Long.parseLong(obj.getString(ActivityInstance.ACTUALSUBMISSIONTIME_ATTRIBUTE)));
 			}
 			if(obj.has(ActivityInstance.PATIENT_PIN)
@@ -193,12 +213,24 @@ public class ModelFactory {
 
 	}
 
-	public ActivityInstance getActitvityInstanceOfType(String activityName, ActivityInstance activityInstance, ExtendedActivityInstance extendedActivityInstance, String situationJson) throws ModelException{
+	public static boolean isLong(String strNum) {
+	    try {
+	        Long d = Long.parseLong(strNum);
+	    } catch (NumberFormatException | NullPointerException nfe) {
+	        return false;
+	    }
+	    return true;
+	}
+	public ActivityInstance getActitvityInstanceOfType(String activityName, ActivityInstance activityInstance, 
+			ExtendedActivityInstance extendedActivityInstance, String situationJson) throws ModelException{
 
 		try{
 			ObjectMapper mapper = new ObjectMapper();
 			SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT_AI);
 			mapper.setDateFormat(format);
+			//mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+		    // StdDateFormat is ISO8601 since jackson 2.9
+		    //mapper.setDateFormat(new StdDateFormat());
 			if(activityName.equals(MAKEBELIEVE_ACTIVITYNAME)){
 
 				MakeBelieveSituation situation;
@@ -271,13 +303,23 @@ public class ModelFactory {
 						activityInstance.getState(),
 						activityInstance.getPatientPin(),extendedActivityInstance);
 			} else if(activityName.equals(FACEIT_ACTIVITYNAME)){
+				System.out.println("1 ................................................");
+				FaceItSituation situation;
+				if(situationJson == null)
+					situation = new FaceItSituation(dao.getFaceItChallenges());
+				else {
+					situation = mapper.readValue(situationJson, FaceItSituation.class);
+				}
+				System.out.println("2 ................................................");
+				
+				extendedActivityInstance.setSituation(situation);
 				activityInstance = new FaceItActivityInstance(
 						activityInstance.getActivityInstanceId(),activityInstance.getActivityId(),
 						activityInstance.getCreatedAt(), activityInstance.getUpdatedAt(),
 						activityInstance.getDescription(), activityInstance.getStartTime(), activityInstance.getEndTime(),
 						activityInstance.getUserSubmissionTime(), activityInstance.getActualSubmissionTime(),
 						activityInstance.getState(),
-						activityInstance.getPatientPin(),dao.getFaceItChallenges());
+						activityInstance.getPatientPin(),extendedActivityInstance);
 			} else if(activityName.equals(EMOTIONS_ACTIVITYNAME)){
 				EmotionSituation situation;
 				if(situationJson == null)
