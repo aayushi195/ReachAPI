@@ -45,7 +45,7 @@ public class ActivityInstanceResource {
 	 * @apiName GetActivityInstancesOfPatient
 	 * @apiGroup ActivityInstance
 	 * @apiParam {Number} patientPin Patient's Unique Id
-	 * @apiSampleRequest http://localhost:8080/ReachAPI/rest/activityinstances?patientPin=4015
+	 * @apiSampleRequest http://localhost:8080/CompassAPI/rest/activityinstances?patientPin=4010
 	 * @apiUse BadRequestError
 	 * @apiUse ActivityInstanceNotFoundError
 	 * @apiUse InternalServerError
@@ -109,7 +109,7 @@ public class ActivityInstanceResource {
 	 * @apiName ActivityInstanceDetail
 	 * @apiGroup ActivityInstance
 	 * @apiParam {String} id ActivityInstance's Unique Id
-	 * @apiSampleRequest http://localhost:8080/ReachAPI/rest/activityinstances/5c5b901a324b051370ac2f3e
+	 * @apiSampleRequest http://localhost:8080/CompassAPI/rest/activityinstances/5c5b901a324b051370ac2f3e
 	 * @apiUse BadRequestError
 	 * @apiUse ActivityInstanceNotFoundError
 	 * @apiUse InternalServerError
@@ -154,26 +154,24 @@ public class ActivityInstanceResource {
 	 * @api {post} /activityinstances Create an ActivityInstance
 	 * @apiName CreateActivityInstance
 	 * @apiGroup ActivityInstance
+	 * @apiParam {String} ActivityId Unique id of the activity
 	 * @apiParam {String} Description Description about the Activity Instance
 	 * @apiParam {DateTime} StartTime Start Time of the Activity Instance
 	 * @apiParam {DateTime} EndTime End Time of the Activity Instance
 	 * @apiParam {DateTime} UserSubmissionTime User Submission Time of the ActivityInstance
 	 * @apiParam {DateTime} ActualSubmissionTime Actual Submission Time of the ActivityInstance
 	 * @apiParam {Number} patientPin Patient's Unique Id
-	 * @apiParam {String} Name The name of the activity
-	 * @apiParamExample {json} Activity Instance Example:
-	 * {
-	 *   "description": "SWAP activity",
-	 *   "startTime": "2019-02-07T01:05:25.286Z",
-	 *   "endTime": null,
-	 *   "userSubmissionTime": null,
-	 *   "actualSubmissionTime": null,
-	 *   "instanceOf": {
-	 *       "name": "SWAP"
-	 *    },
-	 *   "patientPin": 4015
-	 * }
-	 * @apiSampleRequest http://localhost:8080/ReachAPI/rest/activityinstances
+	 * @apiParamExample {json} Request-Payload:
+	 	* {
+	 		* "activityId": "5abd6180734d1d0cf303bc23",
+	 		* "description": "MakeBelieve activity",
+	 		* "startTime": "2018-10-23T07:00:00.000Z",
+	 		* "endTime": null,
+	 		* "userSubmissionTime": null,
+	 		* "actualSubmissionTime": null,
+	 		* "patientPin": 4011
+	 	* }
+	 * @apiSampleRequest http://localhost:8080/CompassAPI/rest/activityinstances
 	 * @apiUse BadRequestError
 	 * @apiUse InternalServerError
 	 * @apiUse NotImplementedError
@@ -253,7 +251,7 @@ public class ActivityInstanceResource {
 	 *         "worry": "Fear to speak",
 	 *         "action": "Practice WorryHeads"
 	 * }
-	 * @apiSampleRequest http://localhost:8080/ReachAPI/rest/activityinstances/5c5b901a324b051370ac2f3e
+	 * @apiSampleRequest http://localhost:8080/CompassAPI/rest/activityinstances/5c5b901a324b051370ac2f3e
 	 * @apiUse BadRequestError
 	 * @apiUse InternalServerError
 	 * @apiUse NotImplementedError
@@ -293,7 +291,7 @@ public class ActivityInstanceResource {
 	 * @apiName DeleteActivityInstance
 	 * @apiGroup ActivityInstance
 	 * @apiParam {String} id ActivityInstance's unique id
-	 * @apiSampleRequest http://localhost:8080/ReachAPI/rest/activityinstances/5c5b901a324b051370ac2f3e
+	 * @apiSampleRequest http://localhost:8080/CompassAPI/rest/activityinstances/5c5b901a324b051370ac2f3e
 	 * @apiUse BadRequestError
 	 * @apiUse ActivityInstanceNotFoundError
 	 * @apiUse InternalServerError
