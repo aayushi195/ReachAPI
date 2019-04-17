@@ -1,0 +1,706 @@
+{
+	"patientSchedule":[
+	{
+	"module":"1",
+	"startDate":"",
+	"endDate":"",
+	"schedule" : [
+				{
+					"day" : 0,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"isDailyActivity" : "true",
+							"totalCount":1
+						},
+						{	"activity" : "MatchIt",
+							"isDailyActivity" : "true",
+							"totalCount":6
+						}
+					]
+				},
+				{
+					"day" : 1,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"isDailyActivity" : "true",
+							"totalCount":1
+						},
+						{	"activity" : "MatchIt",
+							"isDailyActivity" : "true",
+							"totalCount":6
+						}
+					]
+				},
+				{
+					"day" : 2,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"isDailyActivity" : "true",
+							"totalCount":1
+						},
+						{	"activity" : "MatchIt",
+							"isDailyActivity" : "true",
+							"totalCount":6
+						}
+					]
+				},
+				{
+					"day" : 3,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"isDailyActivity" : "true",
+							"totalCount":1
+						},
+						{	"activity" : "MatchIt",
+							"isDailyActivity" : "true",
+							"totalCount":6
+						}
+					]
+				},
+				{
+					"day" : 4,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"isDailyActivity" : "true",
+							"totalCount":1
+						},
+						{	"activity" : "MatchIt",
+							"isDailyActivity" : "true",
+							"totalCount":6
+						}
+					]
+				},
+				{
+					"day" : 5,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"isDailyActivity" : "true",
+							"totalCount":1
+						},
+						{	"activity" : "MatchIt",
+							"isDailyActivity" : "true",
+							"totalCount":6
+						}
+					]
+				},
+				{
+					"day" : 6,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"isDailyActivity" : "true",
+							"totalCount":1
+						},
+						{	"activity" : "MatchIt",
+							"isDailyActivity" : "true",
+							"totalCount":6
+						}
+					]
+				}
+			]
+	},
+	{
+	"module":"2",
+	"startDate":"",
+	"endDate":"",
+	"schedule" : [
+				{
+					"day" : 0,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"isDailyActivity" : "true",
+							"totalCount":1
+						},
+						{	"activity" : "SWAP",
+							"isDailyActivity" : "false",
+							"totalCount":2
+						},
+						{	"activity" : "WorryHeads",
+							"isDailyActivity" : "true",
+							"totalCount":5
+						}
+					]
+				},
+				{
+					"day" : 1,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"isDailyActivity" : "true",
+							"totalCount":1
+						},
+						{	"activity" : "SWAP",
+							"isDailyActivity" : "false",
+							"totalCount":2
+						},
+						{	"activity" : "WorryHeads",
+							"isDailyActivity" : "true",
+							"totalCount":5
+						}
+					]
+				},
+				{
+					"day" : 2,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"isDailyActivity" : "true",
+							"totalCount":1
+						},
+						{	"activity" : "SWAP",
+							"isDailyActivity" : "false",
+							"totalCount":2
+						},
+						{	"activity" : "WorryHeads",
+							"isDailyActivity" : "true",
+							"totalCount":5
+						}
+					]
+				},
+				{
+					"day" : 3,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"isDailyActivity" : "true",
+							"totalCount":1
+						},
+						{	"activity" : "SWAP",
+							"isDailyActivity" : "false",
+							"totalCount":2
+						},
+						{	"activity" : "WorryHeads",
+							"isDailyActivity" : "true",
+							"totalCount":5
+						}
+					]
+				},
+				{
+					"day" : 4,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"isDailyActivity" : "true",
+							"totalCount":1
+						},
+						{	"activity" : "SWAP",
+							"isDailyActivity" : "false",
+							"totalCount":2
+						},
+						{	"activity" : "WorryHeads",
+							"isDailyActivity" : "true",
+							"totalCount":5
+						}
+					]
+				},
+				{
+					"day" : 5,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"isDailyActivity" : "true",
+							"totalCount":1
+						},
+						{	"activity" : "SWAP",
+							"isDailyActivity" : "false",
+							"totalCount":2
+						},
+						{	"activity" : "WorryHeads",
+							"isDailyActivity" : "true",
+							"totalCount":5
+						}
+					]
+				},
+				{
+					"day" : 6,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"isDailyActivity" : "true",
+							"totalCount":1
+						},
+						{	"activity" : "SWAP",
+							"isDailyActivity" : "false",
+							"totalCount":2
+						},
+						{	"activity" : "WorryHeads",
+							"isDailyActivity" : "true",
+							"totalCount":5
+						}
+					]
+				}
+			]
+	},
+	{
+	"module":"3",
+	"startDate":"",
+	"endDate":"",
+	"schedule" : [
+				{
+					"day" : 0,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"isDailyActivity" : "true",
+							"totalCount":1
+						},
+						{	"activity" : "SmallTalks",
+							"isDailyActivity" : "true",
+							"totalCount":6
+						},
+						{	"activity" : "MakeBelive",
+							"isDailyActivity" : "true",
+							"totalCount":5
+						}
+					]
+				},
+				{
+					"day" : 1,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"isDailyActivity" : "true",
+							"totalCount":1
+						},
+						{	"activity" : "SmallTalks",
+							"isDailyActivity" : "true",
+							"totalCount":6
+						},
+						{	"activity" : "MakeBelive",
+							"isDailyActivity" : "true",
+							"totalCount":5
+						}
+					]
+				},
+				{
+					"day" : 2,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"isDailyActivity" : "true",
+							"totalCount":1
+						},
+						{	"activity" : "SmallTalks",
+							"isDailyActivity" : "true",
+							"totalCount":6
+						},
+						{	"activity" : "MakeBelive",
+							"isDailyActivity" : "true",
+							"totalCount":5
+						}
+					]
+				},
+				{
+					"day" : 3,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"isDailyActivity" : "true",
+							"totalCount":1
+						},
+						{	"activity" : "SmallTalks",
+							"isDailyActivity" : "true",
+							"totalCount":6
+						},
+						{	"activity" : "MakeBelive",
+							"isDailyActivity" : "true",
+							"totalCount":5
+						}
+					]
+				},
+				{
+					"day" : 4,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"isDailyActivity" : "true",
+							"totalCount":1
+						},
+						{	"activity" : "SmallTalks",
+							"isDailyActivity" : "true",
+							"totalCount":6
+						},
+						{	"activity" : "MakeBelive",
+							"isDailyActivity" : "true",
+							"totalCount":5
+						}
+					]
+				},
+				{
+					"day" : 5,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"isDailyActivity" : "true",
+							"totalCount":1
+						},
+						{	"activity" : "SmallTalks",
+							"isDailyActivity" : "true",
+							"totalCount":6
+						},
+						{	"activity" : "MakeBelive",
+							"isDailyActivity" : "true",
+							"totalCount":5
+						}
+					]
+				},
+				{
+					"day" : 6,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"isDailyActivity" : "true",
+							"totalCount":1
+						},
+						{	"activity" : "SmallTalks",
+							"isDailyActivity" : "true",
+							"totalCount":6
+						},
+						{	"activity" : "MakeBelive",
+							"isDailyActivity" : "true",
+							"totalCount":5
+						}
+					]
+				}
+			]
+	},
+	{
+	"module":"4",
+	"startDate":"",
+	"endDate":"",
+	"schedule" : [
+				{
+					"day" : 0,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"isDailyActivity" : "true",
+							"totalCount":1
+						},
+						{	"activity" : "SWAP",
+							"isDailyActivity" : "false",
+							"totalCount":2
+						},
+						{	"activity" : "SAFESheet",
+							"isDailyActivity" : "false",
+							"totalCount":2
+						},
+						{	"activity" : "StandUp",
+							"isDailyActivity" : "true",
+							"totalCount":5
+						}
+					]
+				},
+				{
+					"day" : 1,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"isDailyActivity" : "true",
+							"totalCount":1
+						},
+						{	"activity" : "SWAP",
+							"isDailyActivity" : "false",
+							"totalCount":2
+						},
+						{	"activity" : "SAFESheet",
+							"isDailyActivity" : "false",
+							"totalCount":2
+						},
+						{	"activity" : "StandUp",
+							"isDailyActivity" : "true",
+							"totalCount":5
+						}
+					]
+				},
+				{
+					"day" : 2,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"isDailyActivity" : "true",
+							"totalCount":1
+						},
+						{	"activity" : "SWAP",
+							"isDailyActivity" : "false",
+							"totalCount":2
+						},
+						{	"activity" : "SAFESheet",
+							"isDailyActivity" : "false",
+							"totalCount":2
+						},
+						{	"activity" : "StandUp",
+							"isDailyActivity" : "true",
+							"totalCount":5
+						}
+					]
+				},
+				{
+					"day" : 3,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"isDailyActivity" : "true",
+							"totalCount":1
+						},
+						{	"activity" : "SWAP",
+							"isDailyActivity" : "false",
+							"totalCount":2
+						},
+						{	"activity" : "SAFESheet",
+							"isDailyActivity" : "false",
+							"totalCount":2
+						},
+						{	"activity" : "StandUp",
+							"isDailyActivity" : "true",
+							"totalCount":5
+						}
+					]
+				},
+				{
+					"day" : 4,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"isDailyActivity" : "true",
+							"totalCount":1
+						},
+						{	"activity" : "SWAP",
+							"isDailyActivity" : "false",
+							"totalCount":2
+						},
+						{	"activity" : "SAFESheet",
+							"isDailyActivity" : "false",
+							"totalCount":2
+						},
+						{	"activity" : "StandUp",
+							"isDailyActivity" : "true",
+							"totalCount":5
+						}
+					]
+				},
+				{
+					"day" : 5,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"isDailyActivity" : "true",
+							"totalCount":1
+						},
+						{	"activity" : "SWAP",
+							"isDailyActivity" : "false",
+							"totalCount":2
+						},
+						{	"activity" : "SAFESheet",
+							"isDailyActivity" : "false",
+							"totalCount":2
+						},
+						{	"activity" : "StandUp",
+							"isDailyActivity" : "true",
+							"totalCount":5
+						}
+					]
+				},
+				{
+					"day" : 6,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"isDailyActivity" : "true",
+							"totalCount":1
+						},
+						{	"activity" : "SWAP",
+							"isDailyActivity" : "false",
+							"totalCount":2
+						},
+						{	"activity" : "SAFESheet",
+							"isDailyActivity" : "false",
+							"totalCount":2
+						},
+						{	"activity" : "StandUp",
+							"isDailyActivity" : "true",
+							"totalCount":5
+						}
+					]
+				}
+			]
+	},
+	{
+	"module":"5",
+	"startDate":"",
+	"endDate":"",
+	"schedule" : [
+				{
+					"day" : 0,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"isDailyActivity" : "true",
+							"totalCount":1
+						},
+						{	"activity" : "MatchIt",
+							"isDailyActivity" : "true",
+							"totalCount":6
+						}
+					]
+				},
+				{
+					"day" : 1,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"isDailyActivity" : "true",
+							"totalCount":1
+						},
+						{	"activity" : "MatchIt",
+							"isDailyActivity" : "true",
+							"totalCount":6
+						}
+					]
+				},
+				{
+					"day" : 2,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"isDailyActivity" : "true",
+							"totalCount":1
+						},
+						{	"activity" : "MatchIt",
+							"isDailyActivity" : "true",
+							"totalCount":6
+						}
+					]
+				},
+				{
+					"day" : 3,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"isDailyActivity" : "true",
+							"totalCount":1
+						},
+						{	"activity" : "MatchIt",
+							"isDailyActivity" : "true",
+							"totalCount":6
+						}
+					]
+				},
+				{
+					"day" : 4,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"isDailyActivity" : "true",
+							"totalCount":1
+						},
+						{	"activity" : "MatchIt",
+							"isDailyActivity" : "true",
+							"totalCount":6
+						}
+					]
+				},
+				{
+					"day" : 5,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"isDailyActivity" : "true",
+							"totalCount":1
+						},
+						{	"activity" : "MatchIt",
+							"isDailyActivity" : "true",
+							"totalCount":6
+						}
+					]
+				},
+				{
+					"day" : 6,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"isDailyActivity" : "true",
+							"totalCount":1
+						},
+						{	"activity" : "MatchIt",
+							"isDailyActivity" : "true",
+							"totalCount":6
+						}
+					]
+				}
+			]
+	},
+	{
+	"module":"6",
+	"startDate":"",
+	"endDate":"",
+	"schedule" : [
+				{
+					"day" : 0,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"isDailyActivity" : "true",
+							"totalCount":1
+						},
+						{	"activity" : "MatchIt",
+							"isDailyActivity" : "true",
+							"totalCount":6
+						}
+					]
+				},
+				{
+					"day" : 1,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"isDailyActivity" : "true",
+							"totalCount":1
+						},
+						{	"activity" : "MatchIt",
+							"isDailyActivity" : "true",
+							"totalCount":6
+						}
+					]
+				},
+				{
+					"day" : 2,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"isDailyActivity" : "true",
+							"totalCount":1
+						},
+						{	"activity" : "MatchIt",
+							"isDailyActivity" : "true",
+							"totalCount":6
+						}
+					]
+				},
+				{
+					"day" : 3,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"isDailyActivity" : "true",
+							"totalCount":1
+						},
+						{	"activity" : "MatchIt",
+							"isDailyActivity" : "true",
+							"totalCount":6
+						}
+					]
+				},
+				{
+					"day" : 4,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"isDailyActivity" : "true",
+							"totalCount":1
+						},
+						{	"activity" : "MatchIt",
+							"isDailyActivity" : "true",
+							"totalCount":6
+						}
+					]
+				},
+				{
+					"day" : 5,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"isDailyActivity" : "true",
+							"totalCount":1
+						},
+						{	"activity" : "MatchIt",
+							"isDailyActivity" : "true",
+							"totalCount":6
+						}
+					]
+				},
+				{
+					"day" : 6,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"isDailyActivity" : "true",
+							"totalCount":1
+						},
+						{	"activity" : "MatchIt",
+							"isDailyActivity" : "true",
+							"totalCount":6
+						}
+					]
+				}
+			]
+	}
+
+	]
+
+}
