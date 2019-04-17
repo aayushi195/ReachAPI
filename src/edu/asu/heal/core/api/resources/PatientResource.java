@@ -40,8 +40,8 @@ public class PatientResource {
      * @api {get} /patients?trialId={trialId} Get list of all Patients
      * @apiName GetPatients
      * @apiGroup Patient
-     * @apiParam {Number} [trialId] Pass trialId = 'some-unique-id' as query parameter to fetch the list of
-     * patients for a particular trial; eg: `/patient?trialId=1`
+     * @apiParam {Number} id Trial's Unique Id
+     * @apiSampleRequest http://localhost:8080/CompassAPI/rest/patients?trialId=5a946ff566684905df608446
      * @apiUse PatientNotFoundError
      */
     @GET
@@ -93,17 +93,17 @@ public class PatientResource {
     }
 
     /**
-     * @api {get} /patient/:id Get detail for a specific Patient
+     * @api {get} /patients/:id Get detail for a specific Patient
      * @apiName GetPatientDetail
      * @apiGroup Patient
      * @apiParam {Number} id Patient's Unique Id
-     * @apiSampleRequest http://localhost:8080/ReachAPI/rest/patients/4014
+     * @apiSampleRequest http://localhost:8080/CompassAPI/rest/patients/4014
      * @apiUse InternalServerError
      * @apiUse PatientNotFoundError
      */
     @GET
     @Path("/{patientPin}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces("application/hal+json")
     public Response fetchPatient(@PathParam("patientPin") int patientPin) {
         HEALResponse response = null;
         HEALResponseBuilder builder;
@@ -137,15 +137,19 @@ public class PatientResource {
     }
 
     /**
-     * @api {post} /patient Add Patient
+     * @api {post} /patients Add Patient
      * @apiName AddPatient
      * @apiGroup Patient
      * @apiParam {String} Trial ID of the trial to which the patient needs to be added
+     * @apiSampleRequest http://localhost:8080/CompassAPI/rest/patients
+     * @apiParamExample {text} Activity Example:
+     *         5a946ff566684905df608446
      * @apiUse BadRequestError
      * @apiUse InternalServerError
      * @apiUse NotImplementedError
      */
     @POST
+    @Produces("application/hal+json")
     public Response createPatient(String trialId) {
         HEALResponse response;
         HEALResponseBuilder builder;
@@ -184,13 +188,14 @@ public class PatientResource {
      * @apiName updatePatients
      * @apiGroup Patient
      * @apiParam {json} Patient JSON structure
+     * @apiSampleRequest http://localhost:8080/CompassAPI/rest/patients
      * @apiParamExample {json} Request-payload :
-     * {
-     * "pin": 4010,
-     * "startDate": "2018-01-01 13:00:00",
-     * "endDate": "2018-03-01 13:00:00",
-     * "state": "completed"
-     * }
+        * {
+            * "pin": 4010,
+            * "startDate": "2018-01-01 13:00:00",
+            * "endDate": "2018-03-01 13:00:00",
+            * "state": "completed"
+        * }
      * @apiUse BadRequestError
      * @apiUse InternalServerError
      * @apiUse NotImplementedError
@@ -198,6 +203,7 @@ public class PatientResource {
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces("application/hal+json")
     public Response updatePatients(Patient patient) {
         HEALResponse response;
         HEALResponseBuilder builder;
