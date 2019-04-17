@@ -37,7 +37,7 @@ public class LoggerResource {
      * @apiGroup Logger
      * @apiParam {json} loggerJSON array of logs in JSON format
      * @apiSampleRequest http://localhost:8080/CompassAPI/rest/logger
-     * @apiParamExample {array} Request-payload :
+     * @apiParamExample {array} Request-Payload:
         * [
             * {
                 * "format" : "JSON",

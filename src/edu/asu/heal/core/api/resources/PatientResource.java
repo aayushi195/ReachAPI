@@ -142,7 +142,7 @@ public class PatientResource {
      * @apiGroup Patient
      * @apiParam {String} Trial ID of the trial to which the patient needs to be added
      * @apiSampleRequest http://localhost:8080/CompassAPI/rest/patients
-     * @apiParamExample {text} Activity Example:
+     * @apiParamExample {text} Request-Payload:
      *         5a946ff566684905df608446
      * @apiUse BadRequestError
      * @apiUse InternalServerError
@@ -189,7 +189,7 @@ public class PatientResource {
      * @apiGroup Patient
      * @apiParam {json} Patient JSON structure
      * @apiSampleRequest http://localhost:8080/CompassAPI/rest/patients
-     * @apiParamExample {json} Request-payload :
+     * @apiParamExample {json} Request-payload:
         * {
             * "pin": 4010,
             * "startDate": "2018-01-01 13:00:00",

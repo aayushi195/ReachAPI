@@ -114,7 +114,7 @@ public class TrialsResource {
      * @apiParam {String} endDate End Date for the Trial
      * @apiParam {Number} targetCount Target Count of the Trial
      * @apiSampleRequest http://localhost:8080/CompassAPI/rest/trials
-         * @apiParamExample {json} Activity Example:
+     * @apiParamExample {json} Request-Payload:
          * {
          *   "domainId":"5abd64f5734d1d0cf303bda1",
          *   "title":"SCD",
