@@ -31,6 +31,7 @@ public class ScheduleResource {
 	private HealService reachService = HealServiceFactory.getTheService();
 
 	@GET
+	@Produces("application/hal+json")
 	public Response getPatientSchedule(@QueryParam("patientPin") int patientPin) {
 		HEALResponse response = null;
 		HEALResponseBuilder builder;
@@ -60,6 +61,7 @@ public class ScheduleResource {
 
 	@POST
 	@Consumes("application/json")
+	@Produces("application/hal+json")
 	public Response createPatientSchedule(String patientJson) {
 		HEALResponse response = null;
 		HEALResponseBuilder builder;
