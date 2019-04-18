@@ -9,11 +9,11 @@
 					"day" : 0,
 					"activitySchedule" : [
 						{	"activity" : "Relaxation",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":1
 						},
 						{	"activity" : "MatchIt",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":6
 						}
 					]
@@ -22,11 +22,11 @@
 					"day" : 1,
 					"activitySchedule" : [
 						{	"activity" : "Relaxation",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":1
 						},
 						{	"activity" : "MatchIt",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":6
 						}
 					]
@@ -35,11 +35,11 @@
 					"day" : 2,
 					"activitySchedule" : [
 						{	"activity" : "Relaxation",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":1
 						},
 						{	"activity" : "MatchIt",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":6
 						}
 					]
@@ -48,11 +48,11 @@
 					"day" : 3,
 					"activitySchedule" : [
 						{	"activity" : "Relaxation",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":1
 						},
 						{	"activity" : "MatchIt",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":6
 						}
 					]
@@ -61,11 +61,11 @@
 					"day" : 4,
 					"activitySchedule" : [
 						{	"activity" : "Relaxation",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":1
 						},
 						{	"activity" : "MatchIt",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":6
 						}
 					]
@@ -74,11 +74,11 @@
 					"day" : 5,
 					"activitySchedule" : [
 						{	"activity" : "Relaxation",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":1
 						},
 						{	"activity" : "MatchIt",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":6
 						}
 					]
@@ -87,11 +87,11 @@
 					"day" : 6,
 					"activitySchedule" : [
 						{	"activity" : "Relaxation",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":1
 						},
 						{	"activity" : "MatchIt",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":6
 						}
 					]
@@ -107,15 +107,15 @@
 					"day" : 0,
 					"activitySchedule" : [
 						{	"activity" : "Relaxation",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":1
 						},
 						{	"activity" : "SWAP",
-							"isDailyActivity" : "false",
+							"dailyActivity" : false,
 							"totalCount":2
 						},
 						{	"activity" : "WorryHeads",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":5
 						}
 					]
@@ -124,15 +124,15 @@
 					"day" : 1,
 					"activitySchedule" : [
 						{	"activity" : "Relaxation",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":1
 						},
 						{	"activity" : "SWAP",
-							"isDailyActivity" : "false",
+							"dailyActivity" : false,
 							"totalCount":2
 						},
 						{	"activity" : "WorryHeads",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":5
 						}
 					]
@@ -141,15 +141,15 @@
 					"day" : 2,
 					"activitySchedule" : [
 						{	"activity" : "Relaxation",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":1
 						},
 						{	"activity" : "SWAP",
-							"isDailyActivity" : "false",
+							"dailyActivity" : false,
 							"totalCount":2
 						},
 						{	"activity" : "WorryHeads",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":5
 						}
 					]
@@ -158,15 +158,15 @@
 					"day" : 3,
 					"activitySchedule" : [
 						{	"activity" : "Relaxation",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":1
 						},
 						{	"activity" : "SWAP",
-							"isDailyActivity" : "false",
+							"dailyActivity" : false,
 							"totalCount":2
 						},
 						{	"activity" : "WorryHeads",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":5
 						}
 					]
@@ -175,15 +175,15 @@
 					"day" : 4,
 					"activitySchedule" : [
 						{	"activity" : "Relaxation",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":1
 						},
 						{	"activity" : "SWAP",
-							"isDailyActivity" : "false",
+							"dailyActivity" : false,
 							"totalCount":2
 						},
 						{	"activity" : "WorryHeads",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":5
 						}
 					]
@@ -192,15 +192,15 @@
 					"day" : 5,
 					"activitySchedule" : [
 						{	"activity" : "Relaxation",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":1
 						},
 						{	"activity" : "SWAP",
-							"isDailyActivity" : "false",
+							"dailyActivity" : false,
 							"totalCount":2
 						},
 						{	"activity" : "WorryHeads",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":5
 						}
 					]
@@ -209,15 +209,15 @@
 					"day" : 6,
 					"activitySchedule" : [
 						{	"activity" : "Relaxation",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":1
 						},
 						{	"activity" : "SWAP",
-							"isDailyActivity" : "false",
+							"dailyActivity" : false,
 							"totalCount":2
 						},
 						{	"activity" : "WorryHeads",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":5
 						}
 					]
@@ -233,15 +233,15 @@
 					"day" : 0,
 					"activitySchedule" : [
 						{	"activity" : "Relaxation",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":1
 						},
 						{	"activity" : "SmallTalks",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":6
 						},
 						{	"activity" : "MakeBelive",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":5
 						}
 					]
@@ -250,15 +250,15 @@
 					"day" : 1,
 					"activitySchedule" : [
 						{	"activity" : "Relaxation",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":1
 						},
 						{	"activity" : "SmallTalks",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":6
 						},
 						{	"activity" : "MakeBelive",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":5
 						}
 					]
@@ -267,15 +267,15 @@
 					"day" : 2,
 					"activitySchedule" : [
 						{	"activity" : "Relaxation",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":1
 						},
 						{	"activity" : "SmallTalks",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":6
 						},
 						{	"activity" : "MakeBelive",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":5
 						}
 					]
@@ -284,15 +284,15 @@
 					"day" : 3,
 					"activitySchedule" : [
 						{	"activity" : "Relaxation",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":1
 						},
 						{	"activity" : "SmallTalks",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":6
 						},
 						{	"activity" : "MakeBelive",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":5
 						}
 					]
@@ -301,15 +301,15 @@
 					"day" : 4,
 					"activitySchedule" : [
 						{	"activity" : "Relaxation",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":1
 						},
 						{	"activity" : "SmallTalks",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":6
 						},
 						{	"activity" : "MakeBelive",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":5
 						}
 					]
@@ -318,15 +318,15 @@
 					"day" : 5,
 					"activitySchedule" : [
 						{	"activity" : "Relaxation",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":1
 						},
 						{	"activity" : "SmallTalks",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":6
 						},
 						{	"activity" : "MakeBelive",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":5
 						}
 					]
@@ -335,15 +335,15 @@
 					"day" : 6,
 					"activitySchedule" : [
 						{	"activity" : "Relaxation",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":1
 						},
 						{	"activity" : "SmallTalks",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":6
 						},
 						{	"activity" : "MakeBelive",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":5
 						}
 					]
@@ -359,19 +359,19 @@
 					"day" : 0,
 					"activitySchedule" : [
 						{	"activity" : "Relaxation",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":1
 						},
 						{	"activity" : "SWAP",
-							"isDailyActivity" : "false",
+							"dailyActivity" : false,
 							"totalCount":2
 						},
 						{	"activity" : "SAFESheet",
-							"isDailyActivity" : "false",
+							"dailyActivity" : false,
 							"totalCount":2
 						},
 						{	"activity" : "StandUp",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":5
 						}
 					]
@@ -380,19 +380,19 @@
 					"day" : 1,
 					"activitySchedule" : [
 						{	"activity" : "Relaxation",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":1
 						},
 						{	"activity" : "SWAP",
-							"isDailyActivity" : "false",
+							"dailyActivity" : false,
 							"totalCount":2
 						},
 						{	"activity" : "SAFESheet",
-							"isDailyActivity" : "false",
+							"dailyActivity" : false,
 							"totalCount":2
 						},
 						{	"activity" : "StandUp",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":5
 						}
 					]
@@ -401,19 +401,19 @@
 					"day" : 2,
 					"activitySchedule" : [
 						{	"activity" : "Relaxation",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":1
 						},
 						{	"activity" : "SWAP",
-							"isDailyActivity" : "false",
+							"dailyActivity" : false,
 							"totalCount":2
 						},
 						{	"activity" : "SAFESheet",
-							"isDailyActivity" : "false",
+							"dailyActivity" : false,
 							"totalCount":2
 						},
 						{	"activity" : "StandUp",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":5
 						}
 					]
@@ -422,19 +422,19 @@
 					"day" : 3,
 					"activitySchedule" : [
 						{	"activity" : "Relaxation",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":1
 						},
 						{	"activity" : "SWAP",
-							"isDailyActivity" : "false",
+							"dailyActivity" : false,
 							"totalCount":2
 						},
 						{	"activity" : "SAFESheet",
-							"isDailyActivity" : "false",
+							"dailyActivity" : false,
 							"totalCount":2
 						},
 						{	"activity" : "StandUp",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":5
 						}
 					]
@@ -443,19 +443,19 @@
 					"day" : 4,
 					"activitySchedule" : [
 						{	"activity" : "Relaxation",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":1
 						},
 						{	"activity" : "SWAP",
-							"isDailyActivity" : "false",
+							"dailyActivity" : false,
 							"totalCount":2
 						},
 						{	"activity" : "SAFESheet",
-							"isDailyActivity" : "false",
+							"dailyActivity" : false,
 							"totalCount":2
 						},
 						{	"activity" : "StandUp",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":5
 						}
 					]
@@ -464,19 +464,19 @@
 					"day" : 5,
 					"activitySchedule" : [
 						{	"activity" : "Relaxation",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":1
 						},
 						{	"activity" : "SWAP",
-							"isDailyActivity" : "false",
+							"dailyActivity" : false,
 							"totalCount":2
 						},
 						{	"activity" : "SAFESheet",
-							"isDailyActivity" : "false",
+							"dailyActivity" : false,
 							"totalCount":2
 						},
 						{	"activity" : "StandUp",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":5
 						}
 					]
@@ -485,19 +485,19 @@
 					"day" : 6,
 					"activitySchedule" : [
 						{	"activity" : "Relaxation",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":1
 						},
 						{	"activity" : "SWAP",
-							"isDailyActivity" : "false",
+							"dailyActivity" : false,
 							"totalCount":2
 						},
 						{	"activity" : "SAFESheet",
-							"isDailyActivity" : "false",
+							"dailyActivity" : false,
 							"totalCount":2
 						},
 						{	"activity" : "StandUp",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":5
 						}
 					]
@@ -513,11 +513,11 @@
 					"day" : 0,
 					"activitySchedule" : [
 						{	"activity" : "Relaxation",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":1
 						},
 						{	"activity" : "MatchIt",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":6
 						}
 					]
@@ -526,11 +526,11 @@
 					"day" : 1,
 					"activitySchedule" : [
 						{	"activity" : "Relaxation",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":1
 						},
 						{	"activity" : "MatchIt",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":6
 						}
 					]
@@ -539,11 +539,11 @@
 					"day" : 2,
 					"activitySchedule" : [
 						{	"activity" : "Relaxation",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":1
 						},
 						{	"activity" : "MatchIt",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":6
 						}
 					]
@@ -552,11 +552,11 @@
 					"day" : 3,
 					"activitySchedule" : [
 						{	"activity" : "Relaxation",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":1
 						},
 						{	"activity" : "MatchIt",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":6
 						}
 					]
@@ -565,11 +565,11 @@
 					"day" : 4,
 					"activitySchedule" : [
 						{	"activity" : "Relaxation",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":1
 						},
 						{	"activity" : "MatchIt",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":6
 						}
 					]
@@ -578,11 +578,11 @@
 					"day" : 5,
 					"activitySchedule" : [
 						{	"activity" : "Relaxation",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":1
 						},
 						{	"activity" : "MatchIt",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":6
 						}
 					]
@@ -591,11 +591,11 @@
 					"day" : 6,
 					"activitySchedule" : [
 						{	"activity" : "Relaxation",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":1
 						},
 						{	"activity" : "MatchIt",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":6
 						}
 					]
@@ -611,11 +611,11 @@
 					"day" : 0,
 					"activitySchedule" : [
 						{	"activity" : "Relaxation",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":1
 						},
 						{	"activity" : "MatchIt",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":6
 						}
 					]
@@ -624,11 +624,11 @@
 					"day" : 1,
 					"activitySchedule" : [
 						{	"activity" : "Relaxation",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":1
 						},
 						{	"activity" : "MatchIt",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":6
 						}
 					]
@@ -637,11 +637,11 @@
 					"day" : 2,
 					"activitySchedule" : [
 						{	"activity" : "Relaxation",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":1
 						},
 						{	"activity" : "MatchIt",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":6
 						}
 					]
@@ -650,11 +650,11 @@
 					"day" : 3,
 					"activitySchedule" : [
 						{	"activity" : "Relaxation",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":1
 						},
 						{	"activity" : "MatchIt",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":6
 						}
 					]
@@ -663,11 +663,11 @@
 					"day" : 4,
 					"activitySchedule" : [
 						{	"activity" : "Relaxation",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":1
 						},
 						{	"activity" : "MatchIt",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":6
 						}
 					]
@@ -676,11 +676,11 @@
 					"day" : 5,
 					"activitySchedule" : [
 						{	"activity" : "Relaxation",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":1
 						},
 						{	"activity" : "MatchIt",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":6
 						}
 					]
@@ -689,11 +689,11 @@
 					"day" : 6,
 					"activitySchedule" : [
 						{	"activity" : "Relaxation",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":1
 						},
 						{	"activity" : "MatchIt",
-							"isDailyActivity" : "true",
+							"dailyActivity" : true,
 							"totalCount":6
 						}
 					]

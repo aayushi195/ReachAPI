@@ -32,7 +32,7 @@ public class ScheduleResource {
 
 	@POST
 	@Consumes("application/json")
-	public Response fetchPatients(String patientJson) {
+	public Response createPatientSchedule(String patientJson) {
 		HEALResponse response = null;
 		HEALResponseBuilder builder;
 		try{

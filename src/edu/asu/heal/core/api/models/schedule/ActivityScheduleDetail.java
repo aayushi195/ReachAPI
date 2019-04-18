@@ -3,14 +3,14 @@ package edu.asu.heal.core.api.models.schedule;
 public class ActivityScheduleDetail {
 
 	private String activity;
-	private boolean isDailyActivity;
+	private boolean dailyActivity;
 	private int totalCount;
 	
 	public ActivityScheduleDetail() {}
 	
-	public ActivityScheduleDetail(String activity, boolean isDailyActivity, int totalCount) {
+	public ActivityScheduleDetail(String activity, boolean dailyActivity, int totalCount) {
 		this.activity=activity;
-		this.isDailyActivity = isDailyActivity;
+		this.dailyActivity = dailyActivity;
 		this.totalCount=totalCount;
 	}
 
@@ -22,12 +22,12 @@ public class ActivityScheduleDetail {
 		this.activity = activity;
 	}
 
-	public boolean isDailyActivity() {
-		return isDailyActivity;
+	public boolean getDailyActivity() {
+		return dailyActivity;
 	}
 
-	public void setDailyActivity(boolean isDailyActivity) {
-		this.isDailyActivity = isDailyActivity;
+	public void setDailyActivity(boolean dailyActivity) {
+		this.dailyActivity = dailyActivity;
 	}
 
 	public int getTotalCount() {
@@ -42,7 +42,7 @@ public class ActivityScheduleDetail {
 	    public String toString() {
 	        return "ActivitySchedule : {" +
 	                ", activity='" + this.activity + '\'' +
-	                ", isDailyActivity='" + this.isDailyActivity + '\'' +
+	                ", dailyActivity='" + this.dailyActivity + '\'' +
 	                ", totalCount=" + this.totalCount +
 	                '}';
 	    }
