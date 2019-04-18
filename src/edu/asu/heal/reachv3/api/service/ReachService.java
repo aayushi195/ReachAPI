@@ -3,6 +3,7 @@ package edu.asu.heal.reachv3.api.service;
 import edu.asu.heal.core.api.dao.DAO;
 import edu.asu.heal.core.api.dao.DAOFactory;
 import edu.asu.heal.core.api.models.*;
+import edu.asu.heal.core.api.models.schedule.PatientSchedule;
 import edu.asu.heal.core.api.service.HealService;
 import edu.asu.heal.core.api.service.SuggestedActivityiesMappingService.MappingFactory;
 import edu.asu.heal.core.api.service.SuggestedActivityiesMappingService.MappingInterface;
@@ -285,6 +286,26 @@ public class ReachService implements HealService {
 
 			Logger[] logger = dao.logMessage(loggerInstance);
 			return logger;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	@Override
+	public PatientSchedule createPatientSchedule(int patientPin) {
+		try {
+			return __modelFactory.createPatientSchedule(patientPin);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	@Override
+	public PatientSchedule getPatientSchedule(int patientPin) {
+		try {
+			return __modelFactory.getPatientSchedule(patientPin);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

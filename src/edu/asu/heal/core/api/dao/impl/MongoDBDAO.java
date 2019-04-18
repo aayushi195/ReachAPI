@@ -17,6 +17,7 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Projections;
 import edu.asu.heal.core.api.dao.DAO;
 import edu.asu.heal.core.api.models.*;
+import edu.asu.heal.core.api.models.schedule.PatientSchedule;
 import edu.asu.heal.reachv3.api.models.*;
 import org.bson.Document;
 import org.bson.codecs.configuration.CodecRegistry;
@@ -47,6 +48,7 @@ public class MongoDBDAO implements DAO {
 	private static final String SWAPSITUATIONS_COLLECTION = "swapSituations";
 	private static final String LOGGER_COLLECTION = "logger";
 	private static final String EMOTIONS_COLLECTION = "emotions";
+	private static final String PATIENT_SCHEDULE_COLLECTION = "patientSchedules";
 
 	private static String __mongoDBName;
 	private static String __mongoURI;
@@ -860,7 +862,7 @@ public class MongoDBDAO implements DAO {
 		}
 
 	}
-	
+
 	@Override
 	public String getActivityInstanceAsStringDAO(String activityInstanceId) {
 		try{
@@ -892,8 +894,55 @@ public class MongoDBDAO implements DAO {
 		}
 	}
 
-}
+	/********************************************* Schedule Methods ***********************************************/
 
-//enum Emotions{
-//	happy, sad, sick, scared, worried, angry
-//}
+	@Override
+	public PatientSchedule createPatientSchedule(PatientSchedule patientSchedule) {
+		try{
+			MongoDatabase database = MongoDBDAO.getConnectedDatabase();
+			MongoCollection<PatientSchedule> patientScheduleMongoCollection =
+					database.getCollection(PATIENT_SCHEDULE_COLLECTION, PatientSchedule.class);
+
+			PatientSchedule instance = getPatientSchedule(patientSchedule.getPatientPin());
+			if(instance == null) {
+				patientScheduleMongoCollection.insertOne(patientSchedule);
+				instance = patientSchedule;
+			}
+			return instance;
+		}catch (NullPointerException ne) {
+			System.out.println("SOME PROBLEM IN CREATING PATIENT SCHEDULE FOR PIN : " + patientSchedule.getPatientPin());
+			ne.printStackTrace();
+			return null;
+		} catch (Exception e) {
+			System.out.println("SOME SERVER PROBLEM IN CREATE PATIENT SCHEDULE");
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	@Override
+	public PatientSchedule getPatientSchedule(int patientPin) {
+		try{
+			MongoDatabase database = MongoDBDAO.getConnectedDatabase();
+
+			MongoCollection<PatientSchedule> patientScheduleMongoCollection =
+					database.getCollection(PATIENT_SCHEDULE_COLLECTION, PatientSchedule.class);
+
+			PatientSchedule instance = patientScheduleMongoCollection
+					.find(Filters.eq(PatientSchedule.PATIENT_PIN, patientPin))
+					.projection(Projections.excludeId())
+					.first();
+			return instance;
+		} catch (NullPointerException ne) {
+			System.out.println("SOME PROBLEM IN GETTING PATIENT SCHEDULE FOR PIN : " + patientPin);
+			ne.printStackTrace();
+			return null;
+		} catch (Exception e) {
+			System.out.println("SOME SERVER PROBLEM IN GET PATIENT SCHEDULE");
+			e.printStackTrace();
+			return null;
+		}
+
+	}
+
+}

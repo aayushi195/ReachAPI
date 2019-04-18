@@ -1,6 +1,7 @@
 package edu.asu.heal.core.api.dao;
 
 import edu.asu.heal.core.api.models.*;
+import edu.asu.heal.core.api.models.schedule.PatientSchedule;
 import edu.asu.heal.reachv3.api.models.*;
 
 import java.util.List;
@@ -81,5 +82,12 @@ public interface DAO {
     SwapSituation getSwapSituation();
     
     String getActivityInstanceAsStringDAO (String activityInstanceId);
+    
+    /************************************* Schedule Methods *******************************************************/
+    
+    PatientSchedule createPatientSchedule(PatientSchedule patientSchedule);
+    
+    PatientSchedule getPatientSchedule(int patientPin);
+    
 
 }

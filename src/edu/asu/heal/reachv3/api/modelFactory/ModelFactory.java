@@ -2,11 +2,18 @@ package edu.asu.heal.reachv3.api.modelFactory;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
+
+import com.fasterxml.jackson.core.type.TypeReference;
 import edu.asu.heal.core.api.models.*;
+import edu.asu.heal.core.api.models.schedule.DayDetail;
+import edu.asu.heal.core.api.models.schedule.ModuleDetail;
+import edu.asu.heal.core.api.models.schedule.PatientSchedule;
 import edu.asu.heal.reachv3.api.models.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -20,8 +27,11 @@ public class ModelFactory {
 	private static final String DATE_FORMAT_AI="MMM dd, yyyy HH:mm:ss";
 	private static Properties _properties;
 	private static String MAKEBELIEVE_ACTIVITYNAME,EMOTIONS_ACTIVITYNAME,SWAP_ACTIVITYNAME,
-			STANDUP_ACTIVITYNAME, FACEIT_ACTIVITYNAME, RELAXATION_ACTIVITYNAME, WORRYHEADS_ACTIVITYNAME,
-			DAILYDIARY_ACTIVITYNAME, VERSION, DOMAIN_NAME, EXTENDED_PART;
+	STANDUP_ACTIVITYNAME, FACEIT_ACTIVITYNAME, RELAXATION_ACTIVITYNAME, WORRYHEADS_ACTIVITYNAME,
+	DAILYDIARY_ACTIVITYNAME, VERSION, DOMAIN_NAME, EXTENDED_PART;
+	private static String MODULE_SCHEDULE_FILE= "module.schedule";
+	private static String MODULE_DURATION_DAYS= "module.duration.days";
+	private static String TOTAL_MODULE= "total.modules";
 
 	static {
 		_properties = new Properties();
@@ -106,7 +116,7 @@ public class ModelFactory {
 			extendedActivityInstance.setVersion(VERSION);
 
 			String situationJson = getSituationString(null,requestBody);
-			
+
 			if(activityInstance == null) {
 				return NullObjects.getNullActivityInstance();
 			}
@@ -126,9 +136,9 @@ public class ModelFactory {
 	public ActivityInstance getActivityInstanceFromJSON(String requestBody) {	
 
 		try {
-		//	ObjectMapper mapper = new ObjectMapper();
+			//	ObjectMapper mapper = new ObjectMapper();
 			SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT_AI);
-		//	mapper.setDateFormat(format);
+			//	mapper.setDateFormat(format);
 
 			JSONObject obj = new JSONObject(requestBody);
 			String activityInstanceId = null, activityId = null, description = null, state =null;
@@ -156,7 +166,7 @@ public class ModelFactory {
 			if(obj.has(ActivityInstance.CREATEDAT_ATTRIBUTE)
 					&& !obj.getString(ActivityInstance.CREATEDAT_ATTRIBUTE).equals("null")) {
 				createdAt = format.parse(obj.getString(ActivityInstance.CREATEDAT_ATTRIBUTE));
-			//	createdAt = new Date(Long.parseLong(obj.getString(ActivityInstance.CREATEDAT_ATTRIBUTE)));
+				//	createdAt = new Date(Long.parseLong(obj.getString(ActivityInstance.CREATEDAT_ATTRIBUTE)));
 			}
 			if(obj.has(ActivityInstance.STARTTIME_ATTRIBUTE)
 					&& !obj.getString(ActivityInstance.STARTTIME_ATTRIBUTE).equals("null")) {
@@ -176,7 +186,7 @@ public class ModelFactory {
 			if(obj.has(ActivityInstance.ACTUALSUBMISSIONTIME_ATTRIBUTE)
 					&& !obj.getString(ActivityInstance.ACTUALSUBMISSIONTIME_ATTRIBUTE).equals("null")) {
 				actualSubmissionTime = format.parse(obj.getString(ActivityInstance.ACTUALSUBMISSIONTIME_ATTRIBUTE));
-			//	actualSubmissionTime = new Date(Long.parseLong(obj.getString(ActivityInstance.ACTUALSUBMISSIONTIME_ATTRIBUTE)));
+				//	actualSubmissionTime = new Date(Long.parseLong(obj.getString(ActivityInstance.ACTUALSUBMISSIONTIME_ATTRIBUTE)));
 			}
 			if(obj.has(ActivityInstance.PATIENT_PIN)
 					&& obj.getInt(ActivityInstance.PATIENT_PIN) != -1) {
@@ -307,35 +317,35 @@ public class ModelFactory {
 			throw new ModelException("EXCEPTION in getActitvityInstanceOfType.",e);
 		}
 	}
-  
-  	public String getSituationString(String activityInstanceId,String requestBody) throws ModelException {
-  		try {
-  			String instance = null;
-  			if(activityInstanceId!=null){
+
+	public String getSituationString(String activityInstanceId,String requestBody) throws ModelException {
+		try {
+			String instance = null;
+			if(activityInstanceId!=null){
 				instance = dao.getActivityInstanceAsStringDAO(activityInstanceId);
 			}else if(requestBody != null){
-  				instance = requestBody;
+				instance = requestBody;
 			}
-  		   if(instance != null) {
-			   ObjectMapper mapper = new ObjectMapper();
-			   SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT_AI);
-			   mapper.setDateFormat(format);
+			if(instance != null) {
+				ObjectMapper mapper = new ObjectMapper();
+				SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT_AI);
+				mapper.setDateFormat(format);
 
-			   JSONObject obj = new JSONObject(instance);
-			   JSONObject extended = new JSONObject(obj.getString("extended"));
+				JSONObject obj = new JSONObject(instance);
+				JSONObject extended = new JSONObject(obj.getString("extended"));
 
-			   if (extended.has(ExtendedActivityInstance.SITUATION_ATTRIBUTE))
-				   return extended.getString(ExtendedActivityInstance.SITUATION_ATTRIBUTE);
-			   else
-				   return null;
-		   }else
-		   	return null;
-  		    } catch(Exception e) {
-  			    throw new ModelException("SOME ERROR IN GET SITUATION STRING  IN MODEL FACTORY",e);
-  		    }
-      }
+				if (extended.has(ExtendedActivityInstance.SITUATION_ATTRIBUTE))
+					return extended.getString(ExtendedActivityInstance.SITUATION_ATTRIBUTE);
+				else
+					return null;
+			}else
+				return null;
+		} catch(Exception e) {
+			throw new ModelException("SOME ERROR IN GET SITUATION STRING  IN MODEL FACTORY",e);
+		}
+	}
 
-  	public ActivityInstance getActivityInstance(String activityInstanceId) throws ModelException {
+	public ActivityInstance getActivityInstance(String activityInstanceId) throws ModelException {
 		try {
 			ActivityInstance activityInstance;
 			activityInstance = dao.getActivityInstance(activityInstanceId);
@@ -356,7 +366,7 @@ public class ModelFactory {
 		}
 	}
 
-  	//************************************ PATIENTS ***********************************************
+	//************************************ PATIENTS ***********************************************
 	public List<Patient> getPatients(String trialId) {
 		try {
 			List<Patient> result;
@@ -370,30 +380,30 @@ public class ModelFactory {
 			return result;
 		} catch (Exception e) {
 			System.out.println("SOME PROBLEM WITH REACH SERVICE - GET PATIENTS");
-      e.printStackTrace();
-			return null;
-    }
-  }
-  
-  	public Patient getPatient(int patientPin) {
-		try {
-			return dao.getPatient(patientPin);
-		} catch (Exception e) {
-      e.printStackTrace();
-			return null;
-		}
-	}
-  
-  	public Patient createPatient(String trialId) {
-		try {
-			return dao.createPatient(trialId);
-    } catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
-  
-  	public Patient updatePatient(Patient patient) {
+
+	public Patient getPatient(int patientPin) {
+		try {
+			return dao.getPatient(patientPin);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public Patient createPatient(String trialId) {
+		try {
+			return dao.createPatient(trialId);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public Patient updatePatient(Patient patient) {
 		try {
 			Patient patientInDatabase = dao.getPatient(patient.getPin());
 			if (patientInDatabase == null || patientInDatabase.equals(NullObjects.getNullPatient()))
@@ -412,7 +422,7 @@ public class ModelFactory {
 			return dao.updatePatient(patientInDatabase);
 		} catch (Exception e) {
 			System.out.println("SOME PROBLEM IN UPDATE PATIENT IN REACHSERVICE");
-      e.printStackTrace();
+			e.printStackTrace();
 			return null;
 		}
 	}
@@ -428,7 +438,7 @@ public class ModelFactory {
 			return null;
 		}
 	}
-	
+
 	public Activity createActivity(String title, String description) {
 		try {
 			Activity newActivity = new Activity();
@@ -445,7 +455,7 @@ public class ModelFactory {
 			return null;
 		}
 	}
-	
+
 	public Activity getActivity(String activityId) {
 		try {
 			return dao.getActivity(activityId);
@@ -474,7 +484,7 @@ public class ModelFactory {
 			return null;
 		}
 	}
-  
+
 	public Activity deleteActivity(String activityId) {
 		try {
 			return dao.deleteActivity(activityId);
@@ -488,35 +498,35 @@ public class ModelFactory {
 	public HashMap<String, Boolean> getScheduleOfModules(){
 
 		try{
-		    JSONObject moduleData;
+			JSONObject moduleData;
 
-            HashMap<String,Boolean> rval = new HashMap<>();
+			HashMap<String,Boolean> rval = new HashMap<>();
 			Date date = new Date();
 
 			String data = readFile("scheduleOfModules.json");
 
-            moduleData = new JSONObject(data);
-            JSONArray arr = moduleData.getJSONArray("schedule");
+			moduleData = new JSONObject(data);
+			JSONArray arr = moduleData.getJSONArray("schedule");
 
-            for(int i=0; i<arr.length();i++){
+			for(int i=0; i<arr.length();i++){
 
-                String startDate = arr.getJSONObject(i).getString("startDate");
-                String endDate = arr.getJSONObject(i).getString("endDate");
+				String startDate = arr.getJSONObject(i).getString("startDate");
+				String endDate = arr.getJSONObject(i).getString("endDate");
 
-                Date start_Date = new Date(startDate);
-                Date end_date = new Date(endDate);
+				Date start_Date = new Date(startDate);
+				Date end_date = new Date(endDate);
 
-                String module = arr.getJSONObject(i).getString("module");
+				String module = arr.getJSONObject(i).getString("module");
 
-                if((start_Date.before(date) || start_Date.equals(date))
-                        && (end_date.after(date) || end_date.equals(date))){
-                    rval.put(module,true);
-                }
-                else{
-                    rval.put(module,false);
-                }
+				if((start_Date.before(date) || start_Date.equals(date))
+						&& (end_date.after(date) || end_date.equals(date))){
+					rval.put(module,true);
+				}
+				else{
+					rval.put(module,false);
+				}
 
-            }
+			}
 
 			return rval;
 		} catch (Exception e){
@@ -524,24 +534,6 @@ public class ModelFactory {
 			return null;
 		}
 
-	}
-
-	public static String readFile(String filename) {
-		String result = "";
-		try {
-			InputStream inputStream = ModelFactory.class.getResourceAsStream(filename);
-			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-			StringBuilder stringBuilder = new StringBuilder();
-			String line = bufferedReader.readLine();
-			while (line != null) {
-				stringBuilder.append(line);
-				line = bufferedReader.readLine();
-			}
-			result = stringBuilder.toString();
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-		return result;
 	}
 
 	// ************************************* DOMAIN ****************************************************
@@ -621,5 +613,117 @@ public class ModelFactory {
 			return null;
 		}
 	}
+
+	// ************************************* SCHEDULES ****************************************************
+
+	public PatientSchedule createPatientSchedule(int patientPin) {
+		PatientSchedule result = new PatientSchedule();
+		List<ModuleDetail> moduleDetails = new ArrayList<>();
+		HashMap<String,List<String>> dateMap;
+		try {
+
+			result.setPatientPin(patientPin);
+			ObjectMapper mapper = new ObjectMapper();
+
+			String moduleScheduleFileName = _properties.getProperty(MODULE_SCHEDULE_FILE);
+			
+			dateMap = this.calculateDefaultModuleDates();
+			
+			if(moduleScheduleFileName != null) {
+
+				String fileData = this.readFile(moduleScheduleFileName);
+				JSONObject scheduleJSON = new JSONObject(fileData);
+				JSONArray moduleJSON = scheduleJSON.getJSONArray("patientSchedule");
+
+			//	moduleDetails = mapper.readValue(moduleJSON.toString(),
+			//			new TypeReference<List<ModuleDetail>>(){});
+
+				for(int i=0; i< moduleJSON.length(); i++) {
+
+					JSONObject module = moduleJSON.getJSONObject(i);
+
+					ModuleDetail obj = mapper.readValue(module.toString(), ModuleDetail.class);
+					// add start and end date for each module starting from today.
+					List<String> dateList = new ArrayList<>();
+					dateList=dateMap.get(obj.getModule());
+					obj.setStartDate(new Date(dateList.get(0)));
+					obj.setEndDate(new Date(dateList.get(1)));
+					moduleDetails.add(obj);
+				}
+
+				result.setPatientSchedule(moduleDetails);
+			}
+
+			return dao.createPatientSchedule(result);
+
+		}catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public static String readFile(String filename) {
+		String result = "";
+		try {
+			InputStream inputStream = ModelFactory.class.getResourceAsStream(filename);
+			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+			StringBuilder stringBuilder = new StringBuilder();
+			String line = bufferedReader.readLine();
+			while (line != null) {
+				stringBuilder.append(line);
+				line = bufferedReader.readLine();
+			}
+			result = stringBuilder.toString();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	public HashMap<String,List<String>> calculateDefaultModuleDates(){
+		HashMap<String,List<String>> result = new HashMap<>();
+		try {
+			int moduleDays = Integer.parseInt(_properties.getProperty(MODULE_DURATION_DAYS));
+			int totalModule = Integer.parseInt(_properties.getProperty(TOTAL_MODULE));
+			
+			Date today = new Date();
+
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(today);
+			Date startDate = today;
+
+			for(int i =1; i<=totalModule; i++) {
+
+				List<String> dateList = new ArrayList<>();
+
+				dateList.add(startDate.toString());
+				cal.add(Calendar.DATE, moduleDays-1);
+
+				Date endDate = cal.getTime();
+				dateList.add(endDate.toString());
+
+				cal.setTime(endDate);
+				cal.add(Calendar.DATE, 1);
+
+				startDate = cal.getTime();
+				result.put(String.valueOf(i), dateList);
+			}
+			return result;
+		}catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+	
+	public PatientSchedule getPatientSchedule(int patientPin) {
+		try {
+			return dao.getPatientSchedule(patientPin);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 }
 
