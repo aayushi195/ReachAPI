@@ -644,8 +644,7 @@ public class ModelFactory {
 
 					ModuleDetail obj = mapper.readValue(module.toString(), ModuleDetail.class);
 					// add start and end date for each module starting from today.
-					List<String> dateList;
-
+					List<String> dateList = new ArrayList<>();
 					dateList=dateMap.get(obj.getModule());
 					obj.setStartDate(new Date(dateList.get(0)));
 					obj.setEndDate(new Date(dateList.get(1)));
