@@ -3,7 +3,9 @@ package edu.asu.heal.core.api.models.schedule;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PatientSchedule {
+import edu.asu.heal.core.api.models.IHealModelType;
+
+public class PatientSchedule implements IHealModelType{
 	
 	public static String PATIENT_PIN = "patientPin";
 	public static String PATIENT_SCHEDULE = "patientSchedule";

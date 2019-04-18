@@ -12,6 +12,7 @@ public abstract class HEALResponse {
     public static final String DOMAIN_RESOURCE_PATH = new JerseyUriBuilder().path(DomainResource.class).toTemplate().replace("/", "");
     public static final String PATIENT_RESOURCE_PATH = new JerseyUriBuilder().path(PatientResource.class).toTemplate().replace("/", "");
     public static final String TRIAL_RESOURCE_PATH = new JerseyUriBuilder().path(TrialsResource.class).toTemplate().replace("/", "");
+    public static final String SCHEDULE_RESOURCE_PATH = new JerseyUriBuilder().path(ScheduleResource.class).toTemplate().replace("/", "");
 
     private int statusCode;
     private Object data;

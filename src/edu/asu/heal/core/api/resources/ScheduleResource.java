@@ -52,11 +52,6 @@ public class ScheduleResource {
 						.setStatusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
 						.setData("SOME SERVER ERROR. PLEASE CONTACT ADMINISTRATOR")
 						.build();
-			} else if (patientSchedule.equals(NullObjects.getNullPatient())) {
-				response = builder
-						.setStatusCode(Response.Status.BAD_REQUEST.getStatusCode())
-						.setData("THE TRIAL ID YOU'VE PASSED IN IS INCORRECT OR DOES NOT EXIST")
-						.build();
 			} else {
 				response = builder
 						.setStatusCode(Response.Status.OK.getStatusCode())
