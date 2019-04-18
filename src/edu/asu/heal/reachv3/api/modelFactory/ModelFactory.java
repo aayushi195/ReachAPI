@@ -8,7 +8,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
+
+import com.fasterxml.jackson.core.type.TypeReference;
 import edu.asu.heal.core.api.models.*;
+import edu.asu.heal.core.api.models.schedule.DayDetail;
 import edu.asu.heal.core.api.models.schedule.ModuleDetail;
 import edu.asu.heal.core.api.models.schedule.PatientSchedule;
 import edu.asu.heal.reachv3.api.models.*;
@@ -611,40 +614,49 @@ public class ModelFactory {
 		}
 	}
 
-	/*********************** Schedule methods ******************************************************/
+	// ************************************* SCHEDULES ****************************************************
 
 	public PatientSchedule createPatientSchedule(int patientPin) {
 		PatientSchedule result = new PatientSchedule();
 		List<ModuleDetail> moduleDetails = new ArrayList<>();
-		HashMap<String,List<String>> dateMap = new HashMap<>();
+		HashMap<String,List<String>> dateMap;
 		try {
-			String date = (new Date()).toString();
+
 			result.setPatientPin(patientPin);
 			ObjectMapper mapper = new ObjectMapper();
-			String moduelScheduleFileName = _properties.getProperty(MODULE_SCHEDULE_FILE);
+
+			String moduleScheduleFileName = _properties.getProperty(MODULE_SCHEDULE_FILE);
 			
 			dateMap = this.calculateDefaultModuleDates();
 			
-			if(moduelScheduleFileName != null) {
-				String fileData = this.readFile(moduelScheduleFileName);
+			if(moduleScheduleFileName != null) {
+
+				String fileData = this.readFile(moduleScheduleFileName);
 				JSONObject scheduleJSON = new JSONObject(fileData);
 				JSONArray moduleJSON = scheduleJSON.getJSONArray("patientSchedule");
+
+			//	moduleDetails = mapper.readValue(moduleJSON.toString(),
+			//			new TypeReference<List<ModuleDetail>>(){});
+
 				for(int i=0; i< moduleJSON.length(); i++) {
-					String module = moduleJSON.get(i).toString();
-					ModuleDetail obj = mapper.readValue(module, ModuleDetail.class);
+
+					JSONObject module = moduleJSON.getJSONObject(i);
+
+					ModuleDetail obj = mapper.readValue(module.toString(), ModuleDetail.class);
 					// add start and end date for each module starting from today.
-					List<String> dateList = new ArrayList<>();
+					List<String> dateList;
+
 					dateList=dateMap.get(obj.getModule());
 					obj.setStartDate(new Date(dateList.get(0)));
-					obj.setEndDate(new Date(dateList.get(1)));	
+					obj.setEndDate(new Date(dateList.get(1)));
 					moduleDetails.add(obj);
 				}
+
 				result.setPatientSchedule(moduleDetails);
-			}else {
-				// No parameter is mentioned in schedule properties.
 			}
 
-			return result;
+			return dao.createPatientSchedule(result);
+
 		}catch(Exception e) {
 			e.printStackTrace();
 			return null;
@@ -676,22 +688,27 @@ public class ModelFactory {
 			int totalModule = Integer.parseInt(_properties.getProperty(TOTAL_MODULE));
 			
 			Date today = new Date();
+
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(today);
 			Date startDate = today;
+
 			for(int i =1; i<=totalModule; i++) {
+
 				List<String> dateList = new ArrayList<>();
+
 				dateList.add(startDate.toString());
 				cal.add(Calendar.DATE, moduleDays-1);
+
 				Date endDate = cal.getTime();
 				dateList.add(endDate.toString());
+
 				cal.setTime(endDate);
 				cal.add(Calendar.DATE, 1);
+
 				startDate = cal.getTime();
 				result.put(String.valueOf(i), dateList);
 			}
-			System.out.println("Result ............");
-			System.out.println(result);
 			return result;
 		}catch(Exception e) {
 			e.printStackTrace();
