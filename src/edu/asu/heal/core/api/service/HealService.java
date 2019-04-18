@@ -62,4 +62,6 @@ public interface HealService {
     
     PatientSchedule createPatientSchedule(int patientPin);
     
+    PatientSchedule getPatientSchedule(int patientPin);
+    
 }

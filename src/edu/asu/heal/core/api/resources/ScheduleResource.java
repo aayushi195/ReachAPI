@@ -30,6 +30,34 @@ public class ScheduleResource {
 
 	private HealService reachService = HealServiceFactory.getTheService();
 
+	@GET
+	public Response getPatientSchedule(@QueryParam("patientPin") int patientPin) {
+		HEALResponse response = null;
+		HEALResponseBuilder builder;
+		try{
+			builder = new HEALResponseBuilder(ScheduleResponse.class);
+
+			PatientSchedule patientSchedule = reachService.getPatientSchedule(patientPin);
+			if (patientSchedule == null) {
+				response = builder
+						.setStatusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
+						.setData("SOME SERVER ERROR. PLEASE CONTACT ADMINISTRATOR")
+						.build();
+			} else {
+				response = builder
+						.setStatusCode(Response.Status.OK.getStatusCode())
+						.setData(patientSchedule)
+						.setServerURI(_uri.getBaseUri().toString())
+						.build();
+			}
+			return Response.status(response.getStatusCode()).entity(response.toEntity()).build();
+		}catch (Exception e){
+			System.out.println("Problem in HEAL Response builder");
+			e.printStackTrace();
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+		}
+	}
+
 	@POST
 	@Consumes("application/json")
 	public Response createPatientSchedule(String patientJson) {
@@ -54,7 +82,7 @@ public class ScheduleResource {
 						.build();
 			} else {
 				response = builder
-						.setStatusCode(Response.Status.OK.getStatusCode())
+						.setStatusCode(Response.Status.CREATED.getStatusCode())
 						.setData(patientSchedule)
 						.setServerURI(_uri.getBaseUri().toString())
 						.build();

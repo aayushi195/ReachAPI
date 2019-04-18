@@ -715,6 +715,15 @@ public class ModelFactory {
 		}
 		
 	}
+	
+	public PatientSchedule getPatientSchedule(int patientPin) {
+		try {
+			return dao.getPatientSchedule(patientPin);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 
 }
 

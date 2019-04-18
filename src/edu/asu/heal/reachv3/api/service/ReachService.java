@@ -302,5 +302,15 @@ public class ReachService implements HealService {
 		}
 	}
 
+	@Override
+	public PatientSchedule getPatientSchedule(int patientPin) {
+		try {
+			return __modelFactory.getPatientSchedule(patientPin);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 
 }
