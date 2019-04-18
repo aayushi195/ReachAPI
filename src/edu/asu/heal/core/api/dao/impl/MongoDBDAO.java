@@ -945,4 +945,27 @@ public class MongoDBDAO implements DAO {
 
 	}
 
+	@Override
+	public PatientSchedule updatePatientSchedule(PatientSchedule patientSchedule) {
+		try{
+			MongoDatabase database = MongoDBDAO.getConnectedDatabase();
+			MongoCollection<PatientSchedule> patientScheduleMongoCollection =
+					database.getCollection(PATIENT_SCHEDULE_COLLECTION, PatientSchedule.class);
+
+			return patientScheduleMongoCollection
+					.findOneAndReplace(Filters.eq(PatientSchedule.PATIENT_PIN, patientSchedule.getPatientPin()),
+							patientSchedule);
+
+		}catch (NullPointerException ne) {
+			System.out.println("SOME PROBLEM IN CREATING PATIENT SCHEDULE FOR PIN : " + patientSchedule.getPatientPin());
+			ne.printStackTrace();
+			return null;
+		} catch (Exception e) {
+			System.out.println("SOME SERVER PROBLEM IN CREATE PATIENT SCHEDULE");
+			e.printStackTrace();
+			return null;
+		}
+
+	}
+
 }

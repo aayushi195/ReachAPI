@@ -312,5 +312,15 @@ public class ReachService implements HealService {
 		}
 	}
 
+	@Override
+	public PatientSchedule updatePatientSchedule(int patientPin, String module) {
+		try {
+			return __modelFactory.updatePatientSchedule(patientPin, module);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 
 }
