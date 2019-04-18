@@ -626,7 +626,6 @@ public class ModelFactory {
 			String moduleScheduleFileName = _properties.getProperty(MODULE_SCHEDULE_FILE);
 			dateMap = this.calculateDefaultModuleDates();
 			if(moduleScheduleFileName != null) {
-
 				String fileData = this.readFile(moduleScheduleFileName);
 				JSONObject scheduleJSON = new JSONObject(fileData);
 				JSONArray moduleJSON = scheduleJSON.getJSONArray("patientSchedule");
