@@ -214,40 +214,6 @@ public class ActivityResource {
 
     }
 
-    @GET
-    @Path("/moduleProgression")
-    public Response getMovementOfClouds() {
-
-        ReachService service = (ReachService) reachService;
-        HashMap<String,Boolean> map = service.getScheduleOfModules();
-
-        ObjectMapper mapper = new ObjectMapper();
-        HEALResponse response;
-        HEALResponseBuilder builder;
-
-        String rval = null;
-        try {
-            rval = mapper.writeValueAsString(map);
-            builder = new HEALResponseBuilder(ActivityResponse.class);
-        } catch (JsonProcessingException | InstantiationException | IllegalAccessException ie) {
-            ie.printStackTrace();
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-        }
-        if (map == null) {
-            response = builder
-                    .setStatusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
-                    .setData("SOME SERVER ERROR. PLEASE CONTACT ADMINISTRATOR")
-                    .build();
-        } else {
-            response = builder
-                    .setStatusCode(Response.Status.OK.getStatusCode())
-                    .setData(rval)
-                    .setServerURI(_uri.getBaseUri().toString())
-                    .build();
-        }
-        return Response.status(response.getStatusCode()).entity(response.toEntity()).build();
-    }
-
     /**
      * @api {post} /activities Create an Activity
      * @apiName CreateActivity

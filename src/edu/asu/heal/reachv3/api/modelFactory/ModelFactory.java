@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import edu.asu.heal.core.api.models.*;
@@ -15,6 +16,8 @@ import edu.asu.heal.core.api.models.schedule.DayDetail;
 import edu.asu.heal.core.api.models.schedule.ModuleDetail;
 import edu.asu.heal.core.api.models.schedule.PatientSchedule;
 import edu.asu.heal.reachv3.api.models.*;
+import edu.asu.heal.reachv3.api.models.moduleProgession.ModuleBasedInstance;
+import edu.asu.heal.reachv3.api.models.moduleProgession.ModuleInstance;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -32,6 +35,9 @@ public class ModelFactory {
 	private static String MODULE_SCHEDULE_FILE= "module.schedule";
 	private static String MODULE_DURATION_DAYS= "module.duration.days";
 	private static String TOTAL_MODULE= "total.modules";
+	private static String MODULE="module";
+	private static String DAY="day";
+	private static String INFORMATION_MODULE_CONTENT= "introduction.module.";
 
 	static {
 		_properties = new Properties();
@@ -427,7 +433,7 @@ public class ModelFactory {
 		}
 	}
 
-	// ************************************* ACTVITY ****************************************************
+	// ************************************* ACTIVITY ****************************************************
 	public List<Activity> getActivities(String domain) {
 		try {
 			List<Activity> result = dao.getActivities(domain);
@@ -493,47 +499,6 @@ public class ModelFactory {
 			e.printStackTrace();
 			return null;
 		}
-	}
-
-	public HashMap<String, Boolean> getScheduleOfModules(){
-
-		try{
-			JSONObject moduleData;
-
-			HashMap<String,Boolean> rval = new HashMap<>();
-			Date date = new Date();
-
-			String data = readFile("scheduleOfModules.json");
-
-			moduleData = new JSONObject(data);
-			JSONArray arr = moduleData.getJSONArray("schedule");
-
-			for(int i=0; i<arr.length();i++){
-
-				String startDate = arr.getJSONObject(i).getString("startDate");
-				String endDate = arr.getJSONObject(i).getString("endDate");
-
-				Date start_Date = new Date(startDate);
-				Date end_date = new Date(endDate);
-
-				String module = arr.getJSONObject(i).getString("module");
-
-				if((start_Date.before(date) || start_Date.equals(date))
-						&& (end_date.after(date) || end_date.equals(date))){
-					rval.put(module,true);
-				}
-				else{
-					rval.put(module,false);
-				}
-
-			}
-
-			return rval;
-		} catch (Exception e){
-			e.printStackTrace();
-			return null;
-		}
-
 	}
 
 	// ************************************* DOMAIN ****************************************************
@@ -706,6 +671,80 @@ public class ModelFactory {
 		}
 	}
 
+	//************************************ MODULES ***********************************************
+
+	public ModuleInstance getScheduleOfModules(int patientPin){
+
+		ModuleInstance result = new ModuleInstance();
+		List<ModuleBasedInstance> moduleBasedInstanceList = new ArrayList<>();
+		try{
+			result.setPatientPin(patientPin);
+			PatientSchedule patientSchedule = getPatientSchedule(patientPin);
+
+			if(patientSchedule==null)
+				return null;
+
+			HashMap<String,Integer> map = getModuleAndDay(patientSchedule,new Date());
+
+			int currentModule = map.get(this.MODULE);
+			int totalModules = Integer.parseInt(_properties.getProperty(TOTAL_MODULE));
+
+			for(int counter = 1;counter<=totalModules;counter++){
+				ModuleBasedInstance moduleBasedInstance = new ModuleBasedInstance();
+				moduleBasedInstance.setModule(String.valueOf(counter));
+				moduleBasedInstance.setInformationContent(_properties.getProperty(INFORMATION_MODULE_CONTENT
+						+ String.valueOf(counter)));
+				if(counter<=currentModule)
+					moduleBasedInstance.setActive(true);
+				else
+					moduleBasedInstance.setActive(false);
+
+				moduleBasedInstanceList.add(moduleBasedInstance);
+			}
+
+			result.setModuleProgression(moduleBasedInstanceList);
+			return result;
+		} catch (Exception e){
+			e.printStackTrace();
+			return null;
+		}
+
+	}
+
+	public HashMap<String, Integer> getModuleAndDay(PatientSchedule patientSchedule, Date today) {
+
+		if (patientSchedule == null
+				|| patientSchedule.getPatientSchedule() == null
+				|| patientSchedule.getPatientSchedule().size() == 0) {
+			return  new HashMap<>();
+		}
+
+		List<ModuleDetail> moduleJson = patientSchedule.getPatientSchedule();
+
+		HashMap<String, Integer> rval = new HashMap<>();
+		try {
+			for(int i =0; i<moduleJson.size(); i++) {
+
+				Date startDate= getDateWithoutTime(moduleJson.get(i).getStartDate());// new SimpleDateFormat(ReachService.DATE_FORMAT).parse(.toString());
+				Date endDate = getDateWithoutTime(moduleJson.get(i).getEndDate()); //new SimpleDateFormat(ReachService.DATE_FORMAT).parse(.toString());
+
+				today = getDateWithoutTime(today);
+				if(today.compareTo(startDate) >= 0 && today.compareTo(endDate) <=0) {
+					rval.put(this.MODULE, Integer.valueOf(moduleJson.get(i).getModule()));
+					long diffTime = today.getTime() - startDate.getTime();
+					Long d = TimeUnit.DAYS.convert(diffTime, TimeUnit.MILLISECONDS);
+					rval.put(this.DAY,d.intValue());
+					break;
+				}
+
+			}
+			return rval;
+      }catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+  }
+
 	public PatientSchedule updatePatientSchedule(int patientPin, String module) {
 		PatientSchedule patientSchedule = null;
 		try {
@@ -740,7 +779,16 @@ public class ModelFactory {
 		}
 	}
 
-
+	public Date getDateWithoutTime(Date date) {
+		try {
+			SimpleDateFormat formatter = new SimpleDateFormat(
+					"dd/MM/yyyy");
+			return formatter.parse(formatter.format(date));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 }
 

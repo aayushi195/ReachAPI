@@ -33,7 +33,6 @@
     <copy file="${src}/${mapperservicepackage}/mapper.properties" todir="${destdir}/WEB-INF/classes/${mapperservicepackage}" />
     <copy file="${src}/${activitysuggestionpackage}/emotions.properties" todir="${destdir}/WEB-INF/classes/${activitysuggestionpackage}" />
     <copy file="${src}/${modelfactorypackage}/activityName.properties" todir="${destdir}/WEB-INF/classes/${modelfactorypackage}" />
-    <copy file="${src}/${modelfactorypackage}/scheduleOfModules.json" todir="${destdir}/WEB-INF/classes/${modelfactorypackage}" />
     <copy file="${src}/${modelfactorypackage}/moduleSchedule.json" todir="${destdir}/WEB-INF/classes/${modelfactorypackage}" />
   </target>
 

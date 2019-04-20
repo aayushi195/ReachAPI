@@ -8,7 +8,9 @@ import edu.asu.heal.core.api.service.HealService;
 import edu.asu.heal.core.api.service.SuggestedActivityiesMappingService.MappingFactory;
 import edu.asu.heal.core.api.service.SuggestedActivityiesMappingService.MappingInterface;
 import edu.asu.heal.reachv3.api.modelFactory.ModelFactory;
+import edu.asu.heal.reachv3.api.models.moduleProgession.ModuleInstance;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -76,17 +78,6 @@ public class ReachService implements HealService {
 			return __modelFactory.deleteActivity(activityId);
 		} catch (Exception e) {
 			System.out.println("SOME PROBLEM IN REACH SERVICE DELETE ACTIVITY INSTANCE");
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	public HashMap<String, Boolean> getScheduleOfModules(){
-
-		try{
-			return __modelFactory.getScheduleOfModules();
-		} catch (Exception e){
-			System.out.println("SOME PROBLEM IN GETTING THE SCHEDULE OF MODULES");
 			e.printStackTrace();
 			return null;
 		}
@@ -312,6 +303,19 @@ public class ReachService implements HealService {
 		}
 	}
 
+	/****************************************  Service methods for Module *********************************************/
+
+	public ModuleInstance getScheduleOfModules(int patientPin){
+
+		try{
+			return __modelFactory.getScheduleOfModules(patientPin);
+		} catch (Exception e){
+			System.out.println("SOME PROBLEM IN GETTING THE SCHEDULE OF MODULES");
+      e.printStackTrace();
+			return null;
+		}
+	}
+
 	@Override
 	public PatientSchedule updatePatientSchedule(int patientPin, String module) {
 		try {
@@ -322,5 +326,17 @@ public class ReachService implements HealService {
 		}
 	}
 
+	/****************************************  Other Service methods *********************************************/
+
+	public HashMap<String, Integer> getModuleAndDay(PatientSchedule patientSchedule, Date today) {
+
+		try{
+			return __modelFactory.getModuleAndDay(patientSchedule,today);
+		} catch (Exception e){
+			System.out.println("SOME PROBLEM IN GETTING THE SCHEDULE OF MODULES");
+			e.printStackTrace();
+			return null;
+		}
+	}
 
 }
