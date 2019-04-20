@@ -586,27 +586,20 @@ public class ModelFactory {
 		List<ModuleDetail> moduleDetails = new ArrayList<>();
 		HashMap<String,List<String>> dateMap;
 		try {
-
 			result.setPatientPin(patientPin);
 			ObjectMapper mapper = new ObjectMapper();
-
 			String moduleScheduleFileName = _properties.getProperty(MODULE_SCHEDULE_FILE);
-			
 			dateMap = this.calculateDefaultModuleDates();
-			
 			if(moduleScheduleFileName != null) {
-
 				String fileData = this.readFile(moduleScheduleFileName);
 				JSONObject scheduleJSON = new JSONObject(fileData);
 				JSONArray moduleJSON = scheduleJSON.getJSONArray("patientSchedule");
 
-			//	moduleDetails = mapper.readValue(moduleJSON.toString(),
-			//			new TypeReference<List<ModuleDetail>>(){});
+				//	moduleDetails = mapper.readValue(moduleJSON.toString(),
+				//			new TypeReference<List<ModuleDetail>>(){});
 
 				for(int i=0; i< moduleJSON.length(); i++) {
-
 					JSONObject module = moduleJSON.getJSONObject(i);
-
 					ModuleDetail obj = mapper.readValue(module.toString(), ModuleDetail.class);
 					// add start and end date for each module starting from today.
 					List<String> dateList = new ArrayList<>();
@@ -615,12 +608,9 @@ public class ModelFactory {
 					obj.setEndDate(new Date(dateList.get(1)));
 					moduleDetails.add(obj);
 				}
-
 				result.setPatientSchedule(moduleDetails);
 			}
-
 			return dao.createPatientSchedule(result);
-
 		}catch(Exception e) {
 			e.printStackTrace();
 			return null;
@@ -650,26 +640,18 @@ public class ModelFactory {
 		try {
 			int moduleDays = Integer.parseInt(_properties.getProperty(MODULE_DURATION_DAYS));
 			int totalModule = Integer.parseInt(_properties.getProperty(TOTAL_MODULE));
-			
 			Date today = new Date();
-
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(today);
 			Date startDate = today;
-
 			for(int i =1; i<=totalModule; i++) {
-
 				List<String> dateList = new ArrayList<>();
-
 				dateList.add(startDate.toString());
 				cal.add(Calendar.DATE, moduleDays-1);
-
 				Date endDate = cal.getTime();
 				dateList.add(endDate.toString());
-
 				cal.setTime(endDate);
 				cal.add(Calendar.DATE, 1);
-
 				startDate = cal.getTime();
 				result.put(String.valueOf(i), dateList);
 			}
@@ -678,9 +660,8 @@ public class ModelFactory {
 			e.printStackTrace();
 			return null;
 		}
-		
 	}
-	
+
 	public PatientSchedule getPatientSchedule(int patientPin) {
 		try {
 			return dao.getPatientSchedule(patientPin);
@@ -707,7 +688,6 @@ public class ModelFactory {
 
 			int currentModule = map.get(this.MODULE);
 			int totalModules = Integer.parseInt(_properties.getProperty(TOTAL_MODULE));
-			System.out.println(currentModule);
 
 			for(int counter = 1;counter<=totalModules;counter++){
 				ModuleBasedInstance moduleBasedInstance = new ModuleBasedInstance();
@@ -758,8 +738,41 @@ public class ModelFactory {
 				}
 
 			}
-
 			return rval;
+      }catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+  }
+
+	public PatientSchedule updatePatientSchedule(int patientPin, String module) {
+		PatientSchedule patientSchedule = null;
+		try {
+			int moduleDays = Integer.parseInt(_properties.getProperty(MODULE_DURATION_DAYS));
+			patientSchedule = dao.getPatientSchedule(patientPin);
+			if(patientSchedule == null)
+				return null; // can be null object..
+			List<ModuleDetail> moduleDetails =patientSchedule.getPatientSchedule();
+			int moduleNumber = Integer.parseInt(module) -1;
+			Date startDate = new Date();
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(startDate);
+			cal.add(Calendar.DATE, -1);
+			Date prevDay = cal.getTime();
+			cal.setTime(startDate);
+			for(int i=0;i<moduleDetails.size(); i++) {
+				if(i<moduleNumber) {
+					moduleDetails.get(i).setStartDate(prevDay);
+					moduleDetails.get(i).setEndDate(prevDay);
+				}else {
+					moduleDetails.get(i).setStartDate(startDate);
+					cal.add(Calendar.DATE, moduleDays-1);
+					moduleDetails.get(i).setEndDate(cal.getTime());
+					cal.add(Calendar.DATE, 1);
+					startDate = cal.getTime();
+				}
+			}
+			return dao.updatePatientSchedule(patientSchedule);
 		}catch(Exception e) {
 			e.printStackTrace();
 			return null;

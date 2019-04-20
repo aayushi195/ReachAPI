@@ -311,6 +311,16 @@ public class ReachService implements HealService {
 			return __modelFactory.getScheduleOfModules(patientPin);
 		} catch (Exception e){
 			System.out.println("SOME PROBLEM IN GETTING THE SCHEDULE OF MODULES");
+      e.printStackTrace();
+			return null;
+		}
+	}
+
+	@Override
+	public PatientSchedule updatePatientSchedule(int patientPin, String module) {
+		try {
+			return __modelFactory.updatePatientSchedule(patientPin, module);
+		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}

@@ -64,4 +64,6 @@ public interface HealService {
     
     PatientSchedule getPatientSchedule(int patientPin);
     
+    PatientSchedule updatePatientSchedule(int patientPin,String module);
+    
 }
