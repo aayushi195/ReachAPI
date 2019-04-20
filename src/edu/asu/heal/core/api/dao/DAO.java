@@ -89,5 +89,6 @@ public interface DAO {
     
     PatientSchedule getPatientSchedule(int patientPin);
     
+    PatientSchedule updatePatientSchedule(PatientSchedule patientSchedule);
 
 }
