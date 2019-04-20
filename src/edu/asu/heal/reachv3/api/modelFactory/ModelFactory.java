@@ -699,6 +699,10 @@ public class ModelFactory {
 		try{
 			result.setPatientPin(patientPin);
 			PatientSchedule patientSchedule = getPatientSchedule(patientPin);
+
+			if(patientSchedule==null)
+				return null;
+
 			HashMap<String,Integer> map = getModuleAndDay(patientSchedule,new Date());
 
 			int currentModule = map.get(this.MODULE);
