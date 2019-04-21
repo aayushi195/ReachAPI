@@ -9,6 +9,7 @@ import edu.asu.heal.core.api.service.SuggestedActivityiesMappingService.MappingF
 import edu.asu.heal.core.api.service.SuggestedActivityiesMappingService.MappingInterface;
 import edu.asu.heal.reachv3.api.modelFactory.ModelFactory;
 import edu.asu.heal.reachv3.api.models.moduleProgession.ModuleInstance;
+import edu.asu.heal.reachv3.api.models.patientRewards.RewardsInstance;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -244,6 +245,17 @@ public class ReachService implements HealService {
 	@Override
 	public String deletePatient(String patientPin) {
 		return "DELETE PATIENT";
+	}
+
+	public RewardsInstance getPatientRewards(int patientPin){
+		try{
+			return __modelFactory.getPatientRewards(patientPin);
+		} catch (Exception e){
+			System.out.println("SOME ERROR IN GETPATIENTREWARDS IN REACHSERVICE CLASS");
+			e.printStackTrace();
+			return null;
+		}
+
 	}
 
 	/****************************************  Service methods for Trial  *********************************************/

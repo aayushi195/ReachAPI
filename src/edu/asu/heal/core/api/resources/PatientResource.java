@@ -6,6 +6,8 @@ import edu.asu.heal.core.api.responses.HEALResponseBuilder;
 import edu.asu.heal.core.api.responses.PatientResponse;
 import edu.asu.heal.core.api.service.HealService;
 import edu.asu.heal.core.api.service.HealServiceFactory;
+import edu.asu.heal.reachv3.api.models.patientRewards.RewardsInstance;
+import edu.asu.heal.reachv3.api.service.ReachService;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -255,6 +257,7 @@ public class PatientResource {
     public Response fetchPatientRewards(@PathParam("patientPin") int patientPin) {
         HEALResponse response = null;
         HEALResponseBuilder builder;
+        ReachService service =  (ReachService) reachService;
         try {
             builder = new HEALResponseBuilder(PatientResponse.class);
         }catch (IllegalAccessException | InstantiationException ie){
@@ -262,13 +265,13 @@ public class PatientResource {
             ie.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
-        Patient patient = reachService.getPatient(patientPin);
-        if (patient == null) {
+        RewardsInstance rewardsInstance = service.getPatientRewards(patientPin);
+        if (rewardsInstance == null) {
             response = builder
                     .setStatusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
                     .setData("SOME SERVER ERROR. PLEASE CONTACT ADMINISTRATOR")
                     .build();
-        } else if (patient.equals(NullObjects.getNullPatient())) {
+        } else if (rewardsInstance.equals(NullObjects.getNullPatient())) {
             response = builder
                     .setStatusCode(Response.Status.NOT_FOUND.getStatusCode())
                     .setData("THE PATIENT YOU'RE REQUESTING DOES NOT EXIST")
@@ -276,7 +279,7 @@ public class PatientResource {
         } else {
             response = builder
                     .setStatusCode(Response.Status.OK.getStatusCode())
-                    .setData(patient)
+                    .setData(rewardsInstance)
                     .setServerURI(_uri.getBaseUri().toString())
                     .build();
         }

@@ -18,6 +18,7 @@ import edu.asu.heal.core.api.models.schedule.PatientSchedule;
 import edu.asu.heal.reachv3.api.models.*;
 import edu.asu.heal.reachv3.api.models.moduleProgession.ModuleBasedInstance;
 import edu.asu.heal.reachv3.api.models.moduleProgession.ModuleInstance;
+import edu.asu.heal.reachv3.api.models.patientRewards.RewardsInstance;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -431,6 +432,10 @@ public class ModelFactory {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	public RewardsInstance getPatientRewards(int patientPin){
+		return null;
 	}
 
 	// ************************************* ACTIVITY ****************************************************
