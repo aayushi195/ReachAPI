@@ -22,8 +22,8 @@ public class ActivityScoreDetail {
 		this.activityInstances = new HashSet<>();
 	}
 	
-	public ActivityScoreDetail(String activityName,String activityId,int actualCount,
-			int totalCount, float score,HashSet<String> activityInstances ) {
+	public ActivityScoreDetail(String activityName,String activityId,float actualCount,
+			float totalCount, float score,HashSet<String> activityInstances ) {
 		this.activityName=activityName;
 		this.activityId=activityId;
 		this.actualCount = actualCount;

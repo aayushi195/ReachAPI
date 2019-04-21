@@ -891,8 +891,8 @@ public class ModelFactory {
 		for(ActivityScheduleDetail aSchedule : actDetail ) {
 			String actName = aSchedule.getActivity();
 			String actId = dao.getActivityIdByName(actName);
-			int totalCount = aSchedule.getTotalCount();
-			int actualCount = 0;
+			float totalCount = aSchedule.getTotalCount();
+			float actualCount = 0;
 			float score =0;
 			HashSet<String> aiList = new HashSet<>();
 			if(activityName.equals(aSchedule.getActivity())) {
