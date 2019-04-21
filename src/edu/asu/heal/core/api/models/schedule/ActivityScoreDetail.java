@@ -1,16 +1,17 @@
 package edu.asu.heal.core.api.models.schedule;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public class ActivityScoreDetail {
 	
 	private String activityName;
 	private String activityId;
-	private int actualCount;
-	private int totalCount;
+	private float actualCount;
+	private float totalCount;
 	private float score;
-	private List<String> activityInstances;
+	private HashSet<String> activityInstances;
 	
 	public ActivityScoreDetail() {
 		this.activityName=null;
@@ -18,23 +19,24 @@ public class ActivityScoreDetail {
 		this.actualCount=0;
 		this.totalCount=0;
 		this.score=0;
-		this.activityInstances = new ArrayList<>();
+		this.activityInstances = new HashSet<>();
 	}
 	
 	public ActivityScoreDetail(String activityName,String activityId,int actualCount,
-			int totalCount, float score,List<String> activityInstances ) {
+			int totalCount, float score,HashSet<String> activityInstances ) {
 		this.activityName=activityName;
 		this.activityId=activityId;
 		this.actualCount = actualCount;
 		this.totalCount = totalCount;
-		this.activityInstances = new ArrayList<>(activityInstances);
+		this.score=score;
+		this.activityInstances = new HashSet<>(activityInstances);
 	}
 
-	public List<String> getActivityInstances() {
+	public HashSet<String> getActivityInstances() {
 		return activityInstances;
 	}
 
-	public void setActivityInstances(List<String> activityInstances) {
+	public void setActivityInstances(HashSet<String> activityInstances) {
 		this.activityInstances = activityInstances;
 	}
 
@@ -54,19 +56,19 @@ public class ActivityScoreDetail {
 		this.activityId = activityId;
 	}
 
-	public int getActualCount() {
+	public float getActualCount() {
 		return actualCount;
 	}
 
-	public void setActualCount(int actualCount) {
+	public void setActualCount(float actualCount) {
 		this.actualCount = actualCount;
 	}
 
-	public int getTotalCount() {
+	public float getTotalCount() {
 		return totalCount;
 	}
 
-	public void setTotalCount(int totalCount) {
+	public void setTotalCount(float totalCount) {
 		this.totalCount = totalCount;
 	}
 

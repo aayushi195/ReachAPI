@@ -1028,9 +1028,12 @@ public class MongoDBDAO implements DAO {
 			MongoCollection<PatientScoreDetail> patientScoreMongoCollection =
 					database.getCollection(PATIENT_SCORE_COLLECTION, PatientScoreDetail.class);
 
-			patientScoreMongoCollection
-					.findOneAndReplace(Filters.eq(PatientScoreDetail.PATEINT_PIN, patientScoreDetail.getPatientPin()),
+			PatientScoreDetail obj =patientScoreMongoCollection
+					.findOneAndReplace(Filters.eq(PatientScoreDetail.PATIENT_PIN, patientScoreDetail.getPatientPin()),
 							patientScoreDetail);
+			if(obj == null) {
+				patientScoreMongoCollection.insertOne(patientScoreDetail);
+			}
 			return true;
 		} catch (NullPointerException ne) {
 			System.out.println("SOME PROBLEM IN GETTING PATIENT SCHEDULE FOR PIN : " + patientScoreDetail.getPatientPin());

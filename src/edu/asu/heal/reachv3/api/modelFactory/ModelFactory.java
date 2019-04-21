@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
@@ -185,28 +186,40 @@ public class ModelFactory {
 			}
 			if(obj.has(ActivityInstance.CREATEDAT_ATTRIBUTE)
 					&& !obj.getString(ActivityInstance.CREATEDAT_ATTRIBUTE).equals("null")) {
-				createdAt = format.parse(obj.getString(ActivityInstance.CREATEDAT_ATTRIBUTE));
+				if(isLong(obj.getString(ActivityInstance.CREATEDAT_ATTRIBUTE))) 
+					createdAt = new Date(Long.parseLong(obj.getString(ActivityInstance.CREATEDAT_ATTRIBUTE)));
+				else
+					createdAt = format.parse(obj.getString(ActivityInstance.CREATEDAT_ATTRIBUTE));
 				//	createdAt = new Date(Long.parseLong(obj.getString(ActivityInstance.CREATEDAT_ATTRIBUTE)));
 			}
 			if(obj.has(ActivityInstance.STARTTIME_ATTRIBUTE)
 					&& !obj.getString(ActivityInstance.STARTTIME_ATTRIBUTE).equals("null")) {
-				//startTime = format.parse(obj.getString(ActivityInstance.STARTTIME_ATTRIBUTE));
-				startTime = new Date(Long.parseLong(obj.getString(ActivityInstance.STARTTIME_ATTRIBUTE)));
+				if(isLong(obj.getString(ActivityInstance.STARTTIME_ATTRIBUTE)))
+					startTime = new Date(Long.parseLong(obj.getString(ActivityInstance.STARTTIME_ATTRIBUTE)));
+				else
+					startTime = format.parse(obj.getString(ActivityInstance.STARTTIME_ATTRIBUTE));
 			}
 			if(obj.has(ActivityInstance.ENDTIME_ATTRIBUTE)
 					&& !obj.getString(ActivityInstance.ENDTIME_ATTRIBUTE).equals("null")) {
-				endTime = format.parse(obj.getString(ActivityInstance.ENDTIME_ATTRIBUTE));
-				//endTime = new Date(Long.parseLong(obj.getString(ActivityInstance.ENDTIME_ATTRIBUTE)));
+				if(isLong(obj.getString(ActivityInstance.ENDTIME_ATTRIBUTE)))
+					endTime = new Date(Long.parseLong(obj.getString(ActivityInstance.ENDTIME_ATTRIBUTE)));
+				else
+					endTime = format.parse(obj.getString(ActivityInstance.ENDTIME_ATTRIBUTE));
 			}
 			if(obj.has(ActivityInstance.USERSUBMISSIONTIME_ATTRIBUTE)
 					&& !obj.getString(ActivityInstance.USERSUBMISSIONTIME_ATTRIBUTE).equals("null")) {
-				userSubmissionTime = format.parse(obj.getString(ActivityInstance.USERSUBMISSIONTIME_ATTRIBUTE));
-				//userSubmissionTime = new Date(Long.parseLong(obj.getString(ActivityInstance.USERSUBMISSIONTIME_ATTRIBUTE)));
+				if(isLong(obj.getString(ActivityInstance.USERSUBMISSIONTIME_ATTRIBUTE)))
+					userSubmissionTime = new Date(Long.parseLong(obj.getString(ActivityInstance.USERSUBMISSIONTIME_ATTRIBUTE)));
+				else
+					userSubmissionTime = format.parse(obj.getString(ActivityInstance.USERSUBMISSIONTIME_ATTRIBUTE));
+				
 			}
 			if(obj.has(ActivityInstance.ACTUALSUBMISSIONTIME_ATTRIBUTE)
 					&& !obj.getString(ActivityInstance.ACTUALSUBMISSIONTIME_ATTRIBUTE).equals("null")) {
-				actualSubmissionTime = format.parse(obj.getString(ActivityInstance.ACTUALSUBMISSIONTIME_ATTRIBUTE));
-				//	actualSubmissionTime = new Date(Long.parseLong(obj.getString(ActivityInstance.ACTUALSUBMISSIONTIME_ATTRIBUTE)));
+				if(isLong(obj.getString(ActivityInstance.ACTUALSUBMISSIONTIME_ATTRIBUTE)))
+					actualSubmissionTime = new Date(Long.parseLong(obj.getString(ActivityInstance.ACTUALSUBMISSIONTIME_ATTRIBUTE)));
+				else
+					actualSubmissionTime = format.parse(obj.getString(ActivityInstance.ACTUALSUBMISSIONTIME_ATTRIBUTE));
 			}
 			if(obj.has(ActivityInstance.PATIENT_PIN)
 					&& obj.getInt(ActivityInstance.PATIENT_PIN) != -1) {
@@ -824,7 +837,7 @@ public class ModelFactory {
 		}
 
 		HashMap<String, Integer> map = getModuleAndDay(patientSchedule, new Date());
-		Integer module =-1, dayOfModule =-1;
+		Integer module =-1, dayOfModule =-1,moduleIndex=-1;
 		if(map != null && map.size() > 0) {
 			if (map.containsKey(this.MODULE) && map.get(this.MODULE) != null)
 				module = map.get(this.MODULE);
@@ -836,16 +849,12 @@ public class ModelFactory {
 		}else {
 			module -=1;
 			if(patientScoreDetail == null) {
-
 				patientScoreDetail=createModuleScoreDetail(patientPin, activityInstanceId, activityId,
 						activityName, patientSchedule, patientScoreDetail, module, dayOfModule);
 				// Create object for the patient.
-
 			}else {
-
 				patientScoreDetail= updateModuleScoreDetail(patientPin, activityInstanceId, activityId,
 						activityName, patientSchedule, patientScoreDetail, module, dayOfModule);
-
 			}
 			if(dao.updatePatientScoreDetail(patientScoreDetail)) 
 				return true;
@@ -873,9 +882,10 @@ public class ModelFactory {
 		}
 		DayDetail dayDetail =patientSchedule.getPatientSchedule().get(module).getSchedule().get(0);
 		List<ActivityScheduleDetail> actDetail = dayDetail.getActivitySchedule();
-
+		Integer moduleValue = module+1;
+		
 		ModuleScoreDetail moduleScoreDetail = new ModuleScoreDetail();
-		moduleScoreDetail.setModule(module.toString());
+		moduleScoreDetail.setModule(moduleValue.toString());
 		moduleScoreDetail.setDaySoFar(dayOfModule);
 		List<ActivityScoreDetail> actScore = new ArrayList<>();
 		for(ActivityScheduleDetail aSchedule : actDetail ) {
@@ -884,7 +894,7 @@ public class ModelFactory {
 			int totalCount = aSchedule.getTotalCount();
 			int actualCount = 0;
 			float score =0;
-			List<String> aiList = new ArrayList<>();
+			HashSet<String> aiList = new HashSet<>();
 			if(activityName.equals(aSchedule.getActivity())) {
 				actualCount += 1;
 				score = (actualCount/totalCount)*100;
@@ -896,9 +906,9 @@ public class ModelFactory {
 		}
 		moduleScoreDetail.setActivityScores(actScore);
 		mScoreDetails.add(moduleScoreDetail);
-		patientScoreDetail.setScoreData(mScoreDetails);
-
-		return patientScoreDetail;
+		pDetail.setScoreData(mScoreDetails);
+	
+		return pDetail;
 
 	}
 
@@ -906,7 +916,7 @@ public class ModelFactory {
 	public PatientScoreDetail updateModuleScoreDetail(int patientPin, String activityInstanceId, String activityId, 
 			String activityName, PatientSchedule patientSchedule,
 			PatientScoreDetail patientScoreDetail, Integer module, Integer dayOfModule) {
-
+		Integer moduleValue = module+1;
 		List<ModuleScoreDetail> moduleScoreList = patientScoreDetail.getScoreData();
 		List<ActivityScheduleDetail> aScheduleList = patientSchedule.getPatientSchedule().get(module)
 				.getSchedule().get(0).getActivitySchedule();
@@ -917,14 +927,16 @@ public class ModelFactory {
 		int tc =0;
 		if(activityScheduleDetail != null)
 			tc = activityScheduleDetail.getTotalCount();
+		
 		ModuleScoreDetail moduleScoreDetail = moduleScoreList.stream() 
-				.filter(x -> (module.toString()).equals(x.getModule()))   
+				.filter(x -> (moduleValue.toString()).equals(x.getModule()))   
 				.findAny()                                     		 
 				.orElse(null);
+		
 		if(moduleScoreDetail != null) {
 			List<ActivityScoreDetail> activityScoreDetails = moduleScoreDetail.getActivityScores();
 			for(ActivityScoreDetail actScore : activityScoreDetails) {
-				int totalCount, actualCount;
+				float totalCount, actualCount;
 				float score;
 				totalCount = actScore.getTotalCount();
 				if(dayOfModule > moduleScoreDetail.getDaySoFar()) {
@@ -934,9 +946,12 @@ public class ModelFactory {
 				if(actScore.getActivityName().equalsIgnoreCase(activityName)) {
 					actualCount = actScore.getActualCount() + 1;
 					score = (actualCount/totalCount)*100;
+					if(score >100) {
+						score =100;
+					}
 					actScore.setActualCount(actualCount);
 					actScore.setScore(score);
-					List<String> aiList = actScore.getActivityInstances();
+					HashSet<String> aiList = actScore.getActivityInstances();
 					aiList.add(activityInstanceId);
 					actScore.setActivityInstances(aiList);
 				}
@@ -949,6 +964,15 @@ public class ModelFactory {
 		}
 	}
 
+	public boolean isLong(String s) {
+		try {
+			long l = Long.parseLong(s);
+			return true;
+		}catch (Exception e) {
+			// TODO: handle exception
+			return false;
+		}
+	}
 
 
 }

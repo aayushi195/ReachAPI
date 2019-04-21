@@ -5,7 +5,7 @@ import java.util.List;
 
 public class PatientScoreDetail {
 
-	public static final String PATEINT_PIN = "patientPin";
+	public static final String PATIENT_PIN = "patientPin";
 	public static final String SCORE_DATA = "scoreData";
 	
 	
