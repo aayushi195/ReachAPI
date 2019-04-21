@@ -240,4 +240,48 @@ public class PatientResource {
 
     }
 
+    /**
+     * @api {get} /patient/:id Get detail for a specific Patient
+     * @apiName GetPatientDetail
+     * @apiGroup Patient
+     * @apiParam {Number} id Patient's Unique Id
+     * @apiSampleRequest http://localhost:8080/ReachAPI/rest/patients/4014
+     * @apiUse InternalServerError
+     * @apiUse PatientNotFoundError
+     */
+    @GET
+    @Path("/{patientPin}/rewards")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response fetchPatientRewards(@PathParam("patientPin") int patientPin) {
+        HEALResponse response = null;
+        HEALResponseBuilder builder;
+        try {
+            builder = new HEALResponseBuilder(PatientResponse.class);
+        }catch (IllegalAccessException | InstantiationException ie){
+            System.out.println("SOME SERVER ERROR. PLEASE CONTACT ADMINISTRATOR");
+            ie.printStackTrace();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
+        Patient patient = reachService.getPatient(patientPin);
+        if (patient == null) {
+            response = builder
+                    .setStatusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
+                    .setData("SOME SERVER ERROR. PLEASE CONTACT ADMINISTRATOR")
+                    .build();
+        } else if (patient.equals(NullObjects.getNullPatient())) {
+            response = builder
+                    .setStatusCode(Response.Status.NOT_FOUND.getStatusCode())
+                    .setData("THE PATIENT YOU'RE REQUESTING DOES NOT EXIST")
+                    .build();
+        } else {
+            response = builder
+                    .setStatusCode(Response.Status.OK.getStatusCode())
+                    .setData(patient)
+                    .setServerURI(_uri.getBaseUri().toString())
+                    .build();
+        }
+
+        return Response.status(response.getStatusCode()).entity(response.toEntity()).build();
+    }
+
 }
