@@ -912,7 +912,7 @@ public class ModelFactory {
 
 	}
 
-	// Create module score data for the patient.
+	// Update module score data for the patient.
 	public PatientScoreDetail updateModuleScoreDetail(int patientPin, String activityInstanceId, String activityId, 
 			String activityName, PatientSchedule patientSchedule,
 			PatientScoreDetail patientScoreDetail, Integer module, Integer dayOfModule) {
