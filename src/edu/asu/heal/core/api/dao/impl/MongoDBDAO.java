@@ -20,6 +20,7 @@ import edu.asu.heal.core.api.models.*;
 import edu.asu.heal.core.api.models.schedule.PatientSchedule;
 import edu.asu.heal.core.api.models.schedule.PatientScoreDetail;
 import edu.asu.heal.reachv3.api.models.*;
+import edu.asu.heal.reachv3.api.models.patientRewards.RewardsInstance;
 import org.bson.Document;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
@@ -51,7 +52,7 @@ public class MongoDBDAO implements DAO {
 	private static final String EMOTIONS_COLLECTION = "emotions";
 	private static final String PATIENT_SCHEDULE_COLLECTION = "patientSchedules";
 	private static final String PATIENT_SCORE_COLLECTION = "patientScores";
-	
+	private static final String PATIENT_REWARDS_COLLECTION = "rewards";
 
 	private static String __mongoDBName;
 	private static String __mongoURI;
@@ -1043,6 +1044,32 @@ public class MongoDBDAO implements DAO {
 			System.out.println("SOME SERVER PROBLEM IN GET PATIENT SCHEDULE");
 			e.printStackTrace();
 			return false;
+		}
+	}
+
+	@Override
+	public RewardsInstance createPatientRewards(RewardsInstance rewardsInstance, int patientPin) {
+		try{
+			MongoDatabase database = MongoDBDAO.getConnectedDatabase();
+
+			MongoCollection<RewardsInstance> rewardsMongoCollection =
+					database.getCollection(PATIENT_REWARDS_COLLECTION, RewardsInstance.class);
+
+			RewardsInstance obj =rewardsMongoCollection
+					.findOneAndReplace(Filters.eq(PatientScoreDetail.PATIENT_PIN, rewardsInstance.getPatientPin()),
+							rewardsInstance);
+			if(obj == null) {
+				rewardsMongoCollection.insertOne(rewardsInstance);
+			}
+			return rewardsInstance;
+		} catch (NullPointerException ne) {
+			System.out.println("SOME PROBLEM IN GETTING PATIENT SCHEDULE FOR PIN : " + rewardsInstance.getPatientPin());
+			ne.printStackTrace();
+			return null;
+		} catch (Exception e) {
+			System.out.println("SOME SERVER PROBLEM IN GET PATIENT SCHEDULE");
+			e.printStackTrace();
+			return null;
 		}
 	}
 

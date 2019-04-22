@@ -503,6 +503,8 @@ public class ModelFactory {
 				}
 			}
 			rewardsInstance.setRewards(rewardsBasedInstances);
+			if(rewardsInstance!=null)
+				dao.createPatientRewards(rewardsInstance,patientPin);
 			return rewardsInstance;
 
 		} catch (Exception e){
