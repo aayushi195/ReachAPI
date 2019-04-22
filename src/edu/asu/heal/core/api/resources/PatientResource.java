@@ -253,7 +253,6 @@ public class PatientResource {
      */
     @GET
     @Path("/{patientPin}/rewards")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response fetchPatientRewards(@PathParam("patientPin") int patientPin) {
         HEALResponse response = null;
         HEALResponseBuilder builder;
@@ -284,7 +283,7 @@ public class PatientResource {
                     .build();
         }
 
-        return Response.status(response.getStatusCode()).entity(response.toEntity()).build();
+        return Response.status(response.getStatusCode()).entity(rewardsInstance).build();
     }
 
 }

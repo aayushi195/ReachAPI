@@ -21,6 +21,7 @@ import edu.asu.heal.core.api.models.schedule.PatientScoreDetail;
 import edu.asu.heal.reachv3.api.models.*;
 import edu.asu.heal.reachv3.api.models.moduleProgession.ModuleBasedInstance;
 import edu.asu.heal.reachv3.api.models.moduleProgession.ModuleInstance;
+import edu.asu.heal.reachv3.api.models.patientRewards.RewardsBasedInstance;
 import edu.asu.heal.reachv3.api.models.patientRewards.RewardsInstance;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -39,9 +40,11 @@ public class ModelFactory {
 	private static String MODULE_SCHEDULE_FILE= "module.schedule";
 	private static String MODULE_DURATION_DAYS= "module.duration.days";
 	private static String TOTAL_MODULE= "total.modules";
+	private static String TOTAL_SKILLS = "total.skills";
 	private static String MODULE="module";
 	private static String DAY="day";
 	private static String INFORMATION_MODULE_CONTENT= "introduction.module.";
+	private static String SKILL_NAME = "skill.";
 
 	static {
 		_properties = new Properties();
@@ -459,7 +462,51 @@ public class ModelFactory {
 	}
 
 	public RewardsInstance getPatientRewards(int patientPin){
-		return null;
+
+		RewardsInstance rewardsInstance = new RewardsInstance();
+		List<RewardsBasedInstance> rewardsBasedInstances = new ArrayList<>();
+
+		int totalSkills = Integer.parseInt(_properties.getProperty(TOTAL_SKILLS));
+		try{
+			rewardsInstance.setPatientPin(patientPin);
+			PatientScoreDetail patientScoreDetail = dao.getPatientScoreDetail(patientPin);
+			PatientSchedule patientSchedule = dao.getPatientSchedule(patientPin);
+			int rewardsLevel;
+			HashMap<String,Integer> map = getModuleAndDay(patientSchedule,new Date());
+			int currentModule = map.get(this.MODULE);
+
+			System.out.println(currentModule);
+
+			for(int counter = currentModule-1; counter>=0;counter--){
+				//Starts from current module and goes till the first one
+
+				for(int i=0;i<totalSkills;i++){
+					//Loops to check the skills if present in that module
+					RewardsBasedInstance rewardsBasedInstance = new RewardsBasedInstance();
+					String propertySkillName = _properties.getProperty(SKILL_NAME+(i+1));
+
+					int activitylength = patientScoreDetail.getScoreData().get(counter).getActivityScores().size();
+					for(int j=0;j<activitylength;j++){
+						String skillName =
+								patientScoreDetail.getScoreData().get(counter).getActivityScores().get(j).getActivityName();
+						float score = patientScoreDetail.getScoreData().get(counter).getActivityScores().get(j).getScore();
+						if(skillName.equals(propertySkillName)){
+							rewardsBasedInstance.setSkill(propertySkillName);
+							rewardsLevel = getLevelOfRewards(score);
+							rewardsBasedInstance.setLevel(rewardsLevel);
+							rewardsBasedInstances.add(rewardsBasedInstance);
+						}
+
+					}
+				}
+			}
+			rewardsInstance.setRewards(rewardsBasedInstances);
+			return rewardsInstance;
+
+		} catch (Exception e){
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	// ************************************* ACTIVITY ****************************************************
@@ -974,6 +1021,19 @@ public class ModelFactory {
 			// TODO: handle exception
 			return false;
 		}
+	}
+
+	public int getLevelOfRewards(float score){
+		if(score==0)
+			return 0;
+		else if(score>0 && score <=33)
+			return 1;
+		else if(score>33 && score <=66)
+			return 2;
+		else if(score>66 && score<=100)
+			return 3;
+
+		return -1;
 	}
 
 
