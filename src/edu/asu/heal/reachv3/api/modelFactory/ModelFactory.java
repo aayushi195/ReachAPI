@@ -473,9 +473,9 @@ public class ModelFactory {
 			PatientSchedule patientSchedule = dao.getPatientSchedule(patientPin);
 			int rewardsLevel;
 			HashMap<String,Integer> map = getModuleAndDay(patientSchedule,new Date());
-			int currentModule = map.get(this.MODULE);
+			HashMap<String,Boolean> skillSetMap = new HashMap<>();
 
-			System.out.println(currentModule);
+			int currentModule = map.get(this.MODULE);
 
 			for(int counter = currentModule-1; counter>=0;counter--){
 				//Starts from current module and goes till the first one
@@ -490,7 +490,9 @@ public class ModelFactory {
 						String skillName =
 								patientScoreDetail.getScoreData().get(counter).getActivityScores().get(j).getActivityName();
 						float score = patientScoreDetail.getScoreData().get(counter).getActivityScores().get(j).getScore();
-						if(skillName.equals(propertySkillName)){
+
+						if(skillName.equals(propertySkillName) && !skillSetMap.getOrDefault(skillName,false)){
+							skillSetMap.put(skillName,true);
 							rewardsBasedInstance.setSkill(propertySkillName);
 							rewardsLevel = getLevelOfRewards(score);
 							rewardsBasedInstance.setLevel(rewardsLevel);
