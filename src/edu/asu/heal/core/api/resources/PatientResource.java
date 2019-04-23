@@ -266,7 +266,7 @@ public class PatientResource {
         }
         RewardsInstance rewardsInstance = service.getPatientRewards(patientPin);
         if (rewardsInstance == null) {
-            return Response.status(Response.Status.BAD_REQUEST.getStatusCode()).entity(rewardsInstance).build();
+           // return Response.status(Response.Status.BAD_REQUEST.getStatusCode()).entity(rewardsInstance).build();
 
         } else if (rewardsInstance.equals(NullObjects.getNullPatient())) {
             response = builder
