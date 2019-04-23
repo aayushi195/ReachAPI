@@ -4,6 +4,7 @@ import edu.asu.heal.core.api.models.*;
 import edu.asu.heal.core.api.models.schedule.PatientSchedule;
 import edu.asu.heal.core.api.models.schedule.PatientScoreDetail;
 import edu.asu.heal.reachv3.api.models.*;
+import edu.asu.heal.reachv3.api.models.patientRewards.RewardsInstance;
 
 import java.util.List;
 
@@ -99,5 +100,7 @@ public interface DAO {
     PatientScoreDetail getPatientScoreDetail(int patientPin);
     
     boolean updatePatientScoreDetail(PatientScoreDetail patientScoreDetail);
+
+    RewardsInstance createPatientRewards(RewardsInstance rewardsInstance,int patientPin);
 
 }
