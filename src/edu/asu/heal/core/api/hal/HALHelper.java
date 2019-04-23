@@ -2,6 +2,7 @@ package edu.asu.heal.core.api.hal;
 
 import edu.asu.heal.core.api.models.*;
 import edu.asu.heal.core.api.models.schedule.PatientSchedule;
+import edu.asu.heal.reachv3.api.models.moduleProgession.ModuleActivityList;
 import edu.asu.heal.reachv3.api.models.moduleProgession.ModuleInstance;
 
 import java.util.List;
@@ -28,6 +29,8 @@ public interface HALHelper {
     String getPatientScheduleJSON(PatientSchedule patientSchedule,String patientSchedulePath,  String patientResourcePath);
 
     String getmoduleProgressionJSON(ModuleInstance moduleInstance, String patientResourcePath);
+    
+    String getmoduleActivitiesJSON(ModuleActivityList moduleInstance, String patientResourcePath);
 
 
 }

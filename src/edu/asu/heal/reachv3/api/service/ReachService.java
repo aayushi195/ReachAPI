@@ -8,6 +8,7 @@ import edu.asu.heal.core.api.service.HealService;
 import edu.asu.heal.core.api.service.SuggestedActivityiesMappingService.MappingFactory;
 import edu.asu.heal.core.api.service.SuggestedActivityiesMappingService.MappingInterface;
 import edu.asu.heal.reachv3.api.modelFactory.ModelFactory;
+import edu.asu.heal.reachv3.api.models.moduleProgession.ModuleActivityList;
 import edu.asu.heal.reachv3.api.models.moduleProgession.ModuleInstance;
 
 import java.util.Date;
@@ -282,6 +283,8 @@ public class ReachService implements HealService {
 			return null;
 		}
 	}
+	
+	/******************************** Schedule Methods **********************************************************/
 
 	@Override
 	public PatientSchedule createPatientSchedule(int patientPin) {
@@ -302,6 +305,16 @@ public class ReachService implements HealService {
 			return null;
 		}
 	}
+	
+	@Override
+	public PatientSchedule updatePatientSchedule(int patientPin, String module) {
+		try {
+			return __modelFactory.updatePatientSchedule(patientPin, module);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 
 	/****************************************  Service methods for Module *********************************************/
 
@@ -315,16 +328,17 @@ public class ReachService implements HealService {
 			return null;
 		}
 	}
-
-	@Override
-	public PatientSchedule updatePatientSchedule(int patientPin, String module) {
-		try {
-			return __modelFactory.updatePatientSchedule(patientPin, module);
-		} catch (Exception e) {
-			e.printStackTrace();
+	
+	public ModuleActivityList getActivityListWithCallToAction(String module, int patientPin) {
+		try{
+			return __modelFactory.getActivityListWithCallToAction(module,patientPin);
+		} catch (Exception e){
+			System.out.println("SOME PROBLEM IN GETTING THE SCHEDULE OF MODULES");
+      e.printStackTrace();
 			return null;
 		}
 	}
+
 
 	/****************************************  Other Service methods *********************************************/
 
