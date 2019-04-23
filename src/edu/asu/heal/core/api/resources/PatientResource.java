@@ -266,10 +266,8 @@ public class PatientResource {
         }
         RewardsInstance rewardsInstance = service.getPatientRewards(patientPin);
         if (rewardsInstance == null) {
-            response = builder
-                    .setStatusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
-                    .setData("SOME SERVER ERROR. PLEASE CONTACT ADMINISTRATOR")
-                    .build();
+            return Response.status(Response.Status.BAD_REQUEST.getStatusCode()).entity(rewardsInstance).build();
+
         } else if (rewardsInstance.equals(NullObjects.getNullPatient())) {
             response = builder
                     .setStatusCode(Response.Status.NOT_FOUND.getStatusCode())
@@ -283,7 +281,7 @@ public class PatientResource {
                     .build();
         }
 
-        return Response.status(response.getStatusCode()).entity(rewardsInstance).build();
+        return Response.status(Response.Status.OK.getStatusCode()).entity(rewardsInstance).build();
     }
 
 }

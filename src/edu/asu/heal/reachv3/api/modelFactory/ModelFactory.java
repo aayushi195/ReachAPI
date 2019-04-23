@@ -473,26 +473,36 @@ public class ModelFactory {
 		try{
 			rewardsInstance.setPatientPin(patientPin);
 			PatientScoreDetail patientScoreDetail = dao.getPatientScoreDetail(patientPin);
+			if(patientScoreDetail==null)
+				return null;
 			PatientSchedule patientSchedule = dao.getPatientSchedule(patientPin);
+			if(patientSchedule==null)
+				return null;
 			int rewardsLevel;
 			HashMap<String,Integer> map = getModuleAndDay(patientSchedule,new Date());
 			HashMap<String,Boolean> skillSetMap = new HashMap<>();
 
-			int currentModule = map.get(this.MODULE);
+			Integer currentModule = map.get(this.MODULE);
 
-			for(int counter = currentModule-1; counter>=0;counter--){
+			for(Integer counter = currentModule; counter>0;counter--){
 				//Starts from current module and goes till the first one
+				List<ModuleScoreDetail> moduleScoreDetails = patientScoreDetail.getScoreData();
+
+				ModuleScoreDetail moduleScoreDetail = getModuleScoreDetail(moduleScoreDetails,counter);
+
+				if(moduleScoreDetail == null)
+					continue;
 
 				for(int i=0;i<totalSkills;i++){
 					//Loops to check the skills if present in that module
 					RewardsBasedInstance rewardsBasedInstance = new RewardsBasedInstance();
 					String propertySkillName = _properties.getProperty(SKILL_NAME+(i+1));
 
-					int activitylength = patientScoreDetail.getScoreData().get(counter).getActivityScores().size();
+					int activitylength = moduleScoreDetail.getActivityScores().size();
 					for(int j=0;j<activitylength;j++){
 						String skillName =
-								patientScoreDetail.getScoreData().get(counter).getActivityScores().get(j).getActivityName();
-						float score = patientScoreDetail.getScoreData().get(counter).getActivityScores().get(j).getScore();
+								moduleScoreDetail.getActivityScores().get(j).getActivityName();
+						float score = moduleScoreDetail.getActivityScores().get(j).getScore();
 
 						if(skillName.equals(propertySkillName) && !skillSetMap.getOrDefault(skillName,false)){
 							skillSetMap.put(skillName,true);
@@ -514,6 +524,14 @@ public class ModelFactory {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	public ModuleScoreDetail getModuleScoreDetail(List<ModuleScoreDetail> moduleScoreDetails, Integer count){
+
+		return moduleScoreDetails.stream()
+				.filter(x -> (count.toString()).equals(x.getModule()))
+				.findAny()
+				.orElse(null);
 	}
 
 	// ************************************* ACTIVITY ****************************************************
