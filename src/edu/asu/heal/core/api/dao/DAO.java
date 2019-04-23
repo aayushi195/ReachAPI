@@ -2,6 +2,7 @@ package edu.asu.heal.core.api.dao;
 
 import edu.asu.heal.core.api.models.*;
 import edu.asu.heal.core.api.models.schedule.PatientSchedule;
+import edu.asu.heal.core.api.models.schedule.PatientScoreDetail;
 import edu.asu.heal.reachv3.api.models.*;
 
 import java.util.List;
@@ -76,6 +77,8 @@ public interface DAO {
     FaceItActivityInstance getActivityFaceInstanceDAO(String activityInstanceId);
 
     String getActivityNameById(String activityId);
+    
+    String getActivityIdByName(String activityName);
 
     DailyDiarySituation getDailyDiarySituation();
 
@@ -90,5 +93,11 @@ public interface DAO {
     PatientSchedule getPatientSchedule(int patientPin);
     
     PatientSchedule updatePatientSchedule(PatientSchedule patientSchedule);
+    
+    /********************************* Patient Score Data *********************************************************/
+    
+    PatientScoreDetail getPatientScoreDetail(int patientPin);
+    
+    boolean updatePatientScoreDetail(PatientScoreDetail patientScoreDetail);
 
 }

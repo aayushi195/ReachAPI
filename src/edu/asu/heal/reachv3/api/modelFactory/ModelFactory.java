@@ -6,18 +6,24 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import edu.asu.heal.core.api.models.*;
+import edu.asu.heal.core.api.models.schedule.ActivityScheduleDetail;
+import edu.asu.heal.core.api.models.schedule.ActivityScoreDetail;
 import edu.asu.heal.core.api.models.schedule.DayDetail;
 import edu.asu.heal.core.api.models.schedule.ModuleDetail;
+import edu.asu.heal.core.api.models.schedule.ModuleScoreDetail;
 import edu.asu.heal.core.api.models.schedule.PatientSchedule;
+import edu.asu.heal.core.api.models.schedule.PatientScoreDetail;
 import edu.asu.heal.reachv3.api.models.*;
 import edu.asu.heal.reachv3.api.models.moduleProgession.ModuleBasedInstance;
 import edu.asu.heal.reachv3.api.models.moduleProgession.ModuleInstance;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -130,6 +136,15 @@ public class ModelFactory {
 			activityInstance = getActitvityInstanceOfType(activityName,activityInstance,
 					extendedActivityInstance,situationJson);
 
+			if(activityInstance.getState().equals(ActivityInstanceStatus.COMPLETED.status())) {
+				if(updatePatientScoreDetail(activityInstance.getPatientPin(), activityInstance.getActivityInstanceId(),
+						activityInstance.getActivityId(), activityName)) {
+					System.out.println("Score date is succsessfully update for pin : " + activityInstance.getPatientPin());
+				}else {
+					System.out.println(" FAILURE !!!!!!! : Score date is NOT updated for pin : " + activityInstance.getPatientPin());
+				}
+			}
+
 			if(dao.updateActivityInstance(activityInstance)){
 				return activityInstance;
 			}
@@ -171,28 +186,40 @@ public class ModelFactory {
 			}
 			if(obj.has(ActivityInstance.CREATEDAT_ATTRIBUTE)
 					&& !obj.getString(ActivityInstance.CREATEDAT_ATTRIBUTE).equals("null")) {
-				createdAt = format.parse(obj.getString(ActivityInstance.CREATEDAT_ATTRIBUTE));
+				if(isLong(obj.getString(ActivityInstance.CREATEDAT_ATTRIBUTE))) 
+					createdAt = new Date(Long.parseLong(obj.getString(ActivityInstance.CREATEDAT_ATTRIBUTE)));
+				else
+					createdAt = format.parse(obj.getString(ActivityInstance.CREATEDAT_ATTRIBUTE));
 				//	createdAt = new Date(Long.parseLong(obj.getString(ActivityInstance.CREATEDAT_ATTRIBUTE)));
 			}
 			if(obj.has(ActivityInstance.STARTTIME_ATTRIBUTE)
 					&& !obj.getString(ActivityInstance.STARTTIME_ATTRIBUTE).equals("null")) {
-				//startTime = format.parse(obj.getString(ActivityInstance.STARTTIME_ATTRIBUTE));
-				startTime = new Date(Long.parseLong(obj.getString(ActivityInstance.STARTTIME_ATTRIBUTE)));
+				if(isLong(obj.getString(ActivityInstance.STARTTIME_ATTRIBUTE)))
+					startTime = new Date(Long.parseLong(obj.getString(ActivityInstance.STARTTIME_ATTRIBUTE)));
+				else
+					startTime = format.parse(obj.getString(ActivityInstance.STARTTIME_ATTRIBUTE));
 			}
 			if(obj.has(ActivityInstance.ENDTIME_ATTRIBUTE)
 					&& !obj.getString(ActivityInstance.ENDTIME_ATTRIBUTE).equals("null")) {
-				endTime = format.parse(obj.getString(ActivityInstance.ENDTIME_ATTRIBUTE));
-				//endTime = new Date(Long.parseLong(obj.getString(ActivityInstance.ENDTIME_ATTRIBUTE)));
+				if(isLong(obj.getString(ActivityInstance.ENDTIME_ATTRIBUTE)))
+					endTime = new Date(Long.parseLong(obj.getString(ActivityInstance.ENDTIME_ATTRIBUTE)));
+				else
+					endTime = format.parse(obj.getString(ActivityInstance.ENDTIME_ATTRIBUTE));
 			}
 			if(obj.has(ActivityInstance.USERSUBMISSIONTIME_ATTRIBUTE)
 					&& !obj.getString(ActivityInstance.USERSUBMISSIONTIME_ATTRIBUTE).equals("null")) {
-				userSubmissionTime = format.parse(obj.getString(ActivityInstance.USERSUBMISSIONTIME_ATTRIBUTE));
-				//userSubmissionTime = new Date(Long.parseLong(obj.getString(ActivityInstance.USERSUBMISSIONTIME_ATTRIBUTE)));
+				if(isLong(obj.getString(ActivityInstance.USERSUBMISSIONTIME_ATTRIBUTE)))
+					userSubmissionTime = new Date(Long.parseLong(obj.getString(ActivityInstance.USERSUBMISSIONTIME_ATTRIBUTE)));
+				else
+					userSubmissionTime = format.parse(obj.getString(ActivityInstance.USERSUBMISSIONTIME_ATTRIBUTE));
+				
 			}
 			if(obj.has(ActivityInstance.ACTUALSUBMISSIONTIME_ATTRIBUTE)
 					&& !obj.getString(ActivityInstance.ACTUALSUBMISSIONTIME_ATTRIBUTE).equals("null")) {
-				actualSubmissionTime = format.parse(obj.getString(ActivityInstance.ACTUALSUBMISSIONTIME_ATTRIBUTE));
-				//	actualSubmissionTime = new Date(Long.parseLong(obj.getString(ActivityInstance.ACTUALSUBMISSIONTIME_ATTRIBUTE)));
+				if(isLong(obj.getString(ActivityInstance.ACTUALSUBMISSIONTIME_ATTRIBUTE)))
+					actualSubmissionTime = new Date(Long.parseLong(obj.getString(ActivityInstance.ACTUALSUBMISSIONTIME_ATTRIBUTE)));
+				else
+					actualSubmissionTime = format.parse(obj.getString(ActivityInstance.ACTUALSUBMISSIONTIME_ATTRIBUTE));
 			}
 			if(obj.has(ActivityInstance.PATIENT_PIN)
 					&& obj.getInt(ActivityInstance.PATIENT_PIN) != -1) {
@@ -617,55 +644,44 @@ public class ModelFactory {
 		}
 	}
 
-	public static String readFile(String filename) {
-		String result = "";
+	public PatientSchedule getPatientSchedule(int patientPin) {
 		try {
-			InputStream inputStream = ModelFactory.class.getResourceAsStream(filename);
-			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-			StringBuilder stringBuilder = new StringBuilder();
-			String line = bufferedReader.readLine();
-			while (line != null) {
-				stringBuilder.append(line);
-				line = bufferedReader.readLine();
-			}
-			result = stringBuilder.toString();
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-		return result;
-	}
-
-	public HashMap<String,List<String>> calculateDefaultModuleDates(){
-		HashMap<String,List<String>> result = new HashMap<>();
-		try {
-			int moduleDays = Integer.parseInt(_properties.getProperty(MODULE_DURATION_DAYS));
-			int totalModule = Integer.parseInt(_properties.getProperty(TOTAL_MODULE));
-			Date today = new Date();
-			Calendar cal = Calendar.getInstance();
-			cal.setTime(today);
-			Date startDate = today;
-			for(int i =1; i<=totalModule; i++) {
-				List<String> dateList = new ArrayList<>();
-				dateList.add(startDate.toString());
-				cal.add(Calendar.DATE, moduleDays-1);
-				Date endDate = cal.getTime();
-				dateList.add(endDate.toString());
-				cal.setTime(endDate);
-				cal.add(Calendar.DATE, 1);
-				startDate = cal.getTime();
-				result.put(String.valueOf(i), dateList);
-			}
-			return result;
-		}catch(Exception e) {
+			return dao.getPatientSchedule(patientPin);
+		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
 
-	public PatientSchedule getPatientSchedule(int patientPin) {
+	public PatientSchedule updatePatientSchedule(int patientPin, String module) {
+		PatientSchedule patientSchedule = null;
 		try {
-			return dao.getPatientSchedule(patientPin);
-		} catch (Exception e) {
+			int moduleDays = Integer.parseInt(_properties.getProperty(MODULE_DURATION_DAYS));
+			patientSchedule = dao.getPatientSchedule(patientPin);
+			if(patientSchedule == null)
+				return null; // can be null object..
+			List<ModuleDetail> moduleDetails =patientSchedule.getPatientSchedule();
+			int moduleNumber = Integer.parseInt(module) -1;
+			Date startDate = new Date();
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(startDate);
+			cal.add(Calendar.DATE, -1);
+			Date prevDay = cal.getTime();
+			cal.setTime(startDate);
+			for(int i=0;i<moduleDetails.size(); i++) {
+				if(i<moduleNumber) {
+					moduleDetails.get(i).setStartDate(prevDay);
+					moduleDetails.get(i).setEndDate(prevDay);
+				}else {
+					moduleDetails.get(i).setStartDate(startDate);
+					cal.add(Calendar.DATE, moduleDays-1);
+					moduleDetails.get(i).setEndDate(cal.getTime());
+					cal.add(Calendar.DATE, 1);
+					startDate = cal.getTime();
+				}
+			}
+			return dao.updatePatientSchedule(patientSchedule);
+		}catch(Exception e) {
 			e.printStackTrace();
 			return null;
 		}
@@ -711,6 +727,10 @@ public class ModelFactory {
 
 	}
 
+	/************************************ Helper service methods *************************************************/
+
+
+	// To get current module and day based on current date for the patient.
 	public HashMap<String, Integer> getModuleAndDay(PatientSchedule patientSchedule, Date today) {
 
 		if (patientSchedule == null
@@ -739,45 +759,12 @@ public class ModelFactory {
 
 			}
 			return rval;
-      }catch(Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-  }
-
-	public PatientSchedule updatePatientSchedule(int patientPin, String module) {
-		PatientSchedule patientSchedule = null;
-		try {
-			int moduleDays = Integer.parseInt(_properties.getProperty(MODULE_DURATION_DAYS));
-			patientSchedule = dao.getPatientSchedule(patientPin);
-			if(patientSchedule == null)
-				return null; // can be null object..
-			List<ModuleDetail> moduleDetails =patientSchedule.getPatientSchedule();
-			int moduleNumber = Integer.parseInt(module) -1;
-			Date startDate = new Date();
-			Calendar cal = Calendar.getInstance();
-			cal.setTime(startDate);
-			cal.add(Calendar.DATE, -1);
-			Date prevDay = cal.getTime();
-			cal.setTime(startDate);
-			for(int i=0;i<moduleDetails.size(); i++) {
-				if(i<moduleNumber) {
-					moduleDetails.get(i).setStartDate(prevDay);
-					moduleDetails.get(i).setEndDate(prevDay);
-				}else {
-					moduleDetails.get(i).setStartDate(startDate);
-					cal.add(Calendar.DATE, moduleDays-1);
-					moduleDetails.get(i).setEndDate(cal.getTime());
-					cal.add(Calendar.DATE, 1);
-					startDate = cal.getTime();
-				}
-			}
-			return dao.updatePatientSchedule(patientSchedule);
 		}catch(Exception e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
+
 
 	public Date getDateWithoutTime(Date date) {
 		try {
@@ -789,6 +776,204 @@ public class ModelFactory {
 		}
 		return null;
 	}
+
+	public static String readFile(String filename) {
+		String result = "";
+		try {
+			InputStream inputStream = ModelFactory.class.getResourceAsStream(filename);
+			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+			StringBuilder stringBuilder = new StringBuilder();
+			String line = bufferedReader.readLine();
+			while (line != null) {
+				stringBuilder.append(line);
+				line = bufferedReader.readLine();
+			}
+			result = stringBuilder.toString();
+			bufferedReader.close();
+			inputStream.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	// To calculate date according to module length and starting date of first module. 
+	public HashMap<String,List<String>> calculateDefaultModuleDates(){
+		HashMap<String,List<String>> result = new HashMap<>();
+		try {
+			int moduleDays = Integer.parseInt(_properties.getProperty(MODULE_DURATION_DAYS));
+			int totalModule = Integer.parseInt(_properties.getProperty(TOTAL_MODULE));
+			Date today = new Date();
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(today);
+			Date startDate = today;
+			for(int i =1; i<=totalModule; i++) {
+				List<String> dateList = new ArrayList<>();
+				dateList.add(startDate.toString());
+				cal.add(Calendar.DATE, moduleDays-1);
+				Date endDate = cal.getTime();
+				dateList.add(endDate.toString());
+				cal.setTime(endDate);
+				cal.add(Calendar.DATE, 1);
+				startDate = cal.getTime();
+				result.put(String.valueOf(i), dateList);
+			}
+			return result;
+		}catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+
+	// To update patient score once the activity instance is completed.
+	public boolean updatePatientScoreDetail(int patientPin, String activityInstanceId, String activityId, 
+			String activityName) {
+		PatientSchedule patientSchedule = dao.getPatientSchedule(patientPin);
+		PatientScoreDetail patientScoreDetail = dao.getPatientScoreDetail(patientPin);
+
+		if(patientSchedule == null) {
+			return false;  // return null object as no schedule for the patient.
+		}
+
+		HashMap<String, Integer> map = getModuleAndDay(patientSchedule, new Date());
+		Integer module =-1, dayOfModule =-1,moduleIndex=-1;
+		if(map != null && map.size() > 0) {
+			if (map.containsKey(this.MODULE) && map.get(this.MODULE) != null)
+				module = map.get(this.MODULE);
+			if (map.containsKey(this.DAY) && map.get(this.DAY) != null)
+				dayOfModule=map.get(this.DAY);
+		}
+		if(module == -1) {
+			return false;
+		}else {
+			module -=1;
+			if(patientScoreDetail == null) {
+				patientScoreDetail=createModuleScoreDetail(patientPin, activityInstanceId, activityId,
+						activityName, patientSchedule, patientScoreDetail, module, dayOfModule);
+				// Create object for the patient.
+			}else {
+				patientScoreDetail= updateModuleScoreDetail(patientPin, activityInstanceId, activityId,
+						activityName, patientSchedule, patientScoreDetail, module, dayOfModule);
+			}
+			if(dao.updatePatientScoreDetail(patientScoreDetail)) 
+				return true;
+			else
+				return false;
+
+		}
+
+	}
+
+
+	// Create module score data for the patient.
+	public PatientScoreDetail createModuleScoreDetail(int patientPin, String activityInstanceId, String activityId, 
+			String activityName, PatientSchedule patientSchedule,
+			PatientScoreDetail patientScoreDetail, Integer module, Integer dayOfModule) {
+		PatientScoreDetail pDetail;
+		List<ModuleScoreDetail> mScoreDetails;
+		if(patientScoreDetail == null) {
+			pDetail = new PatientScoreDetail();
+			pDetail.setPatientPin(patientPin);
+			mScoreDetails = new ArrayList<>();
+		}else {
+			pDetail=patientScoreDetail;
+			mScoreDetails = pDetail.getScoreData();
+		}
+		DayDetail dayDetail =patientSchedule.getPatientSchedule().get(module).getSchedule().get(0);
+		List<ActivityScheduleDetail> actDetail = dayDetail.getActivitySchedule();
+		Integer moduleValue = module+1;
+		
+		ModuleScoreDetail moduleScoreDetail = new ModuleScoreDetail();
+		moduleScoreDetail.setModule(moduleValue.toString());
+		moduleScoreDetail.setDaySoFar(dayOfModule);
+		List<ActivityScoreDetail> actScore = new ArrayList<>();
+		for(ActivityScheduleDetail aSchedule : actDetail ) {
+			String actName = aSchedule.getActivity();
+			String actId = dao.getActivityIdByName(actName);
+			float totalCount = aSchedule.getTotalCount();
+			float actualCount = 0;
+			float score =0;
+			HashSet<String> aiList = new HashSet<>();
+			if(activityName.equals(aSchedule.getActivity())) {
+				actualCount += 1;
+				score = (actualCount/totalCount)*100;
+				aiList.add(activityInstanceId);
+			}
+			ActivityScoreDetail activityScoreDetail = new ActivityScoreDetail(actName, actId, actualCount,
+					totalCount, score, aiList);
+			actScore.add(activityScoreDetail);
+		}
+		moduleScoreDetail.setActivityScores(actScore);
+		mScoreDetails.add(moduleScoreDetail);
+		pDetail.setScoreData(mScoreDetails);
+	
+		return pDetail;
+
+	}
+
+	// Update module score data for the patient.
+	public PatientScoreDetail updateModuleScoreDetail(int patientPin, String activityInstanceId, String activityId, 
+			String activityName, PatientSchedule patientSchedule,
+			PatientScoreDetail patientScoreDetail, Integer module, Integer dayOfModule) {
+		Integer moduleValue = module+1;
+		List<ModuleScoreDetail> moduleScoreList = patientScoreDetail.getScoreData();
+		List<ActivityScheduleDetail> aScheduleList = patientSchedule.getPatientSchedule().get(module)
+				.getSchedule().get(0).getActivitySchedule();
+		ActivityScheduleDetail activityScheduleDetail = aScheduleList.stream() 
+				.filter(x -> activityName.equals(x.getActivity()))   
+				.findAny()                                     		 
+				.orElse(null);
+		int tc =0;
+		if(activityScheduleDetail != null)
+			tc = activityScheduleDetail.getTotalCount();
+		
+		ModuleScoreDetail moduleScoreDetail = moduleScoreList.stream() 
+				.filter(x -> (moduleValue.toString()).equals(x.getModule()))   
+				.findAny()                                     		 
+				.orElse(null);
+		
+		if(moduleScoreDetail != null) {
+			List<ActivityScoreDetail> activityScoreDetails = moduleScoreDetail.getActivityScores();
+			for(ActivityScoreDetail actScore : activityScoreDetails) {
+				float totalCount, actualCount;
+				float score;
+				totalCount = actScore.getTotalCount();
+				if(dayOfModule > moduleScoreDetail.getDaySoFar()) {
+					totalCount += tc; // change total count
+				}
+				actScore.setTotalCount(totalCount);
+				if(actScore.getActivityName().equalsIgnoreCase(activityName)) {
+					actualCount = actScore.getActualCount() + 1;
+					score = (actualCount/totalCount)*100;
+					if(score >100) {
+						score =100;
+					}
+					actScore.setActualCount(actualCount);
+					actScore.setScore(score);
+					HashSet<String> aiList = actScore.getActivityInstances();
+					aiList.add(activityInstanceId);
+					actScore.setActivityInstances(aiList);
+				}
+			}
+			moduleScoreDetail.setDaySoFar(dayOfModule);
+			return patientScoreDetail;
+		}else {
+			return createModuleScoreDetail(patientPin, activityInstanceId, activityId, activityName,
+					patientSchedule, patientScoreDetail, module, dayOfModule);
+		}
+	}
+
+	public boolean isLong(String s) {
+		try {
+			long l = Long.parseLong(s);
+			return true;
+		}catch (Exception e) {
+			// TODO: handle exception
+			return false;
+		}
+	}
+
 
 }
 
