@@ -193,10 +193,6 @@ public class MongoDBDAO implements DAO {
 			MongoDatabase database = MongoDBDAO.getConnectedDatabase();
 			MongoCollection<Activity> activityMongoCollection =
 					database.getCollection(ACTIVITIES_COLLECTION, Activity.class);
-
-			System.out.println("In get activity .... ");
-			System.out.println(activityMongoCollection);
-
 			return activityMongoCollection
 					.find(Filters.eq(Activity.ACTIVITYID_ATTRIBUTE, activityId))
 					.projection(Projections.excludeId())
@@ -497,7 +493,6 @@ public class MongoDBDAO implements DAO {
 	
 	@Override
 	public String getActivityIdByName(String activityName) {
-		System.out.println("Activity Name in DAO : " + activityName);
 		try {
 			MongoDatabase database = MongoDBDAO.getConnectedDatabase();
 			MongoCollection<Activity> activityCollection = database.getCollection(ACTIVITIES_COLLECTION, Activity.class);

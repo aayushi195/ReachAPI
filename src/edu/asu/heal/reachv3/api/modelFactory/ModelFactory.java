@@ -4,10 +4,12 @@ import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.PriorityQueue;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 import edu.asu.heal.core.api.models.*;
@@ -19,6 +21,8 @@ import edu.asu.heal.core.api.models.schedule.ModuleScoreDetail;
 import edu.asu.heal.core.api.models.schedule.PatientSchedule;
 import edu.asu.heal.core.api.models.schedule.PatientScoreDetail;
 import edu.asu.heal.reachv3.api.models.*;
+import edu.asu.heal.reachv3.api.models.moduleProgession.ModuleAcivityDetail;
+import edu.asu.heal.reachv3.api.models.moduleProgession.ModuleActivityList;
 import edu.asu.heal.reachv3.api.models.moduleProgession.ModuleBasedInstance;
 import edu.asu.heal.reachv3.api.models.moduleProgession.ModuleInstance;
 import edu.asu.heal.reachv3.api.models.patientRewards.RewardsBasedInstance;
@@ -98,7 +102,6 @@ public class ModelFactory {
 	public ActivityInstance createActivityInstance(ActivityInstance activityInstance) throws ModelException{
 		try {
 			SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT_AI);
-			System.out.println(new Date());
 			if (activityInstance.getCreatedAt() == null) activityInstance.setCreatedAt(new Date());
 			if (activityInstance.getState() == null) activityInstance.setState(ActivityInstanceStatus.CREATED.status());
 			if (activityInstance.getUpdatedAt() == null) activityInstance.setUpdatedAt(new Date());
@@ -213,7 +216,7 @@ public class ModelFactory {
 					userSubmissionTime = new Date(Long.parseLong(obj.getString(ActivityInstance.USERSUBMISSIONTIME_ATTRIBUTE)));
 				else
 					userSubmissionTime = format.parse(obj.getString(ActivityInstance.USERSUBMISSIONTIME_ATTRIBUTE));
-				
+
 			}
 			if(obj.has(ActivityInstance.ACTUALSUBMISSIONTIME_ATTRIBUTE)
 					&& !obj.getString(ActivityInstance.ACTUALSUBMISSIONTIME_ATTRIBUTE).equals("null")) {
@@ -780,6 +783,89 @@ public class ModelFactory {
 
 	}
 
+	public ModuleActivityList getActivityListWithCallToAction(String module, int patientPin) {
+		ModuleActivityList result = new ModuleActivityList();
+
+		try {
+			result.setModule(module);
+			result.setPatientPin(patientPin);
+			List<ModuleAcivityDetail> moduleAcivityDetails = new ArrayList<>();
+			PatientSchedule patientSchedule = dao.getPatientSchedule(patientPin);
+			PatientScoreDetail patientScoreDetail = dao.getPatientScoreDetail(patientPin);
+			if(patientSchedule == null)
+				return null;
+			HashMap<String, Integer> map = getModuleAndDay(patientSchedule, new Date());
+			Integer mod =-1, dayOfModule =-1,moduleIndex=-1;
+			if(map != null && map.size() > 0) {
+				if (map.containsKey(this.DAY) && map.get(this.DAY) != null)
+					dayOfModule=map.get(this.DAY);
+				if (map.containsKey(this.MODULE) && map.get(this.MODULE) != null)
+					mod=map.get(this.MODULE);
+			}
+			if(patientScoreDetail == null)
+				patientScoreDetail=createModuleScoreDetail(patientPin, null, null, patientSchedule, 
+						patientScoreDetail, Integer.valueOf(module), dayOfModule);
+
+			Integer currModule = Integer.valueOf(module)-1;
+			if(currModule == -1)
+				return null;
+			List<ActivityScoreDetail> leftOverActivities = null;
+			List<ModuleScoreDetail> moduleScoreDetails = patientScoreDetail.getScoreData();
+			ModuleScoreDetail moduleScoreDetail = moduleScoreDetails.stream() 
+					.filter(x -> (module.toString()).equals(x.getModule()))   
+					.findAny()                                     		 
+					.orElse(null);
+
+			if(moduleScoreDetail == null) {
+				patientScoreDetail= createModuleScoreDetail(patientPin, null, null, patientSchedule, 
+						patientScoreDetail, Integer.valueOf(module), dayOfModule);
+			}
+			if(currModule >= 1) {
+				leftOverActivities = getLeftOverActivities(Integer.valueOf(module),patientScoreDetail);
+			}
+			moduleScoreDetail = moduleScoreDetails.stream() 
+					.filter(x -> (module.toString()).equals(x.getModule()))   
+					.findAny()                                     		 
+					.orElse(null);
+
+			if(leftOverActivities != null && !leftOverActivities.isEmpty() && moduleScoreDetail!=null) {
+				HashSet<String> uniqueSet = new HashSet<>();
+				for(ActivityScoreDetail obj : moduleScoreDetail.getActivityScores()) {
+					uniqueSet.add(obj.getActivityName());
+				}
+				List<ActivityScoreDetail> al = moduleScoreDetail.getActivityScores();
+				for(ActivityScoreDetail obj : leftOverActivities ) {
+					if(!uniqueSet.contains(obj.getActivityName())) {
+						al.add(obj);
+					}
+				}
+				moduleScoreDetail.setActivityScores(al);
+			}
+			if(dao.updatePatientScoreDetail(patientScoreDetail)) {
+				System.out.println("Patient score detail updated from ");
+			}
+
+
+			// Call method which has PQ and return list of module activity in ascending order of score	
+			moduleAcivityDetails = getOrderedModuleActivities(patientScoreDetail,Integer.parseInt(module));
+
+			result.setActivityList(moduleAcivityDetails);
+
+		}catch(Exception e ) {
+			System.out.println("Error in getActivityListWithCallToAction");
+			e.printStackTrace();
+			return null;
+		}
+
+
+		return result;
+
+		// if dayOfModule ==0 -- create modulescoredetail and thn leftover add it to module score
+		// create inner class contains score and ModuleActivityDetails - create PQ and store sorted in list
+
+		// if dayOfModule > 0 -- read score data and create list using PQ above.
+	}
+
 	/************************************ Helper service methods *************************************************/
 
 
@@ -902,7 +988,7 @@ public class ModelFactory {
 		}else {
 			module -=1;
 			if(patientScoreDetail == null) {
-				patientScoreDetail=createModuleScoreDetail(patientPin, activityInstanceId, activityId,
+				patientScoreDetail=createModuleScoreDetail(patientPin, activityInstanceId, 
 						activityName, patientSchedule, patientScoreDetail, module, dayOfModule);
 				// Create object for the patient.
 			}else {
@@ -920,7 +1006,7 @@ public class ModelFactory {
 
 
 	// Create module score data for the patient.
-	public PatientScoreDetail createModuleScoreDetail(int patientPin, String activityInstanceId, String activityId, 
+	public PatientScoreDetail createModuleScoreDetail(int patientPin, String activityInstanceId, 
 			String activityName, PatientSchedule patientSchedule,
 			PatientScoreDetail patientScoreDetail, Integer module, Integer dayOfModule) {
 		PatientScoreDetail pDetail;
@@ -933,10 +1019,10 @@ public class ModelFactory {
 			pDetail=patientScoreDetail;
 			mScoreDetails = pDetail.getScoreData();
 		}
-		DayDetail dayDetail =patientSchedule.getPatientSchedule().get(module).getSchedule().get(0);
+		DayDetail dayDetail =patientSchedule.getPatientSchedule().get(module-1).getSchedule().get(0);
 		List<ActivityScheduleDetail> actDetail = dayDetail.getActivitySchedule();
-		Integer moduleValue = module+1;
-		
+		Integer moduleValue = module;
+
 		ModuleScoreDetail moduleScoreDetail = new ModuleScoreDetail();
 		moduleScoreDetail.setModule(moduleValue.toString());
 		moduleScoreDetail.setDaySoFar(dayOfModule);
@@ -948,7 +1034,7 @@ public class ModelFactory {
 			float actualCount = 0;
 			float score =0;
 			HashSet<String> aiList = new HashSet<>();
-			if(activityName.equals(aSchedule.getActivity())) {
+			if(activityName != null && activityName.equals(aSchedule.getActivity())) {
 				actualCount += 1;
 				score = (actualCount/totalCount)*100;
 				aiList.add(activityInstanceId);
@@ -960,8 +1046,10 @@ public class ModelFactory {
 		moduleScoreDetail.setActivityScores(actScore);
 		mScoreDetails.add(moduleScoreDetail);
 		pDetail.setScoreData(mScoreDetails);
-	
-		return pDetail;
+		if(dao.updatePatientScoreDetail(pDetail)) 
+			return pDetail;
+		else 
+			return null;
 
 	}
 
@@ -980,12 +1068,12 @@ public class ModelFactory {
 		int tc =0;
 		if(activityScheduleDetail != null)
 			tc = activityScheduleDetail.getTotalCount();
-		
+
 		ModuleScoreDetail moduleScoreDetail = moduleScoreList.stream() 
 				.filter(x -> (moduleValue.toString()).equals(x.getModule()))   
 				.findAny()                                     		 
 				.orElse(null);
-		
+
 		if(moduleScoreDetail != null) {
 			List<ActivityScoreDetail> activityScoreDetails = moduleScoreDetail.getActivityScores();
 			for(ActivityScoreDetail actScore : activityScoreDetails) {
@@ -1012,10 +1100,77 @@ public class ModelFactory {
 			moduleScoreDetail.setDaySoFar(dayOfModule);
 			return patientScoreDetail;
 		}else {
-			return createModuleScoreDetail(patientPin, activityInstanceId, activityId, activityName,
+			return createModuleScoreDetail(patientPin, activityInstanceId, activityName,
 					patientSchedule, patientScoreDetail, module, dayOfModule);
 		}
 	}
+
+
+	public List<ActivityScoreDetail> getLeftOverActivities(Integer module, PatientScoreDetail patientScoreDetail){
+		List<ActivityScoreDetail> result = new ArrayList<>();
+		Integer prevModuleIndex = module -1;
+		List<ModuleScoreDetail> moduleScoreDetails =patientScoreDetail.getScoreData();
+		if(prevModuleIndex >=0) {
+			ModuleScoreDetail moduleScoreDetail = moduleScoreDetails.stream() 
+					.filter(x -> (prevModuleIndex.toString()).equals(x.getModule()))   
+					.findAny()                                     		 
+					.orElse(null);
+			List<ActivityScoreDetail> activityScoreDetails =null;
+			if(moduleScoreDetail != null)
+				activityScoreDetails = moduleScoreDetail.getActivityScores();
+			else
+				return result;
+			for(int i=0; i< activityScoreDetails.size();i++) {
+				ActivityScoreDetail obj = activityScoreDetails.get(i);
+				if(obj.getScore() < 100) {
+					result.add(obj);
+				}
+			}
+		}
+		return result;
+	}
+
+	public List<ModuleAcivityDetail> getOrderedModuleActivities(PatientScoreDetail patientScoreDetail, Integer currModule){
+		List<ModuleAcivityDetail> result = new ArrayList<>();
+		List<ModuleScoreDetail> moduleScoreDetails = patientScoreDetail.getScoreData();
+		ModuleScoreDetail moduleScoreDetail = moduleScoreDetails.stream() 
+				.filter(x -> (currModule.toString()).equals(x.getModule()))   
+				.findAny()                                     		 
+				.orElse(null);
+		List<ActivityScoreDetail> activityScoreDetails = null;
+		if(moduleScoreDetail != null) {
+			activityScoreDetails = moduleScoreDetail.getActivityScores();
+		}
+		else
+			return result;
+		PriorityQueue<ScoreDetails> pq = new PriorityQueue<>(new Comparator<ScoreDetails>() {
+
+			@Override
+			public int compare(ScoreDetails arg0, ScoreDetails arg1) {
+				if(arg0.score < arg1.score)
+					return -1;
+				else if(arg0.score > arg1.score)
+					return 1;
+				return 0;
+			}
+		});		
+		
+		for(ActivityScoreDetail obj : activityScoreDetails) {
+			ModuleAcivityDetail moduleAcivityDetail = new ModuleAcivityDetail();
+			moduleAcivityDetail.setActivityId(obj.getActivityId());
+			moduleAcivityDetail.setActivityName(obj.getActivityName());
+			if(obj.getScore()<100)
+				moduleAcivityDetail.setCallToAction(true);
+			ScoreDetails scoreDetails = new ScoreDetails(obj.getScore(), moduleAcivityDetail);
+			pq.add(scoreDetails);
+		}	
+		while(!pq.isEmpty()) {
+			result.add(pq.poll().getModuleAcivityDetail());
+		}
+		return result;
+	}
+
+
 
 	public boolean isLong(String s) {
 		try {
@@ -1024,6 +1179,23 @@ public class ModelFactory {
 		}catch (Exception e) {
 			// TODO: handle exception
 			return false;
+		}
+	}
+
+	public class ScoreDetails{
+		float score;
+		ModuleAcivityDetail moduleAcivityDetail;
+		public ScoreDetails(float score, ModuleAcivityDetail moduleAcivityDetail) {
+			this.score = score;
+			this.moduleAcivityDetail=moduleAcivityDetail;
+		}
+
+		public ModuleAcivityDetail getModuleAcivityDetail() {
+			return moduleAcivityDetail;
+		}
+
+		public float getScore() {
+			return score;
 		}
 	}
 
@@ -1039,7 +1211,5 @@ public class ModelFactory {
 
 		return -1;
 	}
-
-
 }
 

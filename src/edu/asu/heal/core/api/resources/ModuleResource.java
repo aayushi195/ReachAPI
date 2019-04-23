@@ -5,6 +5,7 @@ import edu.asu.heal.core.api.responses.HEALResponseBuilder;
 import edu.asu.heal.core.api.responses.ModuleResponse;
 import edu.asu.heal.core.api.service.HealService;
 import edu.asu.heal.core.api.service.HealServiceFactory;
+import edu.asu.heal.reachv3.api.models.moduleProgession.ModuleActivityList;
 import edu.asu.heal.reachv3.api.models.moduleProgession.ModuleInstance;
 import edu.asu.heal.reachv3.api.service.ReachService;
 
@@ -61,4 +62,47 @@ public class ModuleResource {
 		}
 		return Response.status(response.getStatusCode()).entity(response.toEntity()).build();
 	}
+	
+	@GET
+	@Path("/{module}")
+	@Produces("application/hal+json")
+	public Response getActivityListWithCallToAction(@PathParam("module") String module,
+			@QueryParam("patientPin") int patientPin) {
+
+		HEALResponse response;
+		HEALResponseBuilder builder;
+
+		ReachService service = (ReachService) reachService;
+		ModuleActivityList moduleInstance = null;
+		try {
+			builder = new HEALResponseBuilder(ModuleResponse.class);
+		} catch (InstantiationException | IllegalAccessException ie) {
+			ie.printStackTrace();
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+		}
+
+		if (patientPin == 0 || patientPin < -1 || Integer.parseInt(module) < 1 || Integer.parseInt(module) > 6) {
+			response = builder
+					.setData("ISSUE WITH PATIENT PIN AND/OR MODULE IN THE REQUEST")
+					.setStatusCode(Response.Status.BAD_REQUEST.getStatusCode())
+					.setServerURI(_uri.getBaseUri().toString())
+					.build();
+		} else {
+			moduleInstance = service.getActivityListWithCallToAction(module, patientPin);
+			if (moduleInstance == null) {
+				response = builder
+						.setStatusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
+						.setData("SOME SERVER ERROR. PLEASE CONTACT ADMINISTRATOR")
+						.build();
+			} else {
+				response = builder
+						.setStatusCode(Response.Status.OK.getStatusCode())
+						.setData(moduleInstance)
+						.setServerURI(_uri.getBaseUri().toString())
+						.build();
+			}
+		}
+		return Response.status(Response.Status.OK.getStatusCode()).entity(moduleInstance).build();
+	}
+	
 }
