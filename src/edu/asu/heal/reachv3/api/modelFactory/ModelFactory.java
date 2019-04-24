@@ -143,7 +143,6 @@ public class ModelFactory {
 			if(activityInstance.getState().equals(ActivityInstanceStatus.COMPLETED.status())) {
 				if(updatePatientScoreDetail(activityInstance.getPatientPin(), activityInstance.getActivityInstanceId(),
 						activityInstance.getActivityId(), activityName)) {
-					System.out.println("Score date is succsessfully update for pin : " + activityInstance.getPatientPin());
 				}else {
 					System.out.println(" FAILURE !!!!!!! : Score date is NOT updated for pin : " + activityInstance.getPatientPin());
 				}
@@ -1004,7 +1003,7 @@ public class ModelFactory {
 		if(module == -1) {
 			return false;
 		}else {
-			module -=1;
+			//module -=1;
 			if(patientScoreDetail == null) {
 				patientScoreDetail=createModuleScoreDetail(patientPin, activityInstanceId, 
 						activityName, patientSchedule, patientScoreDetail, module, dayOfModule);
@@ -1077,7 +1076,7 @@ public class ModelFactory {
 			PatientScoreDetail patientScoreDetail, Integer module, Integer dayOfModule) {
 		Integer moduleValue = module+1;
 		List<ModuleScoreDetail> moduleScoreList = patientScoreDetail.getScoreData();
-		List<ActivityScheduleDetail> aScheduleList = patientSchedule.getPatientSchedule().get(module)
+		List<ActivityScheduleDetail> aScheduleList = patientSchedule.getPatientSchedule().get(module-1)
 				.getSchedule().get(0).getActivitySchedule();
 		ActivityScheduleDetail activityScheduleDetail = aScheduleList.stream() 
 				.filter(x -> activityName.equals(x.getActivity()))   
@@ -1088,7 +1087,7 @@ public class ModelFactory {
 			tc = activityScheduleDetail.getTotalCount();
 
 		ModuleScoreDetail moduleScoreDetail = moduleScoreList.stream() 
-				.filter(x -> (moduleValue.toString()).equals(x.getModule()))   
+				.filter(x -> (module.toString()).equals(x.getModule()))
 				.findAny()                                     		 
 				.orElse(null);
 
