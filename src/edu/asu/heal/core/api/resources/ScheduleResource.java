@@ -39,18 +39,26 @@ public class ScheduleResource {
 		try{
 			builder = new HEALResponseBuilder(ScheduleResponse.class);
 
-			PatientSchedule patientSchedule = reachService.getPatientSchedule(patientPin);
-			if (patientSchedule == null) {
+			if (patientPin == 0 || patientPin < -1) {
 				response = builder
-						.setStatusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
-						.setData("SOME SERVER ERROR. PLEASE CONTACT ADMINISTRATOR")
-						.build();
-			} else {
-				response = builder
-						.setStatusCode(Response.Status.OK.getStatusCode())
-						.setData(patientSchedule)
+						.setData("YOUR PATIENT PIN IS ABSENT FROM THE REQUEST")
+						.setStatusCode(Response.Status.BAD_REQUEST.getStatusCode())
 						.setServerURI(_uri.getBaseUri().toString())
 						.build();
+			}else {
+				PatientSchedule patientSchedule = reachService.getPatientSchedule(patientPin);
+				if (patientSchedule == null) {
+					response = builder
+							.setStatusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
+							.setData("SOME SERVER ERROR. PLEASE CONTACT ADMINISTRATOR")
+							.build();
+				} else {
+					response = builder
+							.setStatusCode(Response.Status.OK.getStatusCode())
+							.setData(patientSchedule)
+							.setServerURI(_uri.getBaseUri().toString())
+							.build();
+				}
 			}
 			return Response.status(response.getStatusCode()).entity(response.toEntity()).build();
 		}catch (Exception e){
@@ -97,7 +105,7 @@ public class ScheduleResource {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
 		}
 	}
-	
+
 	@PATCH
 	@Consumes("application/json")
 	@Produces("application/hal+json")
