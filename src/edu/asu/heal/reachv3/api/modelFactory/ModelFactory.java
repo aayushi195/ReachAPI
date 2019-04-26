@@ -103,7 +103,6 @@ public class ModelFactory {
 
 	public ActivityInstance createActivityInstance(ActivityInstance activityInstance) throws ModelException{
 		try {
-			SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT_AI);
 			if (activityInstance.getCreatedAt() == null) activityInstance.setCreatedAt(new Date());
 			if (activityInstance.getState() == null) activityInstance.setState(ActivityInstanceStatus.CREATED.status());
 			if (activityInstance.getUpdatedAt() == null) activityInstance.setUpdatedAt(new Date());
@@ -480,10 +479,13 @@ public class ModelFactory {
 			if(patientSchedule==null)
 				return null;
 			int rewardsLevel;
+			Integer currentModule = -1;
 			HashMap<String,Integer> map = getModuleAndDay(patientSchedule,new Date());
+			if(map != null && map.size() > 0) {
+				if (map.containsKey(this.MODULE) && map.get(this.MODULE) != null)
+					currentModule=map.get(this.MODULE);
+			}
 			HashMap<String,Boolean> skillSetMap = new HashMap<>();
-
-			Integer currentModule = map.get(this.MODULE);
 
 			for(Integer counter = currentModule; counter>0;counter--){
 				//Starts from current module and goes till the first one
@@ -694,8 +696,14 @@ public class ModelFactory {
 			dateMap = this.calculateDefaultModuleDates();
 			if(moduleScheduleFileName != null) {
 				String fileData = this.readFile(moduleScheduleFileName);
+				if(fileData == null || fileData.equals(""))
+					return null;
 				JSONObject scheduleJSON = new JSONObject(fileData);
-				JSONArray moduleJSON = scheduleJSON.getJSONArray("patientSchedule");
+				JSONArray moduleJSON = null;
+				if(scheduleJSON.has("patientSchedule"))
+					moduleJSON = scheduleJSON.getJSONArray("patientSchedule");
+				if(moduleJSON == null)
+					return null;
 
 				//	moduleDetails = mapper.readValue(moduleJSON.toString(),
 				//			new TypeReference<List<ModuleDetail>>(){});
@@ -774,12 +782,17 @@ public class ModelFactory {
 
 			if(patientSchedule==null)
 				return null;
-
-			HashMap<String,Integer> map = getModuleAndDay(patientSchedule,new Date());
-
-			int currentModule = map.get(this.MODULE);
+			HashMap<String, Integer> map = getModuleAndDay(patientSchedule, new Date());
+			Integer currentModule =-1, dayOfModule =-1,moduleIndex=-1;
+			if(map != null && map.size() > 0) {
+				if (map.containsKey(this.DAY) && map.get(this.DAY) != null)
+					dayOfModule=map.get(this.DAY);
+				if (map.containsKey(this.MODULE) && map.get(this.MODULE) != null)
+					currentModule=map.get(this.MODULE);
+			}
+			if(currentModule == -1)
+				return null;
 			int totalModules = Integer.parseInt(_properties.getProperty(TOTAL_MODULE));
-
 			for(int counter = 1;counter<=totalModules;counter++){
 				ModuleBasedInstance moduleBasedInstance = new ModuleBasedInstance();
 				moduleBasedInstance.setModule(String.valueOf(counter));
@@ -851,7 +864,7 @@ public class ModelFactory {
 				HashSet<String> uniqueSet = new HashSet<>();
 				for(ActivityScoreDetail obj : moduleScoreDetail.getActivityScores()) {
 					uniqueSet.add(obj.getActivityName());
-				}
+				}				
 				List<ActivityScoreDetail> al = moduleScoreDetail.getActivityScores();
 				for(ActivityScoreDetail obj : leftOverActivities ) {
 					if(!uniqueSet.contains(obj.getActivityName())) {
@@ -861,11 +874,14 @@ public class ModelFactory {
 				moduleScoreDetail.setActivityScores(al);
 			}
 			if(dao.updatePatientScoreDetail(patientScoreDetail)) {
-				System.out.println("Patient score detail updated from ");
+				System.out.println("Patient score detail updated  - from getActivityListWithCallToAction "
+						+ "for pin : "+ patientPin);
+			}else {
+				System.out.println("Patient score detail did NOT update - from getActivityListWithCallToAction "
+						+ "for pin : "+ patientPin);
 			}
-
-
-			// Call method which has PQ and return list of module activity in ascending order of score	
+			
+			// Call method which has Priority queue and return list of module activity in ascending order of score	
 			moduleAcivityDetails = getOrderedModuleActivities(patientScoreDetail,Integer.parseInt(module));
 
 			result.setActivityList(moduleAcivityDetails);
@@ -1005,7 +1021,6 @@ public class ModelFactory {
 		if(module == -1) {
 			return false;
 		}else {
-			//module -=1;
 			if(patientScoreDetail == null) {
 				patientScoreDetail=createModuleScoreDetail(patientPin, activityInstanceId, 
 						activityName, patientSchedule, patientScoreDetail, module, dayOfModule);
@@ -1080,7 +1095,6 @@ public class ModelFactory {
 	public PatientScoreDetail updateModuleScoreDetail(int patientPin, String activityInstanceId, String activityId, 
 			String activityName, PatientSchedule patientSchedule,
 			PatientScoreDetail patientScoreDetail, Integer module, Integer dayOfModule) {
-		Integer moduleValue = module+1;
 		List<ModuleScoreDetail> moduleScoreList = patientScoreDetail.getScoreData();
 		List<ActivityScheduleDetail> aScheduleList = patientSchedule.getPatientSchedule().get(module-1)
 				.getSchedule().get(0).getActivitySchedule();
@@ -1088,7 +1102,7 @@ public class ModelFactory {
 				.filter(x -> activityName.equals(x.getActivity()))   
 				.findAny()                                     		 
 				.orElse(null);
-		int tc =0;
+		int tc =0; // Change variable
 		if(activityScheduleDetail != null)
 			tc = activityScheduleDetail.getTotalCount();
 
@@ -1186,8 +1200,9 @@ public class ModelFactory {
 			ModuleAcivityDetail moduleAcivityDetail = new ModuleAcivityDetail();
 			moduleAcivityDetail.setActivityId(obj.getActivityId());
 			moduleAcivityDetail.setActivityName(obj.getActivityName());
-			if(obj.getScore()<100)
+			if(obj.getScore()<100 && !moduleAcivityDetail.getActivityName().equalsIgnoreCase(WRAPUP_ACTIVITYNAME) ) {
 				moduleAcivityDetail.setCallToAction(true);
+			}
 			if(isLastDay(patientScoreDetail.getPatientPin()) &&
 					moduleAcivityDetail.getActivityName().equalsIgnoreCase(WRAPUP_ACTIVITYNAME)) {
 				moduleAcivityDetail.setCallToAction(true);
@@ -1215,11 +1230,10 @@ public class ModelFactory {
 			if (map.containsKey(this.DAY) && map.get(this.DAY) != null)
 				dayOfModule=map.get(this.DAY);
 		}
-		System.out.println("Map : " + map);
 		if(module == -1) 
 			return false;
 		else {
-			if(dayOfModule <= (moduleLen-1)) {
+			if(dayOfModule == (moduleLen-1)) {
 				return true;
 			}
 		}

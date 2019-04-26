@@ -42,6 +42,16 @@ public class ModuleAcivityDetail {
 		this.callToAction = callToAction;
 	}
 	
+
+    @Override
+    public String toString() {
+        return "ModuleActivityDetails : {" +
+                ", activityName='" + activityName + '\'' +
+                ", activityId='" + activityId + '\'' +
+                ", callToAction=" + callToAction +
+                '}';
+    }
+	
 	
 
 }

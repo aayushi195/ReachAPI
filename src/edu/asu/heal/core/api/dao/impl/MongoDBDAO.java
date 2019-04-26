@@ -478,6 +478,8 @@ public class MongoDBDAO implements DAO {
 					.projection(Projections.excludeId())
 					.first();
 
+			if(activity == null)
+				return null;
 			return activity.getTitle();
 
 		} catch (NullPointerException ne) {
@@ -502,6 +504,8 @@ public class MongoDBDAO implements DAO {
 					.projection(Projections.excludeId())
 					.first();
 
+			if(activity == null)
+				return null;
 			return activity.getActivityId();
 
 		} catch (NullPointerException ne) {
@@ -926,7 +930,7 @@ public class MongoDBDAO implements DAO {
 			MongoDatabase database = MongoDBDAO.getConnectedDatabase();
 			MongoCollection<PatientSchedule> patientScheduleMongoCollection =
 					database.getCollection(PATIENT_SCHEDULE_COLLECTION, PatientSchedule.class);
-
+			
 			PatientSchedule instance = getPatientSchedule(patientSchedule.getPatientPin());
 			if(instance == null) {
 				patientScheduleMongoCollection.insertOne(patientSchedule);
