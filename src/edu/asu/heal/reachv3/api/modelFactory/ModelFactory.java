@@ -40,7 +40,7 @@ public class ModelFactory {
 	private static Properties _properties;
 	private static String MAKEBELIEVE_ACTIVITYNAME,EMOTIONS_ACTIVITYNAME,SWAP_ACTIVITYNAME,
 	STANDUP_ACTIVITYNAME, FACEIT_ACTIVITYNAME, RELAXATION_ACTIVITYNAME, WORRYHEADS_ACTIVITYNAME,
-	DAILYDIARY_ACTIVITYNAME, VERSION, DOMAIN_NAME, EXTENDED_PART;
+	DAILYDIARY_ACTIVITYNAME,WRAPUP_ACTIVITYNAME, VERSION, DOMAIN_NAME, EXTENDED_PART;
 	private static String MODULE_SCHEDULE_FILE= "module.schedule";
 	private static String MODULE_DURATION_DAYS= "module.duration.days";
 	private static String TOTAL_MODULE= "total.modules";
@@ -65,10 +65,12 @@ public class ModelFactory {
 			RELAXATION_ACTIVITYNAME = _properties.getProperty("relaxation.name");
 			WORRYHEADS_ACTIVITYNAME = _properties.getProperty("worryHeads.name");
 			DAILYDIARY_ACTIVITYNAME = _properties.getProperty("dailyDiary.name");
+			WRAPUP_ACTIVITYNAME = _properties.getProperty("wrapup.name");
+			
 			VERSION = _properties.getProperty("version.name");
 			DOMAIN_NAME = _properties.getProperty("domain.name");
 			EXTENDED_PART = _properties.getProperty("extended.name");
-
+			
 
 		} catch (Throwable t) {
 			t.printStackTrace();
@@ -1050,6 +1052,7 @@ public class ModelFactory {
 			float totalCount = aSchedule.getTotalCount();
 			float actualCount = 0;
 			float score =0;
+			
 			HashSet<String> aiList = new HashSet<>();
 			if(activityName != null && activityName.equals(aSchedule.getActivity())) {
 				actualCount += 1;
@@ -1058,6 +1061,9 @@ public class ModelFactory {
 			}
 			ActivityScoreDetail activityScoreDetail = new ActivityScoreDetail(actName, actId, actualCount,
 					totalCount, score, aiList);
+			if(activityScoreDetail.getActivityName().equalsIgnoreCase(WRAPUP_ACTIVITYNAME)) {
+				activityScoreDetail.setScore(100);
+			}
 			actScore.add(activityScoreDetail);
 		}
 		moduleScoreDetail.setActivityScores(actScore);
@@ -1101,6 +1107,9 @@ public class ModelFactory {
 					totalCount += tc; // change total count
 				}
 				actScore.setTotalCount(totalCount);
+				if(actScore.getActivityName().equalsIgnoreCase(WRAPUP_ACTIVITYNAME)) {
+					actScore.setScore(100);
+				}
 				if(actScore.getActivityName().equalsIgnoreCase(activityName)) {
 					actualCount = actScore.getActualCount() + 1;
 					score = (actualCount/totalCount)*100;
@@ -1147,7 +1156,8 @@ public class ModelFactory {
 		return result;
 	}
 
-	public List<ModuleAcivityDetail> getOrderedModuleActivities(PatientScoreDetail patientScoreDetail, Integer currModule){
+	public List<ModuleAcivityDetail> getOrderedModuleActivities(PatientScoreDetail patientScoreDetail, 
+			Integer currModule){
 		List<ModuleAcivityDetail> result = new ArrayList<>();
 		List<ModuleScoreDetail> moduleScoreDetails = patientScoreDetail.getScoreData();
 		ModuleScoreDetail moduleScoreDetail = moduleScoreDetails.stream() 
@@ -1178,6 +1188,10 @@ public class ModelFactory {
 			moduleAcivityDetail.setActivityName(obj.getActivityName());
 			if(obj.getScore()<100)
 				moduleAcivityDetail.setCallToAction(true);
+			if(isLastDay(patientScoreDetail.getPatientPin()) &&
+					moduleAcivityDetail.getActivityName().equalsIgnoreCase(WRAPUP_ACTIVITYNAME)) {
+				moduleAcivityDetail.setCallToAction(true);
+			}
 			ScoreDetails scoreDetails = new ScoreDetails(obj.getScore(), moduleAcivityDetail);
 			pq.add(scoreDetails);
 		}	
@@ -1188,6 +1202,29 @@ public class ModelFactory {
 	}
 
 
+	public boolean isLastDay(Integer patientPin) {
+		PatientSchedule patientSchedule = dao.getPatientSchedule(patientPin);
+		if(patientSchedule == null)
+			return false;
+		Integer moduleLen = Integer.parseInt(_properties.getProperty(MODULE_DURATION_DAYS));
+		HashMap<String, Integer> map = getModuleAndDay(patientSchedule, new Date());
+		Integer module =-1, dayOfModule =-1,moduleIndex=-1;
+		if(map != null && map.size() > 0) {
+			if (map.containsKey(this.MODULE) && map.get(this.MODULE) != null)
+				module = map.get(this.MODULE);
+			if (map.containsKey(this.DAY) && map.get(this.DAY) != null)
+				dayOfModule=map.get(this.DAY);
+		}
+		System.out.println("Map : " + map);
+		if(module == -1) 
+			return false;
+		else {
+			if(dayOfModule <= (moduleLen-1)) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 	public boolean isLong(String s) {
 		try {
