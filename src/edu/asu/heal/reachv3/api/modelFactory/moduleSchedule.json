@@ -1,0 +1,818 @@
+{
+	"patientSchedule":[
+	{
+	"module":"1",
+	"startDate":"",
+	"endDate":"",
+	"schedule" : [
+				{
+					"day" : 0,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"dailyActivity" : true,
+							"totalCount":1
+						},
+						{	"activity" : "MatchIt",
+							"dailyActivity" : true,
+							"totalCount":6
+						},
+						{	"activity" : "WrapUp",
+							"dailyActivity" : false,
+							"totalCount":1
+						}
+					]
+				},
+				{
+					"day" : 1,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"dailyActivity" : true,
+							"totalCount":1
+						},
+						{	"activity" : "MatchIt",
+							"dailyActivity" : true,
+							"totalCount":6
+						},
+						{	"activity" : "WrapUp",
+							"dailyActivity" : false,
+							"totalCount":1
+						}
+					]
+				},
+				{
+					"day" : 2,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"dailyActivity" : true,
+							"totalCount":1
+						},
+						{	"activity" : "MatchIt",
+							"dailyActivity" : true,
+							"totalCount":6
+						},
+						{	"activity" : "WrapUp",
+							"dailyActivity" : false,
+							"totalCount":1
+						}
+					]
+				},
+				{
+					"day" : 3,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"dailyActivity" : true,
+							"totalCount":1
+						},
+						{	"activity" : "MatchIt",
+							"dailyActivity" : true,
+							"totalCount":6
+						},
+						{	"activity" : "WrapUp",
+							"dailyActivity" : false,
+							"totalCount":1
+						}
+					]
+				},
+				{
+					"day" : 4,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"dailyActivity" : true,
+							"totalCount":1
+						},
+						{	"activity" : "MatchIt",
+							"dailyActivity" : true,
+							"totalCount":6
+						},
+						{	"activity" : "WrapUp",
+							"dailyActivity" : false,
+							"totalCount":1
+						}
+					]
+				},
+				{
+					"day" : 5,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"dailyActivity" : true,
+							"totalCount":1
+						},
+						{	"activity" : "MatchIt",
+							"dailyActivity" : true,
+							"totalCount":6
+						},
+						{	"activity" : "WrapUp",
+							"dailyActivity" : false,
+							"totalCount":1
+						}
+					]
+				},
+				{
+					"day" : 6,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"dailyActivity" : true,
+							"totalCount":1
+						},
+						{	"activity" : "MatchIt",
+							"dailyActivity" : true,
+							"totalCount":6
+						},
+						{	"activity" : "WrapUp",
+							"dailyActivity" : false,
+							"totalCount":1
+						}
+					]
+				}
+			]
+	},
+	{
+	"module":"2",
+	"startDate":"",
+	"endDate":"",
+	"schedule" : [
+				{
+					"day" : 0,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"dailyActivity" : true,
+							"totalCount":1
+						},
+						{	"activity" : "SWAP",
+							"dailyActivity" : false,
+							"totalCount":2
+						},
+						{	"activity" : "WorryHeads",
+							"dailyActivity" : true,
+							"totalCount":5
+						},
+						{	"activity" : "WrapUp",
+							"dailyActivity" : false,
+							"totalCount":1
+						}
+					]
+				},
+				{
+					"day" : 1,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"dailyActivity" : true,
+							"totalCount":1
+						},
+						{	"activity" : "SWAP",
+							"dailyActivity" : false,
+							"totalCount":2
+						},
+						{	"activity" : "WorryHeads",
+							"dailyActivity" : true,
+							"totalCount":5
+						},
+						{	"activity" : "WrapUp",
+							"dailyActivity" : false,
+							"totalCount":1
+						}
+					]
+				},
+				{
+					"day" : 2,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"dailyActivity" : true,
+							"totalCount":1
+						},
+						{	"activity" : "SWAP",
+							"dailyActivity" : false,
+							"totalCount":2
+						},
+						{	"activity" : "WorryHeads",
+							"dailyActivity" : true,
+							"totalCount":5
+						},
+						{	"activity" : "WrapUp",
+							"dailyActivity" : false,
+							"totalCount":1
+						}
+					]
+				},
+				{
+					"day" : 3,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"dailyActivity" : true,
+							"totalCount":1
+						},
+						{	"activity" : "SWAP",
+							"dailyActivity" : false,
+							"totalCount":2
+						},
+						{	"activity" : "WorryHeads",
+							"dailyActivity" : true,
+							"totalCount":5
+						},
+						{	"activity" : "WrapUp",
+							"dailyActivity" : false,
+							"totalCount":1
+						}
+					]
+				},
+				{
+					"day" : 4,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"dailyActivity" : true,
+							"totalCount":1
+						},
+						{	"activity" : "SWAP",
+							"dailyActivity" : false,
+							"totalCount":2
+						},
+						{	"activity" : "WorryHeads",
+							"dailyActivity" : true,
+							"totalCount":5
+						},
+						{	"activity" : "WrapUp",
+							"dailyActivity" : false,
+							"totalCount":1
+						}
+					]
+				},
+				{
+					"day" : 5,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"dailyActivity" : true,
+							"totalCount":1
+						},
+						{	"activity" : "SWAP",
+							"dailyActivity" : false,
+							"totalCount":2
+						},
+						{	"activity" : "WorryHeads",
+							"dailyActivity" : true,
+							"totalCount":5
+						},
+						{	"activity" : "WrapUp",
+							"dailyActivity" : false,
+							"totalCount":1
+						}
+					]
+				},
+				{
+					"day" : 6,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"dailyActivity" : true,
+							"totalCount":1
+						},
+						{	"activity" : "SWAP",
+							"dailyActivity" : false,
+							"totalCount":2
+						},
+						{	"activity" : "WorryHeads",
+							"dailyActivity" : true,
+							"totalCount":5
+						},
+						{	"activity" : "WrapUp",
+							"dailyActivity" : false,
+							"totalCount":1
+						}
+					]
+				}
+			]
+	},
+	{
+	"module":"3",
+	"startDate":"",
+	"endDate":"",
+	"schedule" : [
+				{
+					"day" : 0,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"dailyActivity" : true,
+							"totalCount":1
+						},
+						{	"activity" : "SmallTalks",
+							"dailyActivity" : true,
+							"totalCount":6
+						},
+						{	"activity" : "MakeBelieve",
+							"dailyActivity" : true,
+							"totalCount":5
+						},
+						{	"activity" : "WrapUp",
+							"dailyActivity" : false,
+							"totalCount":1
+						}
+					]
+				},
+				{
+					"day" : 1,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"dailyActivity" : true,
+							"totalCount":1
+						},
+						{	"activity" : "SmallTalks",
+							"dailyActivity" : true,
+							"totalCount":6
+						},
+						{	"activity" : "MakeBelieve",
+							"dailyActivity" : true,
+							"totalCount":5
+						},
+						{	"activity" : "WrapUp",
+							"dailyActivity" : false,
+							"totalCount":1
+						}
+					]
+				},
+				{
+					"day" : 2,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"dailyActivity" : true,
+							"totalCount":1
+						},
+						{	"activity" : "SmallTalks",
+							"dailyActivity" : true,
+							"totalCount":6
+						},
+						{	"activity" : "MakeBelieve",
+							"dailyActivity" : true,
+							"totalCount":5
+						},
+						{	"activity" : "WrapUp",
+							"dailyActivity" : false,
+							"totalCount":1
+						}
+					]
+				},
+				{
+					"day" : 3,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"dailyActivity" : true,
+							"totalCount":1
+						},
+						{	"activity" : "SmallTalks",
+							"dailyActivity" : true,
+							"totalCount":6
+						},
+						{	"activity" : "MakeBelieve",
+							"dailyActivity" : true,
+							"totalCount":5
+						},
+						{	"activity" : "WrapUp",
+							"dailyActivity" : false,
+							"totalCount":1
+						}
+					]
+				},
+				{
+					"day" : 4,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"dailyActivity" : true,
+							"totalCount":1
+						},
+						{	"activity" : "SmallTalks",
+							"dailyActivity" : true,
+							"totalCount":6
+						},
+						{	"activity" : "MakeBelieve",
+							"dailyActivity" : true,
+							"totalCount":5
+						},
+						{	"activity" : "WrapUp",
+							"dailyActivity" : false,
+							"totalCount":1
+						}
+					]
+				},
+				{
+					"day" : 5,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"dailyActivity" : true,
+							"totalCount":1
+						},
+						{	"activity" : "SmallTalks",
+							"dailyActivity" : true,
+							"totalCount":6
+						},
+						{	"activity" : "MakeBelieve",
+							"dailyActivity" : true,
+							"totalCount":5
+						},
+						{	"activity" : "WrapUp",
+							"dailyActivity" : false,
+							"totalCount":1
+						}
+					]
+				},
+				{
+					"day" : 6,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"dailyActivity" : true,
+							"totalCount":1
+						},
+						{	"activity" : "SmallTalks",
+							"dailyActivity" : true,
+							"totalCount":6
+						},
+						{	"activity" : "MakeBelieve",
+							"dailyActivity" : true,
+							"totalCount":5
+						},
+						{	"activity" : "WrapUp",
+							"dailyActivity" : false,
+							"totalCount":1
+						}
+					]
+				}
+			]
+	},
+	{
+	"module":"4",
+	"startDate":"",
+	"endDate":"",
+	"schedule" : [
+				{
+					"day" : 0,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"dailyActivity" : true,
+							"totalCount":1
+						},
+						{	"activity" : "SWAP",
+							"dailyActivity" : false,
+							"totalCount":2
+						},
+						{	"activity" : "SAFESheet",
+							"dailyActivity" : false,
+							"totalCount":2
+						},
+						{	"activity" : "StandUp",
+							"dailyActivity" : true,
+							"totalCount":5
+						},
+						{	"activity" : "WrapUp",
+							"dailyActivity" : false,
+							"totalCount":1
+						}
+					]
+				},
+				{
+					"day" : 1,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"dailyActivity" : true,
+							"totalCount":1
+						},
+						{	"activity" : "SWAP",
+							"dailyActivity" : false,
+							"totalCount":2
+						},
+						{	"activity" : "SAFESheet",
+							"dailyActivity" : false,
+							"totalCount":2
+						},
+						{	"activity" : "StandUp",
+							"dailyActivity" : true,
+							"totalCount":5
+						},
+						{	"activity" : "WrapUp",
+							"dailyActivity" : false,
+							"totalCount":1
+						}
+					]
+				},
+				{
+					"day" : 2,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"dailyActivity" : true,
+							"totalCount":1
+						},
+						{	"activity" : "SWAP",
+							"dailyActivity" : false,
+							"totalCount":2
+						},
+						{	"activity" : "SAFESheet",
+							"dailyActivity" : false,
+							"totalCount":2
+						},
+						{	"activity" : "StandUp",
+							"dailyActivity" : true,
+							"totalCount":5
+						},
+						{	"activity" : "WrapUp",
+							"dailyActivity" : false,
+							"totalCount":1
+						}
+					]
+				},
+				{
+					"day" : 3,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"dailyActivity" : true,
+							"totalCount":1
+						},
+						{	"activity" : "SWAP",
+							"dailyActivity" : false,
+							"totalCount":2
+						},
+						{	"activity" : "SAFESheet",
+							"dailyActivity" : false,
+							"totalCount":2
+						},
+						{	"activity" : "StandUp",
+							"dailyActivity" : true,
+							"totalCount":5
+						},
+						{	"activity" : "WrapUp",
+							"dailyActivity" : false,
+							"totalCount":1
+						}
+					]
+				},
+				{
+					"day" : 4,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"dailyActivity" : true,
+							"totalCount":1
+						},
+						{	"activity" : "SWAP",
+							"dailyActivity" : false,
+							"totalCount":2
+						},
+						{	"activity" : "SAFESheet",
+							"dailyActivity" : false,
+							"totalCount":2
+						},
+						{	"activity" : "StandUp",
+							"dailyActivity" : true,
+							"totalCount":5
+						},
+						{	"activity" : "WrapUp",
+							"dailyActivity" : false,
+							"totalCount":1
+						}
+					]
+				},
+				{
+					"day" : 5,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"dailyActivity" : true,
+							"totalCount":1
+						},
+						{	"activity" : "SWAP",
+							"dailyActivity" : false,
+							"totalCount":2
+						},
+						{	"activity" : "SAFESheet",
+							"dailyActivity" : false,
+							"totalCount":2
+						},
+						{	"activity" : "StandUp",
+							"dailyActivity" : true,
+							"totalCount":5
+						},
+						{	"activity" : "WrapUp",
+							"dailyActivity" : false,
+							"totalCount":1
+						}
+					]
+				},
+				{
+					"day" : 6,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"dailyActivity" : true,
+							"totalCount":1
+						},
+						{	"activity" : "SWAP",
+							"dailyActivity" : false,
+							"totalCount":2
+						},
+						{	"activity" : "SAFESheet",
+							"dailyActivity" : false,
+							"totalCount":2
+						},
+						{	"activity" : "StandUp",
+							"dailyActivity" : true,
+							"totalCount":5
+						},
+						{	"activity" : "WrapUp",
+							"dailyActivity" : false,
+							"totalCount":1
+						}
+					]
+				}
+			]
+	},
+	{
+	"module":"5",
+	"startDate":"",
+	"endDate":"",
+	"schedule" : [
+				{
+					"day" : 0,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"dailyActivity" : true,
+							"totalCount":1
+						},
+						{	"activity" : "FaceIt",
+							"dailyActivity" : true,
+							"totalCount":5
+						},
+						{	"activity" : "WrapUp",
+							"dailyActivity" : false,
+							"totalCount":1
+						}
+					]
+				},
+				{
+					"day" : 1,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"dailyActivity" : true,
+							"totalCount":1
+						},
+						{	"activity" : "FaceIt",
+							"dailyActivity" : true,
+							"totalCount":5
+						},
+						{	"activity" : "WrapUp",
+							"dailyActivity" : false,
+							"totalCount":1
+						}
+					]
+				},
+				{
+					"day" : 2,
+					"activitySchedule" : [
+					{	"activity" : "Relaxation",
+							"dailyActivity" : true,
+							"totalCount":1
+						},
+						{	"activity" : "FaceIt",
+							"dailyActivity" : true,
+							"totalCount":5
+						},
+						{	"activity" : "WrapUp",
+							"dailyActivity" : false,
+							"totalCount":1
+						}
+					]
+				},
+				{
+					"day" : 3,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"dailyActivity" : true,
+							"totalCount":1
+						},
+						{	"activity" : "FaceIt",
+							"dailyActivity" : true,
+							"totalCount":5
+						},
+						{	"activity" : "WrapUp",
+							"dailyActivity" : false,
+							"totalCount":1
+						}
+					]
+				},
+				{
+					"day" : 4,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"dailyActivity" : true,
+							"totalCount":1
+						},
+						{	"activity" : "FaceIt",
+							"dailyActivity" : true,
+							"totalCount":5
+						},
+						{	"activity" : "WrapUp",
+							"dailyActivity" : false,
+							"totalCount":1
+						}
+					]
+				},
+				{
+					"day" : 5,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"dailyActivity" : true,
+							"totalCount":1
+						},
+						{	"activity" : "FaceIt",
+							"dailyActivity" : true,
+							"totalCount":5
+						},
+						{	"activity" : "WrapUp",
+							"dailyActivity" : false,
+							"totalCount":1
+						}
+					]
+				},
+				{
+					"day" : 6,
+					"activitySchedule" : [
+						{	"activity" : "Relaxation",
+							"dailyActivity" : true,
+							"totalCount":1
+						},
+						{	"activity" : "FaceIt",
+							"dailyActivity" : true,
+							"totalCount":5
+						},
+						{	"activity" : "WrapUp",
+							"dailyActivity" : false,
+							"totalCount":1
+						}
+					]
+				}
+			]
+	},
+	{
+	"module":"6",
+	"startDate":"",
+	"endDate":"",
+	"schedule" : [
+				{
+					"day" : 0,
+					"activitySchedule" : [
+						{	"activity" : "WrapUp",
+							"dailyActivity" : false,
+							"totalCount":1
+						}
+					]
+				},
+				{
+					"day" : 1,
+					"activitySchedule" : [
+						{	"activity" : "WrapUp",
+							"dailyActivity" : false,
+							"totalCount":1
+						}
+					]
+				},
+				{
+					"day" : 2,
+					"activitySchedule" : [
+						{	"activity" : "WrapUp",
+							"dailyActivity" : false,
+							"totalCount":1
+						}
+					]
+				},
+				{
+					"day" : 3,
+					"activitySchedule" : [
+						{	"activity" : "WrapUp",
+							"dailyActivity" : false,
+							"totalCount":1
+						}
+					]
+				},
+				{
+					"day" : 4,
+					"activitySchedule" : [
+						{	"activity" : "WrapUp",
+							"dailyActivity" : false,
+							"totalCount":1
+						}
+					]
+				},
+				{
+					"day" : 5,
+					"activitySchedule" : [
+						{	"activity" : "WrapUp",
+							"dailyActivity" : false,
+							"totalCount":1
+						}
+					]
+				},
+				{
+					"day" : 6,
+					"activitySchedule" : [
+						{	"activity" : "WrapUp",
+							"dailyActivity" : false,
+							"totalCount":1
+						}
+					]
+				}
+			]
+	}
+
+	]
+
+}

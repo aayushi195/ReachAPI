@@ -1,7 +1,10 @@
 package edu.asu.heal.core.api.dao;
 
 import edu.asu.heal.core.api.models.*;
+import edu.asu.heal.core.api.models.schedule.PatientSchedule;
+import edu.asu.heal.core.api.models.schedule.PatientScoreDetail;
 import edu.asu.heal.reachv3.api.models.*;
+import edu.asu.heal.reachv3.api.models.patientRewards.RewardsInstance;
 
 import java.util.List;
 
@@ -75,11 +78,29 @@ public interface DAO {
     FaceItActivityInstance getActivityFaceInstanceDAO(String activityInstanceId);
 
     String getActivityNameById(String activityId);
+    
+    String getActivityIdByName(String activityName);
 
     DailyDiarySituation getDailyDiarySituation();
 
     SwapSituation getSwapSituation();
     
     String getActivityInstanceAsStringDAO (String activityInstanceId);
+    
+    /************************************* Schedule Methods *******************************************************/
+    
+    PatientSchedule createPatientSchedule(PatientSchedule patientSchedule);
+    
+    PatientSchedule getPatientSchedule(int patientPin);
+    
+    PatientSchedule updatePatientSchedule(PatientSchedule patientSchedule);
+    
+    /********************************* Patient Score Data *********************************************************/
+    
+    PatientScoreDetail getPatientScoreDetail(int patientPin);
+    
+    boolean updatePatientScoreDetail(PatientScoreDetail patientScoreDetail);
+
+    RewardsInstance createPatientRewards(RewardsInstance rewardsInstance,int patientPin);
 
 }

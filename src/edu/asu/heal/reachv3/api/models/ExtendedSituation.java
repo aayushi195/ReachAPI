@@ -31,26 +31,6 @@ public class ExtendedSituation {
 	public void setSituationTitle(String situationTitle) {
 		this.situationTitle = situationTitle;
 	}
-//	public List<ExtendedQuestions> getQuestions() {
-//		return questions;
-//	}
-//	public void setQuestions(List<ExtendedQuestions> questions) {
-//		this.questions = questions;
-//	}
-
-//	public void convertTOMake(List<MakeBelieveQuestion> qs) {
-//
-//		if(qs == null)
-//			System.out.println("NULLLLLLLLLLLLLLLLLLLLLLLLLLL .....");
-//		if(questions == null)
-//			questions = new ArrayList<>();
-//		else
-//			questions.clear();
-//		for(MakeBelieveQuestion obj : qs) {
-//			questions.add(obj);
-//		}
-//		this.setQuestions(questions);
-//	}
 
 	@Override
 	public String toString() {

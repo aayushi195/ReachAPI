@@ -17,7 +17,10 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Projections;
 import edu.asu.heal.core.api.dao.DAO;
 import edu.asu.heal.core.api.models.*;
+import edu.asu.heal.core.api.models.schedule.PatientSchedule;
+import edu.asu.heal.core.api.models.schedule.PatientScoreDetail;
 import edu.asu.heal.reachv3.api.models.*;
+import edu.asu.heal.reachv3.api.models.patientRewards.RewardsInstance;
 import org.bson.Document;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
@@ -47,6 +50,9 @@ public class MongoDBDAO implements DAO {
 	private static final String SWAPSITUATIONS_COLLECTION = "swapSituations";
 	private static final String LOGGER_COLLECTION = "logger";
 	private static final String EMOTIONS_COLLECTION = "emotions";
+	private static final String PATIENT_SCHEDULE_COLLECTION = "patientSchedules";
+	private static final String PATIENT_SCORE_COLLECTION = "patientScores";
+	private static final String PATIENT_REWARDS_COLLECTION = "rewards";
 
 	private static String __mongoDBName;
 	private static String __mongoURI;
@@ -187,10 +193,6 @@ public class MongoDBDAO implements DAO {
 			MongoDatabase database = MongoDBDAO.getConnectedDatabase();
 			MongoCollection<Activity> activityMongoCollection =
 					database.getCollection(ACTIVITIES_COLLECTION, Activity.class);
-
-			System.out.println("In get activity .... ");
-			System.out.println(activityMongoCollection);
-
 			return activityMongoCollection
 					.find(Filters.eq(Activity.ACTIVITYID_ATTRIBUTE, activityId))
 					.projection(Projections.excludeId())
@@ -476,7 +478,35 @@ public class MongoDBDAO implements DAO {
 					.projection(Projections.excludeId())
 					.first();
 
+			if(activity == null)
+				return null;
 			return activity.getTitle();
+
+		} catch (NullPointerException ne) {
+			ne.printStackTrace();
+			return null;
+		} catch (Exception e) {
+			System.out.println("SOME ERROR HERE **");
+			e.printStackTrace();
+			return null;
+		}
+		//return null;
+	}
+	
+	@Override
+	public String getActivityIdByName(String activityName) {
+		try {
+			MongoDatabase database = MongoDBDAO.getConnectedDatabase();
+			MongoCollection<Activity> activityCollection = database.getCollection(ACTIVITIES_COLLECTION, Activity.class);
+
+			Activity activity = activityCollection
+					.find(Filters.eq(Activity.TITLE_ATTRIBUTE,activityName))
+					.projection(Projections.excludeId())
+					.first();
+
+			if(activity == null)
+				return null;
+			return activity.getActivityId();
 
 		} catch (NullPointerException ne) {
 			ne.printStackTrace();
@@ -860,7 +890,7 @@ public class MongoDBDAO implements DAO {
 		}
 
 	}
-	
+
 	@Override
 	public String getActivityInstanceAsStringDAO(String activityInstanceId) {
 		try{
@@ -892,8 +922,154 @@ public class MongoDBDAO implements DAO {
 		}
 	}
 
-}
+	/********************************************* Schedule Methods ***********************************************/
 
-//enum Emotions{
-//	happy, sad, sick, scared, worried, angry
-//}
+	@Override
+	public PatientSchedule createPatientSchedule(PatientSchedule patientSchedule) {
+		try{
+			MongoDatabase database = MongoDBDAO.getConnectedDatabase();
+			MongoCollection<PatientSchedule> patientScheduleMongoCollection =
+					database.getCollection(PATIENT_SCHEDULE_COLLECTION, PatientSchedule.class);
+			
+			PatientSchedule instance = getPatientSchedule(patientSchedule.getPatientPin());
+			if(instance == null) {
+				patientScheduleMongoCollection.insertOne(patientSchedule);
+				instance = patientSchedule;
+			}
+			return instance;
+		}catch (NullPointerException ne) {
+			System.out.println("SOME PROBLEM IN CREATING PATIENT SCHEDULE FOR PIN : " + patientSchedule.getPatientPin());
+			ne.printStackTrace();
+			return null;
+		} catch (Exception e) {
+			System.out.println("SOME SERVER PROBLEM IN CREATE PATIENT SCHEDULE");
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	@Override
+	public PatientSchedule getPatientSchedule(int patientPin) {
+		try{
+			MongoDatabase database = MongoDBDAO.getConnectedDatabase();
+
+			MongoCollection<PatientSchedule> patientScheduleMongoCollection =
+					database.getCollection(PATIENT_SCHEDULE_COLLECTION, PatientSchedule.class);
+
+			PatientSchedule instance = patientScheduleMongoCollection
+					.find(Filters.eq(PatientSchedule.PATIENT_PIN, patientPin))
+					.projection(Projections.excludeId())
+					.first();
+			return instance;
+		} catch (NullPointerException ne) {
+			System.out.println("SOME PROBLEM IN GETTING PATIENT SCHEDULE FOR PIN : " + patientPin);
+			ne.printStackTrace();
+			return null;
+		} catch (Exception e) {
+			System.out.println("SOME SERVER PROBLEM IN GET PATIENT SCHEDULE");
+			e.printStackTrace();
+			return null;
+		}
+
+	}
+
+	@Override
+	public PatientSchedule updatePatientSchedule(PatientSchedule patientSchedule) {
+		try{
+			MongoDatabase database = MongoDBDAO.getConnectedDatabase();
+			MongoCollection<PatientSchedule> patientScheduleMongoCollection =
+					database.getCollection(PATIENT_SCHEDULE_COLLECTION, PatientSchedule.class);
+
+			return patientScheduleMongoCollection
+					.findOneAndReplace(Filters.eq(PatientSchedule.PATIENT_PIN, patientSchedule.getPatientPin()),
+							patientSchedule);
+
+		}catch (NullPointerException ne) {
+			System.out.println("SOME PROBLEM IN CREATING PATIENT SCHEDULE FOR PIN : " + patientSchedule.getPatientPin());
+			ne.printStackTrace();
+			return null;
+		} catch (Exception e) {
+			System.out.println("SOME SERVER PROBLEM IN CREATE PATIENT SCHEDULE");
+			e.printStackTrace();
+			return null;
+		}
+
+	}
+
+	@Override
+	public PatientScoreDetail getPatientScoreDetail(int patientPin) {
+		try{
+			MongoDatabase database = MongoDBDAO.getConnectedDatabase();
+
+			MongoCollection<PatientScoreDetail> patientScoreMongoCollection =
+					database.getCollection(PATIENT_SCORE_COLLECTION, PatientScoreDetail.class);
+
+			PatientScoreDetail instance = patientScoreMongoCollection
+					.find(Filters.eq(PatientSchedule.PATIENT_PIN, patientPin))
+					.projection(Projections.excludeId())
+					.first();
+			return instance;
+		} catch (NullPointerException ne) {
+			System.out.println("SOME PROBLEM IN GETTING PATIENT SCHEDULE FOR PIN : " + patientPin);
+			ne.printStackTrace();
+			return null;
+		} catch (Exception e) {
+			System.out.println("SOME SERVER PROBLEM IN GET PATIENT SCHEDULE");
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	@Override
+	public boolean updatePatientScoreDetail(PatientScoreDetail patientScoreDetail) {
+		try{
+			MongoDatabase database = MongoDBDAO.getConnectedDatabase();
+
+			MongoCollection<PatientScoreDetail> patientScoreMongoCollection =
+					database.getCollection(PATIENT_SCORE_COLLECTION, PatientScoreDetail.class);
+
+			PatientScoreDetail obj =patientScoreMongoCollection
+					.findOneAndReplace(Filters.eq(PatientScoreDetail.PATIENT_PIN, patientScoreDetail.getPatientPin()),
+							patientScoreDetail);
+			if(obj == null) {
+				patientScoreMongoCollection.insertOne(patientScoreDetail);
+			}
+			return true;
+		} catch (NullPointerException ne) {
+			System.out.println("SOME PROBLEM IN GETTING PATIENT SCHEDULE FOR PIN : " + patientScoreDetail.getPatientPin());
+			ne.printStackTrace();
+			return false;
+		} catch (Exception e) {
+			System.out.println("SOME SERVER PROBLEM IN GET PATIENT SCHEDULE");
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	@Override
+	public RewardsInstance createPatientRewards(RewardsInstance rewardsInstance, int patientPin) {
+		try{
+			MongoDatabase database = MongoDBDAO.getConnectedDatabase();
+
+			MongoCollection<RewardsInstance> rewardsMongoCollection =
+					database.getCollection(PATIENT_REWARDS_COLLECTION, RewardsInstance.class);
+
+			RewardsInstance obj =rewardsMongoCollection
+					.findOneAndReplace(Filters.eq(PatientScoreDetail.PATIENT_PIN, rewardsInstance.getPatientPin()),
+							rewardsInstance);
+			if(obj == null) {
+				rewardsMongoCollection.insertOne(rewardsInstance);
+			}
+			return rewardsInstance;
+		} catch (NullPointerException ne) {
+			System.out.println("SOME PROBLEM IN GETTING PATIENT SCHEDULE FOR PIN : " + rewardsInstance.getPatientPin());
+			ne.printStackTrace();
+			return null;
+		} catch (Exception e) {
+			System.out.println("SOME SERVER PROBLEM IN GET PATIENT SCHEDULE");
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+}

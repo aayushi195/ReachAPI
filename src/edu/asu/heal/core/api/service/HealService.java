@@ -1,6 +1,7 @@
 package edu.asu.heal.core.api.service;
 
 import edu.asu.heal.core.api.models.*;
+import edu.asu.heal.core.api.models.schedule.PatientSchedule;
 import edu.asu.heal.reachv3.api.models.MakeBelieveActivityInstance;
 
 import java.util.List;
@@ -57,4 +58,12 @@ public interface HealService {
     /****************************************  Service methods for Logger  ********************************************/
     Logger[] logMessage (Logger[] loggerInstance);
 
+    /******************************************* Schedule methods ***********************************************************/
+    
+    PatientSchedule createPatientSchedule(int patientPin);
+    
+    PatientSchedule getPatientSchedule(int patientPin);
+    
+    PatientSchedule updatePatientSchedule(int patientPin,String module);
+    
 }
