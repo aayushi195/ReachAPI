@@ -19,8 +19,7 @@ public class LoggerResource {
     @Context
     private UriInfo _uri;
 
-    private static HealService reachService =
-            HealServiceFactory.getTheService();
+    private static HealService reachService = HealServiceFactory.getTheService();
 
     /**
      * @apiDefine InternalServerError
@@ -33,10 +32,23 @@ public class LoggerResource {
      * */
 
     /**
-     * @api {post} /logger Add Logs
+     * @api {post} /logger Create Logs
      * @apiName AddLogs
      * @apiGroup Logger
-     * @apiParam {Array} loggerJSON array of logs in JSON format
+     * @apiParam {array} loggerJSON array of logs in JSON format
+     * @apiSampleRequest http://localhost:8080/CompassAPI/rest/logger
+     * @apiParamExample {array} Request-Payload:
+        * [
+            * {
+                * "format" : "JSON",
+                * "level" : "INFO",
+                * "metadata" : "{\"buttonName\":\"pressBtn\",\"methodName\":\"onClick\"}",
+                * "subtype" : "Settings",
+                * "timeStamp" : "19.01.2019 14:46:50",
+                * "trialId" : "5a946ff566684905df608446",
+                * "type" : "UI_EVENT"
+            * }
+        * ]
      * @apiUse InternalServerError
      * @apiUse NotImplementedError
      */

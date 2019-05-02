@@ -52,7 +52,7 @@ public class ActivityResource {
      * @apiName GetActivitiesByDomain
      * @apiGroup Activity
      * @apiParam {String} domain Domain name for which activities are to be fetched.
-     * @apiSampleRequest http://localhost:8080/ReachAPI/rest/activities?domain=Preventive Anxiety
+     * @apiSampleRequest http://localhost:8080/CompassAPI/rest/activities?domain=Preventive Anxiety
      * @apiUse ActivityNotFoundError
      * @apiUse InternalServerError
      * @apiUse BadRequestError
@@ -108,7 +108,7 @@ public class ActivityResource {
      * @api {get} /activities/:activityId Get an Activity for an activity Id
      * @apiName ActivityDetail
      * @apiGroup Activity
-     * @apiParam {String} id Activity's Unique Id
+     * @apiParam {String} activityId Activity's Unique Id
      * @apiSampleRequest http://localhost:8080/ReachAPI/rest/activities/5a9496ef66684905df624348
      * @apiUse ActivityInstanceNotFoundError
      * @apiUse InternalServerError
@@ -148,7 +148,7 @@ public class ActivityResource {
     }
 
     /**
-     * @api {get} /activities/suggestions?patientPin={patientPin}&emotion={emotionName}&intensity={intensityValue} Get suggested activities based on the emotionName and intensity level
+     * @api {get} /activities/suggestions?patientPin={patientPin}&emotion={emotionName}&intensity={intensityValue} Get suggested activities based on the emotion name and intensity level
      * @apiName GetSuggestedActivities
      * @apiGroup Activity
      * @apiParam {Number} patientPin Patient's Unique Id
@@ -221,10 +221,10 @@ public class ActivityResource {
      * @apiParam {String} Title Title of the Activity
      * @apiParam {String} Description Description of the Activity
      * @apiParamExample {json} Activity Example:
-     * {
-     * "title" : "SWAP",
-     * "description" : "SWAP Activity"
-     * }
+     *      {
+     *          "title" : "SWAP",
+     *          "description" : "SWAP Activity"
+     *      }
      * @apiSampleRequest http://localhost:8080/ReachAPI/rest/activities
      * @apiUse InternalServerError
      * @apiUse BadRequestError
@@ -275,13 +275,13 @@ public class ActivityResource {
      * @apiParam {DateTime} updatedAt Updated Data and Time of the Activity
      * @apiParamExample {json} Activity Example:
      * {
-     * "activityId" : "5a9496ef66684905df624348",
-     * "title" : "SWAP",
-     * "description" : "SWAP Activity",
-     * "createdAt" : ISODate("2018-02-26T07:00:00Z"),
-     * "updatedAt" : ISODate("2018-02-26T07:00:00Z")
+     *         "activityId": "5a9496ef66684905df624348",
+     *         "createdAt": "2019-05-02T05:29:33.207Z[UTC]",
+     *         "description": "SWAP Activity",
+     *         "title": "SWAP",
+     *         "updatedAt": "2019-05-02T05:29:33.207Z[UTC]"
      * }
-     * @apiSampleRequest http://localhost:8080/ReachAPI/rest/activities
+     * @apiSampleRequest http://localhost:8080/CompassAPI/rest/activities
      * @apiUse InternalServerError
      * @apiUse BadRequestError
      */
@@ -326,11 +326,11 @@ public class ActivityResource {
     }
 
     /**
-     * @api {delete} /activities/:id Delete an Activity
+     * @api {delete} /activities/:activityId Delete an Activity
      * @apiName DeleteActivity
      * @apiGroup Activity
-     * @apiParam {String} id Activity's Unique Id
-     * @apiSampleRequest http://localhost:8080/ReachAPI/rest/activities/5a9496ef66684905df624348
+     * @apiParam {String} activityId Activity's Unique Id
+     * @apiSampleRequest http://localhost:8080/CompassAPI/rest/activities/5a9496ef66684905df624348
      * @apiUse ActivityInstanceNotFoundError
      * @apiUse BadRequestError
      * @apiUse InternalServerError

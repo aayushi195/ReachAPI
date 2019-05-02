@@ -46,8 +46,9 @@ public class TrialsResource {
      * @apiName getTrials
      * @apiGroup Trials
      * @apiParam {String} domain Domain name for which trials are to be fetched.
-     * @apiSampleRequest http://localhost:8080/ReachAPI/rest/trials?domain=Preventive Anxiety
+     * @apiSampleRequest http://localhost:8080/CompassAPI/rest/trials?domain=Preventive Anxiety
      * @apiUse BadRequestError
+     * @apiUse TrialNotFoundError
      * @apiUse InternalServerError
      * @apiUse NotImplementedError
      */
@@ -76,7 +77,7 @@ public class TrialsResource {
                     .build();
         } else if (trials.isEmpty()) {
             response = builder
-                    .setStatusCode(Response.Status.OK.getStatusCode())
+                    .setStatusCode(Response.Status.NOT_FOUND.getStatusCode())
                     .setData("THERE ARE NO TRIALS IN THE DATABASE")
                     .build();
         } else if (trials.size() == 1) {
@@ -106,22 +107,23 @@ public class TrialsResource {
     /**
      * @api {post} /trials Create Trial
      * @apiName CreateTrial
-     * @apiGroup Trial
+     * @apiGroup Trials
      * @apiParam {String} domainId DomainId for which the trial is being created
      * @apiParam {String} title Title of the Trial
      * @apiParam {String} description Description of the Trial
      * @apiParam {String} startDate Start Date for the Trial
      * @apiParam {String} endDate End Date for the Trial
      * @apiParam {Number} targetCount Target Count of the Trial
-     * @apiParamExample {json} Activity Example:
-     * {
-     *      domainId=5abd64f5734d1d0cf303bda1
-     *      title="Compass"
-     *      description="Compass for Courage"
-     *      startDate="2018-02-26T07:00:00Z"
-     *      endDate="2018-04-25T07:00:00Z"
-     *      targetCount=100
-     * }
+     * @apiSampleRequest http://localhost:8080/CompassAPI/rest/trials
+     * @apiParamExample {json} Request-Payload:
+         * {
+         *   "domainId":"5abd64f5734d1d0cf303bda1",
+         *   "title":"SCD",
+         *   "description":"Sickle Cell Disease",
+         *   "startDate":"2018-10-23T07:00:00.000Z",
+         *   "endDate":"2019-10-23T07:00:00.000Z",
+         *   "targetCount":100
+         * }
      * @apiUse BadRequestError
      * @apiUse InternalServerError
      * @apiuse TrialNotFoundError

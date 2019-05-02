@@ -18,6 +18,7 @@ import java.util.List;
 
 @Path("/patients")
 public class PatientResource {
+
 	@Context
 	private UriInfo _uri;
 
@@ -42,9 +43,10 @@ public class PatientResource {
 	 * @api {get} /patients?trialId={trialId} Get list of all Patients
 	 * @apiName GetPatients
 	 * @apiGroup Patient
-	 * @apiParam {Number} [trialId] Pass trialId = 'some-unique-id' as query parameter to fetch the list of
-	 * patients for a particular trial; eg: `/patient?trialId=1`
+	 * @apiParam {Number} trialId Unique Id of a trial
+	 * @apiSampleRequest http://localhost:8080/CompassAPI/rest/patients?trialId=5a946ff566684905df608446
 	 * @apiUse PatientNotFoundError
+	 * @apiUse InternalServerError
 	 */
 	@GET
 	@Produces("application/hal+json")
@@ -95,10 +97,10 @@ public class PatientResource {
 	}
 
 	/**
-	 * @api {get} /patient/:id Get detail for a specific Patient
+	 * @api {get} /patient/:patientPin Get detail for a specific Patient
 	 * @apiName GetPatientDetail
 	 * @apiGroup Patient
-	 * @apiParam {Number} id Patient's Unique Id
+	 * @apiParam {Number} patientPin Patient's Unique Id
 	 * @apiSampleRequest http://localhost:8080/ReachAPI/rest/patients/4014
 	 * @apiUse InternalServerError
 	 * @apiUse PatientNotFoundError
@@ -139,10 +141,13 @@ public class PatientResource {
 	}
 
 	/**
-	 * @api {post} /patient Add Patient
+	 * @api {post} /patient Create Patient
 	 * @apiName AddPatient
 	 * @apiGroup Patient
 	 * @apiParam {String} Trial ID of the trial to which the patient needs to be added
+	 * @apiParamExample {text} Request-Payload:
+	 * 	  5a946ff566684905df608446
+	 * @apiSampleRequest http://localhost:8080/CompassAPI/rest/patients
 	 * @apiUse BadRequestError
 	 * @apiUse InternalServerError
 	 * @apiUse NotImplementedError
@@ -193,6 +198,7 @@ public class PatientResource {
 	 * "endDate": "2018-03-01 13:00:00",
 	 * "state": "completed"
 	 * }
+	 * @apiSampleRequest http://localhost:8080/CompassAPI/rest/patients
 	 * @apiUse BadRequestError
 	 * @apiUse InternalServerError
 	 * @apiUse NotImplementedError
@@ -243,12 +249,14 @@ public class PatientResource {
 	}
 
 	/**
-	 * @api {get} /patient/:id Get detail for a specific Patient
-	 * @apiName GetPatientDetail
+	 * @api {get} /patient/:patientPin/rewards Get rewards for a specific Patient
+	 * @apiName GetPatientRewards
 	 * @apiGroup Patient
-	 * @apiParam {Number} id Patient's Unique Id
-	 * @apiSampleRequest http://localhost:8080/ReachAPI/rest/patients/4014
+	 * @apiParam {Number} patientPin Patient's Unique Id
+	 * @apiSampleRequest http://localhost:8080/ReachAPI/rest/patients/4014/rewards
 	 * @apiUse InternalServerError
+	 * @apiUse PatientNotFoundError
+	 * @apiUse BadRequestError
 	 * @apiUse PatientNotFoundError
 	 */
 	@GET
@@ -291,5 +299,4 @@ public class PatientResource {
 		}
 		return Response.status(Response.Status.OK.getStatusCode()).entity(rewardsInstance).build();
 	}
-
 }
