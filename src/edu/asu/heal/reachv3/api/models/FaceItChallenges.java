@@ -13,8 +13,9 @@ public class FaceItChallenges {
     private String questionText;
     private int answerId;
     private String status;
-    
-    @JsonDeserialize(using= DateDeserializer.class)
+    private static final String DATE_FORMAT_AI="MMM dd, yyyy HH:mm:ss";
+    SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT_AI);
+ //   @JsonDeserialize(using= DateDeserializer.class)
  //   @JsonSerialize(using=DateSerializer.class)
     private Date lastModified;
 
@@ -25,6 +26,13 @@ public class FaceItChallenges {
         this.questionText = questionText;
         this.answerId = answerId;
         this.status = status;
+        try {
+        	System.out.println("In Challanges ::::::: " + lastModified);
+			this.lastModified = format.parse(lastModified);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
     public String getQuestionText() {

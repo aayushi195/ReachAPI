@@ -2,6 +2,7 @@ package edu.asu.heal.reachv3.api.modelFactory;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -10,6 +11,8 @@ import edu.asu.heal.core.api.models.*;
 import edu.asu.heal.reachv3.api.models.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.util.StdDateFormat;
@@ -90,7 +93,8 @@ public class ModelFactory {
 			extendedActivityInstance.setActivityTypeName(activityName);
 			extendedActivityInstance.setVersion(VERSION);
 
-			activityInstance = getActitvityInstanceOfType(activityName,activityInstance,extendedActivityInstance,null);
+			activityInstance = getActitvityInstanceOfType(activityName,activityInstance,
+					extendedActivityInstance,null);
 
 			ActivityInstance newActivityInstance = dao.createActivityInstance(activityInstance);
 			return newActivityInstance;
@@ -304,11 +308,21 @@ public class ModelFactory {
 						activityInstance.getPatientPin(),extendedActivityInstance);
 			} else if(activityName.equals(FACEIT_ACTIVITYNAME)){
 				System.out.println("1 ................................................");
-				FaceItSituation situation;
+				System.out.println(situationJson);
+				FaceItSituation situation = new FaceItSituation();
 				if(situationJson == null)
 					situation = new FaceItSituation(dao.getFaceItChallenges());
 				else {
-					situation = mapper.readValue(situationJson, FaceItSituation.class);
+					JSONObject jobj = new JSONObject(situationJson);
+					String faceItChallanges = null;
+					List<FaceItChallenges> faceItList = new ArrayList<>();
+					if(jobj.has("faceItChallenges"))
+						faceItChallanges = jobj.getString("faceItChallenges");
+					if(faceItChallanges != null) {
+						faceItList = mapper.readValue(faceItChallanges, new TypeReference<List<FaceItChallenges>>(){});
+					}
+					
+					situation.setFaceItChallenges(faceItList);
 				}
 				System.out.println("2 ................................................");
 				
@@ -390,7 +404,8 @@ public class ModelFactory {
 			extendedActivityInstance.setVersion(VERSION);
 
 			String situationStr = getSituationString(activityInstanceId,null);
-			activityInstance = getActitvityInstanceOfType(activityName, activityInstance, extendedActivityInstance, situationStr);
+			activityInstance = getActitvityInstanceOfType(activityName, activityInstance, 
+					extendedActivityInstance, situationStr);
 			return activityInstance;
 
 		} catch (Exception e) {
