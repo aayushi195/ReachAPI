@@ -662,14 +662,12 @@ public class ModelFactory {
 
 			Domain domain = dao.getDomain(trialInstance.getDomainId());
 			if (domain != null) {
-
-				Date startDateFormat = new SimpleDateFormat(DATE_FORMAT).parse(trialInstance.getStartDate().toString());
-				Date endDateFormat = new SimpleDateFormat(DATE_FORMAT).parse(trialInstance.getEndDate().toString());
-
 				trialInstance.setUpdatedAt(new Date());
 				trialInstance.setCreatedAt(new Date());
-				trialInstance.setStartDate(startDateFormat);
-				trialInstance.setEndDate(endDateFormat);
+				if(trialInstance.getStartDate() == null)
+					trialInstance.setStartDate(new Date());
+				if(trialInstance.getEndDate() == null)
+					trialInstance.setEndDate(new Date());
 				trialInstance.setDomainId(domain.getDomainId());
 
 				return dao.createTrial(trialInstance);
