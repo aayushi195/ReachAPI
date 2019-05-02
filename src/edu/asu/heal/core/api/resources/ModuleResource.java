@@ -69,9 +69,9 @@ public class ModuleResource {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
 		}
 
-		if (patientPin == 0 || patientPin < -1) {
+		if (patientPin == 0 || patientPin <= -1) {
 			response = builder
-					.setData("YOUR PATIENT PIN IS ABSENT FROM THE REQUEST")
+					.setData("BAD VALUES FOR PARAMETER PATIENT PIN")
 					.setStatusCode(Response.Status.BAD_REQUEST.getStatusCode())
 					.setServerURI(_uri.getBaseUri().toString())
 					.build();
@@ -125,10 +125,11 @@ public class ModuleResource {
 
 		if (patientPin == 0 || patientPin < -1 || Integer.parseInt(module) < 1 || Integer.parseInt(module) > 6) {
 			response = builder
-					.setData("ISSUE WITH PATIENT PIN AND/OR MODULE IN THE REQUEST")
+					.setData("BAD VALUES FOR PARAMETER PATIENT PIN AND MODULE")
 					.setStatusCode(Response.Status.BAD_REQUEST.getStatusCode())
 					.setServerURI(_uri.getBaseUri().toString())
 					.build();
+			return Response.status(response.getStatusCode()).entity(response.toEntity()).build();
 		} else {
 			moduleInstance = service.getActivityListWithCallToAction(module, patientPin);
 			if (moduleInstance == null) {
@@ -136,6 +137,7 @@ public class ModuleResource {
 						.setStatusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
 						.setData("SOME SERVER ERROR. PLEASE CONTACT ADMINISTRATOR")
 						.build();
+				return Response.status(response.getStatusCode()).entity(response.toEntity()).build();
 			} else {
 				response = builder
 						.setStatusCode(Response.Status.OK.getStatusCode())

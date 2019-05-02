@@ -65,13 +65,13 @@ public class ScheduleResource {
 		try{
 			builder = new HEALResponseBuilder(ScheduleResponse.class);
 
-			if (patientPin == 0 || patientPin < -1) {
+			if (patientPin == 0 || patientPin <= -1) {
 				response = builder
-						.setData("YOUR PATIENT PIN IS ABSENT FROM THE REQUEST")
+						.setData("BAD VALUES FOR PARAMETER PATIENT PIN")
 						.setStatusCode(Response.Status.BAD_REQUEST.getStatusCode())
 						.setServerURI(_uri.getBaseUri().toString())
 						.build();
-			}else {
+			} else {
 				PatientSchedule patientSchedule = reachService.getPatientSchedule(patientPin);
 				if (patientSchedule == null) {
 					response = builder
@@ -125,8 +125,15 @@ public class ScheduleResource {
 				patientPin = patientData.getInt("patientPin");
 			}
 			PatientSchedule patientSchedule = null;
-			if(patientPin != -1)
+			if(patientPin > 0)
 				patientSchedule = reachService.createPatientSchedule(patientPin);
+			else if (patientPin == 0 || patientPin <= -1){
+				response = builder
+						.setStatusCode(Response.Status.BAD_REQUEST.getStatusCode())
+						.setData("BAD VALUES FOR PARAMETER PATIENT PIN")
+						.build();
+				return Response.status(response.getStatusCode()).entity(response.toEntity()).build();
+			}
 
 			if (patientSchedule == null) {
 				response = builder
@@ -185,12 +192,12 @@ public class ScheduleResource {
 				module = patientData.getString("module");
 			}
 			PatientSchedule patientSchedule = null;
-			if(patientPin != -1 && module != null)
+			if(patientPin > 0 && module != null && (Integer.parseInt(module) >= 1 && Integer.parseInt(module) <= 6))
 				patientSchedule = reachService.updatePatientSchedule(patientPin, module);
-			else {
+			else if (patientPin == 0 || patientPin <= -1 || Integer.parseInt(module) < 1 || Integer.parseInt(module) > 6){
 				response = builder
 						.setStatusCode(Response.Status.BAD_REQUEST.getStatusCode())
-						.setData("BAD VALUES FOR PARAMETER patientPin AND module")
+						.setData("BAD VALUES FOR PARAMETER PATIENT PIN AND MODULE")
 						.build();
 				return Response.status(response.getStatusCode()).entity(response.toEntity()).build();
 			}

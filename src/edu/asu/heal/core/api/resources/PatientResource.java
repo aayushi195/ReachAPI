@@ -273,22 +273,18 @@ public class PatientResource {
 			ie.printStackTrace();
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
 		}
-		if (patientPin == 0 || patientPin < -1) {
+		if (patientPin == 0 || patientPin <= -1) {
 			response = builder
-					.setData("YOUR PATIENT PIN IS ABSENT FROM THE REQUEST")
+					.setData("BAD VALUES FOR PARAMETER PATIENT PIN")
 					.setStatusCode(Response.Status.BAD_REQUEST.getStatusCode())
 					.setServerURI(_uri.getBaseUri().toString())
 					.build();
+			return Response.status(response.getStatusCode()).entity(response.toEntity()).build();
 		}else {
 			rewardsInstance = service.getPatientRewards(patientPin);
 			if (rewardsInstance == null) {
 				 return Response.status(Response.Status.BAD_REQUEST.getStatusCode()).entity(rewardsInstance).build();
 
-			} else if (rewardsInstance.equals(NullObjects.getNullPatient())) {
-				response = builder
-						.setStatusCode(Response.Status.NOT_FOUND.getStatusCode())
-						.setData("THE PATIENT YOU'RE REQUESTING DOES NOT EXIST")
-						.build();
 			} else {
 				response = builder
 						.setStatusCode(Response.Status.OK.getStatusCode())
