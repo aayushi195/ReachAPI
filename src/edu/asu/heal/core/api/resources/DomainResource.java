@@ -78,7 +78,7 @@ public class DomainResource {
     }
 
     /**
-     * @api {get} /domains/:id Get a specific domain Detail
+     * @api {get} /domains/:id Get a specific domain
      * @apiName DomainDetail
      * @apiGroup Domain
      * @apiParam {String} id Domain's Unique Id

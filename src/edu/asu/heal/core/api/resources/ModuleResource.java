@@ -22,6 +22,36 @@ public class ModuleResource {
 
 	private HealService reachService = HealServiceFactory.getTheService();
 
+	/**
+	 * @apiDefine BadRequestError
+	 * @apiError (Error 4xx) {400} BadRequest Bad Request Encountered
+	 * */
+
+	/** @apiDefine PatientNotFoundError
+	 * @apiError (Error 4xx) {404} NotFound Patient cannot be found
+	 * */
+
+	/**
+	 * @apiDefine InternalServerError
+	 * @apiError (Error 5xx) {500} InternalServerError Something went wrong at server, Please contact the administrator!
+	 * */
+
+	/**
+	 * @apiDefine NotImplementedError
+	 * @apiError (Error 5xx) {501} NotImplemented The resource has not been implemented. Please keep patience, our developers are working hard on it!!
+	 * */
+
+	/**
+	 * @api {get} /modules/progression?patientPin={patientPin} Get progression for a specific Patient
+	 * @apiName ModuleProgressionDetail
+	 * @apiGroup Modules
+	 * @apiParam {Number} patientPin Patient's Unique Id
+	 * @apiSampleRequest http://localhost:8080/CompassAPI/rest/modules/progression?patientPin=4011
+	 * @apiUse BadRequestError
+	 * @apiUse PatientNotFoundError
+	 * @apiUse InternalServerError
+	 * @apiUse NotImplementedError
+	 */
 	@GET
 	@Path("/progression")
 	@Produces("application/hal+json")
@@ -62,7 +92,19 @@ public class ModuleResource {
 		}
 		return Response.status(response.getStatusCode()).entity(response.toEntity()).build();
 	}
-	
+
+	/**
+	 * @api {get} /modules/:id?patientPin={patientPin} Get list of activities for a given module for a specific patient
+	 * @apiName ModuleActivityDetail
+	 * @apiGroup Modules
+	 * @apiParam {Number} id Module Number
+	 * @apiParam {Number} patientPin Patient's Unique Id
+	 * @apiSampleRequest http://localhost:8080/CompassAPI/rest/modules/1?patientPin=4011
+	 * @apiUse BadRequestError
+	 * @apiUse PatientNotFoundError
+	 * @apiUse InternalServerError
+	 * @apiUse NotImplementedError
+	 */
 	@GET
 	@Path("/{module}")
 	@Produces("application/hal+json")

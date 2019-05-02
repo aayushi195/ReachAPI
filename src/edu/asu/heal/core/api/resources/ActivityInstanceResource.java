@@ -105,10 +105,10 @@ public class ActivityInstanceResource {
 	}
 
 	/**
-	 * @api {get} /activityinstances/:id Get Activity Instances for an activityInstanceId
+	 * @api {get} /activityinstances/:activityInstanceId Get Activity Instances for an activity Instance Id
 	 * @apiName ActivityInstanceDetail
 	 * @apiGroup ActivityInstance
-	 * @apiParam {String} id ActivityInstance's Unique Id
+	 * @apiParam {String} activityInstanceId ActivityInstance's Unique Id
 	 * @apiSampleRequest http://localhost:8080/CompassAPI/rest/activityinstances/5c5b901a324b051370ac2f3e
 	 * @apiUse BadRequestError
 	 * @apiUse ActivityInstanceNotFoundError
@@ -162,15 +162,15 @@ public class ActivityInstanceResource {
 	 * @apiParam {DateTime} ActualSubmissionTime Actual Submission Time of the ActivityInstance
 	 * @apiParam {Number} patientPin Patient's Unique Id
 	 * @apiParamExample {json} Request-Payload:
-	 	* {
-	 		* "activityId": "5abd6180734d1d0cf303bc23",
-	 		* "description": "MakeBelieve activity",
-	 		* "startTime": "2018-10-23T07:00:00.000Z",
-	 		* "endTime": null,
-	 		* "userSubmissionTime": null,
-	 		* "actualSubmissionTime": null,
-	 		* "patientPin": 4011
-	 	* }
+	 * {
+	 * 	"activityId": "5a9496ef66684905df624348",
+	 * 	"description": "SWAP activity",
+	 * 	"startTime": "2018-10-23T07:00:00.000Z",
+	 * 	"endTime": null,
+	 * 	"userSubmissionTime": null,
+	 * 	"actualSubmissionTime": null,
+	 * 	"patientPin": 4011
+	 * }
 	 * @apiSampleRequest http://localhost:8080/CompassAPI/rest/activityinstances
 	 * @apiUse BadRequestError
 	 * @apiUse InternalServerError
@@ -222,6 +222,7 @@ public class ActivityInstanceResource {
 	 * @apiName UpdateActivityInstance
 	 * @apiGroup ActivityInstance
 	 * @apiParam {String} ActivityInstanceId ActivityInstance's Unique Id
+	 * @apiParam {String} ActivityId Unique id of the activity
 	 * @apiParam {String} Description Description about the Activity Instance
 	 * @apiParam {DateTime} createdAt Created Date and Time of the Activity Instance
 	 * @apiParam {DateTime} updatedAt Updated Data and Time of the Activity Instance
@@ -230,27 +231,52 @@ public class ActivityInstanceResource {
 	 * @apiParam {DateTime} UserSubmissionTime User Submission Time of the ActivityInstance
 	 * @apiParam {DateTime} ActualSubmissionTime Actual Submission Time of the ActivityInstance
 	 * @apiParam {Number} patientPin Patient's Unique Id
-	 * @apiParam {String} Name The name of the activity
-	 * @apiParam {String} state The status of the Activity Instance from Created | Available | In Execution (Running) | Suspended | Completed | Aborted
-	 * @apiParamExample {json} Activity Instance Example:
-	 * {
-	 *         "activityInstanceId": "5c5b901a324b051370ac2f3e",
-	 *         "createdAt": "2019-02-07T01:30:34.947Z",
-	 *         "updatedAt": "2019-02-07T01:30:34.947Z",
-	 *         "description": "SWAP activity",
-	 *         "startTime": "2019-02-07T01:05:25.286Z",
-	 *         "endTime": null,
-	 *         "userSubmissionTime": null,
-	 *         "actualSubmissionTime": null,
-	 *         "instanceOf": {
-	 *             "name": "SWAP",
-	 *         },
-	 *         "state": "completed",
-	 *         "patientPin": 4015,
-	 *         "situation": "Explain the principal",
-	 *         "worry": "Fear to speak",
-	 *         "action": "Practice WorryHeads"
-	 * }
+	 * @apiParam {String} state The status of the Activity Instance from Created | In Progress (Running) | Completed
+	 * @apiParamExample {json} Request-Payload:
+	 * 	{
+	 * 		"activityInstanceId": "5cca73cf89f38e3d343fdcae",
+	 * 		"activityId": "5a9496ef66684905df624348",
+	 * 		"createdAt": 1556771790775,
+	 * 		"updatedAt": 1556771790776,
+	 * 		"description": "SWAP activity",
+	 * 		"startTime": 1540278000000,
+	 * 		"endTime": null,
+	 * 		"userSubmissionTime": null,
+	 * 		"actualSubmissionTime": null,
+	 * 		"state": "created",
+	 * 		"patientPin": 4012,
+	 * 		"extended": {
+	 * 			"domainName": "Preventive Anxiety",
+	 * 			"activityTypeName": "SWAP",
+	 * 			"version": "v1",
+	 * 			"situation": {
+	 * 				"situationId": 1,
+	 * 				"situationTitle": "SWAP Situation",
+	 * 				"questions": [
+	 * 					{
+	 * 						"questionId": 1,
+	 * 						"questionText": "SITUATION (NOTICE THE SITUATION THAT MAKES YOU WORRY, SCARED OR NERVOUS)",
+	 * 						"answerText": null
+	 * 					},
+	 * 					{
+	 * 						"questionId": 2,
+	 * 						"questionText": "WORRY (NOTICE THE WORRY THAT POPS INTO YOUR HEAD)",
+	 * 						"answerText": null
+	 * 					},
+	 * 					{
+	 * 						"questionId": 3,
+	 * 						"questionText": "ACTION THOUGHT OR PLAN (WHAT ELSE CAN HAPPEN? HOW CAN YOU SOLVE THAT?)",
+	 * 						"answerText": null
+	 * 					},
+	 * 					{
+	 * 						"questionId": 4,
+	 * 						"questionText": "PRACTICE (ACTION THOUGHT OR PLAN)",
+	 * 						"answerText": null
+	 * 					}
+	 * 				]
+	 * 			}
+	 * 		}
+	 * 	}
 	 * @apiSampleRequest http://localhost:8080/CompassAPI/rest/activityinstances/5c5b901a324b051370ac2f3e
 	 * @apiUse BadRequestError
 	 * @apiUse InternalServerError
@@ -287,10 +313,10 @@ public class ActivityInstanceResource {
 	}
 
 	/**
-	 * @api {delete} /activityinstances/:id Delete an ActivityInstance
+	 * @api {delete} /activityinstances/:activityInstanceId Delete an ActivityInstance
 	 * @apiName DeleteActivityInstance
 	 * @apiGroup ActivityInstance
-	 * @apiParam {String} id ActivityInstance's unique id
+	 * @apiParam {String} activityInstanceId ActivityInstance's unique id
 	 * @apiSampleRequest http://localhost:8080/CompassAPI/rest/activityinstances/5c5b901a324b051370ac2f3e
 	 * @apiUse BadRequestError
 	 * @apiUse ActivityInstanceNotFoundError

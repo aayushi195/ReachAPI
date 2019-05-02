@@ -32,10 +32,10 @@ public class LoggerResource {
      * */
 
     /**
-     * @api {post} /logger Add Logs
+     * @api {post} /logger Create Logs
      * @apiName AddLogs
      * @apiGroup Logger
-     * @apiParam {json} loggerJSON array of logs in JSON format
+     * @apiParam {array} loggerJSON array of logs in JSON format
      * @apiSampleRequest http://localhost:8080/CompassAPI/rest/logger
      * @apiParamExample {array} Request-Payload:
         * [

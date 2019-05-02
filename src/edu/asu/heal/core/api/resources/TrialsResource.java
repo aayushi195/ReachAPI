@@ -48,6 +48,7 @@ public class TrialsResource {
      * @apiParam {String} domain Domain name for which trials are to be fetched.
      * @apiSampleRequest http://localhost:8080/CompassAPI/rest/trials?domain=Preventive Anxiety
      * @apiUse BadRequestError
+     * @apiUse TrialNotFoundError
      * @apiUse InternalServerError
      * @apiUse NotImplementedError
      */
@@ -76,7 +77,7 @@ public class TrialsResource {
                     .build();
         } else if (trials.isEmpty()) {
             response = builder
-                    .setStatusCode(Response.Status.OK.getStatusCode())
+                    .setStatusCode(Response.Status.NOT_FOUND.getStatusCode())
                     .setData("THERE ARE NO TRIALS IN THE DATABASE")
                     .build();
         } else if (trials.size() == 1) {

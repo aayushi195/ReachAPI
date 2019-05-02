@@ -1,7 +1,5 @@
 package edu.asu.heal.core.api.resources;
 
-import java.util.List;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.PATCH;
@@ -14,8 +12,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import org.json.JSONObject;
-
-import edu.asu.heal.core.api.models.NullObjects;
 import edu.asu.heal.core.api.models.schedule.PatientSchedule;
 import edu.asu.heal.core.api.responses.HEALResponse;
 import edu.asu.heal.core.api.responses.HEALResponseBuilder;
@@ -31,6 +27,36 @@ public class ScheduleResource {
 
 	private HealService reachService = HealServiceFactory.getTheService();
 
+	/**
+	 * @apiDefine BadRequestError
+	 * @apiError (Error 4xx) {400} BadRequest Bad Request Encountered
+	 * */
+
+	/** @apiDefine ScheduleNotFoundError
+	 * @apiError (Error 4xx) {404} NotFound Schedule cannot be found
+	 * */
+
+	/**
+	 * @apiDefine InternalServerError
+	 * @apiError (Error 5xx) {500} InternalServerError Something went wrong at server, Please contact the administrator!
+	 * */
+
+	/**
+	 * @apiDefine NotImplementedError
+	 * @apiError (Error 5xx) {501} NotImplemented The resource has not been implemented. Please keep patience, our developers are working hard on it!!
+	 * */
+
+	/**
+	 * @api {get} /schedules?patientPin={patientPin} Get schedule for a specific Patient
+	 * @apiName PatientScheduleDetail
+	 * @apiGroup Schedules
+	 * @apiParam {Number} id Patient's Unique Id
+	 * @apiSampleRequest http://localhost:8080/CompassAPI/rest/schedules?patientPin=4010
+	 * @apiUse BadRequestError
+	 * @apiUse ScheduleNotFoundError
+	 * @apiUse InternalServerError
+	 * @apiUse NotImplementedError
+	 */
 	@GET
 	@Produces("application/hal+json")
 	public Response getPatientSchedule(@QueryParam("patientPin") int patientPin) {
@@ -61,12 +87,28 @@ public class ScheduleResource {
 				}
 			}
 			return Response.status(response.getStatusCode()).entity(response.toEntity()).build();
-		}catch (Exception e){
+		} catch (Exception e){
 			System.out.println("Problem in HEAL Response builder");
 			e.printStackTrace();
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
 		}
 	}
+
+	/**
+	 * @api {post} /schedules Create Schedule of a patient
+	 * @apiName CreateSchedule
+	 * @apiGroup Schedules
+	 * @apiParam {Number} patientPin Patient's Unique Id
+	 * @apiSampleRequest http://localhost:8080/CompassAPI/rest/schedules
+	 * @apiParamExample {json} Request-Payload:
+	 * {
+	 * 		"patientPin" : 4012
+	 * }
+	 * @apiUse BadRequestError
+	 * @apiUse InternalServerError
+	 * @apiuse ScheduleNotFoundError
+	 * @apiUse NotImplementedError
+	 */
 
 	@POST
 	@Consumes("application/json")
@@ -106,6 +148,24 @@ public class ScheduleResource {
 		}
 	}
 
+	/**
+	 * @api {patch} /schedules Update schedule of the patient
+	 * @apiName UpdateSchedule
+	 * @apiGroup Schedules
+	 * @apiParam {Number} patientPin Patient's Unique Id
+	 * @apiParam {String} module Module Number
+	 * @apiSampleRequest http://localhost:8080/CompassAPI/rest/schedules
+	 * @apiParamExample {json} Request-Payload:
+	 * {
+	 * 		"patientPin" : 4012
+	 * 		"module" : "3"
+	 * }
+	 * @apiUse BadRequestError
+	 * @apiUse InternalServerError
+	 * @apiuse ScheduleNotFoundError
+	 * @apiUse NotImplementedError
+	 */
+
 	@PATCH
 	@Consumes("application/json")
 	@Produces("application/hal+json")
@@ -130,7 +190,7 @@ public class ScheduleResource {
 			else {
 				response = builder
 						.setStatusCode(Response.Status.BAD_REQUEST.getStatusCode())
-						.setData("BAD VALUES FOR PERAMETER patientPin AND module")
+						.setData("BAD VALUES FOR PARAMETER patientPin AND module")
 						.build();
 				return Response.status(response.getStatusCode()).entity(response.toEntity()).build();
 			}
