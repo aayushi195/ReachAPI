@@ -5,6 +5,9 @@ import com.theoryinpractise.halbuilder.api.RepresentationFactory;
 import com.theoryinpractise.halbuilder.impl.api.Support;
 import com.theoryinpractise.halbuilder.standard.StandardRepresentationFactory;
 import edu.asu.heal.core.api.models.*;
+import edu.asu.heal.core.api.models.schedule.PatientSchedule;
+import edu.asu.heal.reachv3.api.models.moduleProgession.ModuleActivityList;
+import edu.asu.heal.reachv3.api.models.moduleProgession.ModuleInstance;
 
 import java.util.List;
 
@@ -177,5 +180,48 @@ public class HALBuilderApiHALHelperImpl implements HALHelper{
             finalRepresentation.withRepresentation("trials", representation);
         }
         return finalRepresentation.toString(RepresentationFactory.HAL_JSON);
+    }
+
+	@Override
+	public String getPatientScheduleJSON(PatientSchedule patientSchedule, String patientSchedulePath,String patientResourcePath) {
+		RepresentationFactory factory = new StandardRepresentationFactory();
+        Representation representation;
+
+        representation = factory.newRepresentation()
+                .withProperty("patient_schedule", patientSchedule)
+                .withLink(Support.SELF, patientSchedulePath + "?patientPin=" + patientSchedule.getPatientPin())
+                .withLink("patient_pin", patientResourcePath + "/" + String.valueOf(patientSchedule.getPatientPin()));
+              
+        System.out.println("REPRESENTATION HERE");  
+        System.out.println(representation);
+        return representation.toString(RepresentationFactory.HAL_JSON);
+	}
+
+    @Override
+    public String getmoduleProgressionJSON(ModuleInstance moduleInstance, String patientResourcePath) {
+        RepresentationFactory factory = new StandardRepresentationFactory();
+        Representation representation;
+
+        representation = factory.newRepresentation()
+                .withProperty("module_progression", moduleInstance)
+                .withLink("patient_pin", patientResourcePath + "/" + String.valueOf(moduleInstance.getPatientPin()));
+
+        System.out.println("REPRESENTATION HERE");
+        System.out.println(representation);
+        return representation.toString(RepresentationFactory.HAL_JSON);
+    }
+    
+    @Override
+    public String getmoduleActivitiesJSON(ModuleActivityList moduleInstance, String patientResourcePath) {
+        RepresentationFactory factory = new StandardRepresentationFactory();
+        Representation representation;
+
+        representation = factory.newRepresentation()
+                .withProperty("module_progression", moduleInstance)
+                .withLink("patient_pin", patientResourcePath + "/" + String.valueOf(moduleInstance.getPatientPin()));
+
+        System.out.println("REPRESENTATION HERE");
+        System.out.println(representation);
+        return representation.toString(RepresentationFactory.HAL_JSON);
     }
 }

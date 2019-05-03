@@ -3,11 +3,16 @@ package edu.asu.heal.reachv3.api.service;
 import edu.asu.heal.core.api.dao.DAO;
 import edu.asu.heal.core.api.dao.DAOFactory;
 import edu.asu.heal.core.api.models.*;
+import edu.asu.heal.core.api.models.schedule.PatientSchedule;
 import edu.asu.heal.core.api.service.HealService;
 import edu.asu.heal.core.api.service.SuggestedActivityiesMappingService.MappingFactory;
 import edu.asu.heal.core.api.service.SuggestedActivityiesMappingService.MappingInterface;
 import edu.asu.heal.reachv3.api.modelFactory.ModelFactory;
+import edu.asu.heal.reachv3.api.models.moduleProgession.ModuleActivityList;
+import edu.asu.heal.reachv3.api.models.moduleProgession.ModuleInstance;
+import edu.asu.heal.reachv3.api.models.patientRewards.RewardsInstance;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -75,17 +80,6 @@ public class ReachService implements HealService {
 			return __modelFactory.deleteActivity(activityId);
 		} catch (Exception e) {
 			System.out.println("SOME PROBLEM IN REACH SERVICE DELETE ACTIVITY INSTANCE");
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	public HashMap<String, Boolean> getScheduleOfModules(){
-
-		try{
-			return __modelFactory.getScheduleOfModules();
-		} catch (Exception e){
-			System.out.println("SOME PROBLEM IN GETTING THE SCHEDULE OF MODULES");
 			e.printStackTrace();
 			return null;
 		}
@@ -254,6 +248,17 @@ public class ReachService implements HealService {
 		return "DELETE PATIENT";
 	}
 
+	public RewardsInstance getPatientRewards(int patientPin){
+		try{
+			return __modelFactory.getPatientRewards(patientPin);
+		} catch (Exception e){
+			System.out.println("SOME ERROR IN GETPATIENTREWARDS IN REACHSERVICE CLASS");
+			e.printStackTrace();
+			return null;
+		}
+
+	}
+
 	/****************************************  Service methods for Trial  *********************************************/
 
 	@Override
@@ -290,6 +295,74 @@ public class ReachService implements HealService {
 			return null;
 		}
 	}
+	
+	/******************************** Schedule Methods **********************************************************/
 
+	@Override
+	public PatientSchedule createPatientSchedule(int patientPin) {
+		try {
+			return __modelFactory.createPatientSchedule(patientPin);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	@Override
+	public PatientSchedule getPatientSchedule(int patientPin) {
+		try {
+			return __modelFactory.getPatientSchedule(patientPin);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	@Override
+	public PatientSchedule updatePatientSchedule(int patientPin, String module) {
+		try {
+			return __modelFactory.updatePatientSchedule(patientPin, module);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	/****************************************  Service methods for Module *********************************************/
+
+	public ModuleInstance getScheduleOfModules(int patientPin){
+
+		try{
+			return __modelFactory.getScheduleOfModules(patientPin);
+		} catch (Exception e){
+			System.out.println("SOME PROBLEM IN GETTING THE SCHEDULE OF MODULES");
+      e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public ModuleActivityList getActivityListWithCallToAction(String module, int patientPin) {
+		try{
+			return __modelFactory.getActivityListWithCallToAction(module,patientPin);
+		} catch (Exception e){
+			System.out.println("SOME PROBLEM IN GETTING THE SCHEDULE OF MODULES");
+      e.printStackTrace();
+			return null;
+		}
+	}
+
+
+	/****************************************  Other Service methods *********************************************/
+
+	public HashMap<String, Integer> getModuleAndDay(PatientSchedule patientSchedule, Date today) {
+
+		try{
+			return __modelFactory.getModuleAndDay(patientSchedule,today);
+		} catch (Exception e){
+			System.out.println("SOME PROBLEM IN GETTING THE SCHEDULE OF MODULES");
+			e.printStackTrace();
+			return null;
+		}
+	}
 
 }
