@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "HEAL API Documentation",
   "title": "HEAL API",
-  "url" : "https://localhost:8080/ReachAPI/rest/",
+  "url" : "https://localhost:8080/CompassAPI/rest",
   "order":[
     "Patient",
     "GetPatients",
@@ -20,6 +20,8 @@
     "DeleteActivityInstance",
     "Activity",
     "CreateActivity",
+    "GetTrialsOfDomain",
+    "AddTrial",
     "AddLogs"
   ]
 }

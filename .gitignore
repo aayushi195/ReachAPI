@@ -24,9 +24,5 @@ WebContent/
 .classpath
 .project
 .settings/
+apidocs/
 
-
-
-/build/
-
-/apidocs/

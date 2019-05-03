@@ -18,6 +18,7 @@ import java.util.List;
 
 @Path("/patients")
 public class PatientResource {
+
 	@Context
 	private UriInfo _uri;
 
@@ -42,9 +43,10 @@ public class PatientResource {
 	 * @api {get} /patients?trialId={trialId} Get list of all Patients
 	 * @apiName GetPatients
 	 * @apiGroup Patient
-	 * @apiParam {Number} [trialId] Pass trialId = 'some-unique-id' as query parameter to fetch the list of
-	 * patients for a particular trial; eg: `/patient?trialId=1`
+	 * @apiParam {Number} trialId Unique Id of a trial
+	 * @apiSampleRequest http://localhost:8080/CompassAPI/rest/patients?trialId=5a946ff566684905df608446
 	 * @apiUse PatientNotFoundError
+	 * @apiUse InternalServerError
 	 */
 	@GET
 	@Produces("application/hal+json")
@@ -95,10 +97,10 @@ public class PatientResource {
 	}
 
 	/**
-	 * @api {get} /patient/:id Get detail for a specific Patient
+	 * @api {get} /patient/:patientPin Get detail for a specific Patient
 	 * @apiName GetPatientDetail
 	 * @apiGroup Patient
-	 * @apiParam {Number} id Patient's Unique Id
+	 * @apiParam {Number} patientPin Patient's Unique Id
 	 * @apiSampleRequest http://localhost:8080/ReachAPI/rest/patients/4014
 	 * @apiUse InternalServerError
 	 * @apiUse PatientNotFoundError
@@ -139,10 +141,13 @@ public class PatientResource {
 	}
 
 	/**
-	 * @api {post} /patient Add Patient
+	 * @api {post} /patient Create Patient
 	 * @apiName AddPatient
 	 * @apiGroup Patient
 	 * @apiParam {String} Trial ID of the trial to which the patient needs to be added
+	 * @apiParamExample {text} Request-Payload:
+	 * 	  5a946ff566684905df608446
+	 * @apiSampleRequest http://localhost:8080/CompassAPI/rest/patients
 	 * @apiUse BadRequestError
 	 * @apiUse InternalServerError
 	 * @apiUse NotImplementedError
@@ -189,10 +194,11 @@ public class PatientResource {
 	 * @apiParamExample {json} Request-payload :
 	 * {
 	 * "pin": 4010,
-	 * "startDate": "2018-01-01 13:00:00",
-	 * "endDate": "2018-03-01 13:00:00",
-	 * "state": "completed"
+	 * "startDate": "2018-10-23T07:00:00.000Z,
+	 * "endDate": "2018-10-23T07:00:00.000Z,
+	 * "state": "Active"
 	 * }
+	 * @apiSampleRequest http://localhost:8080/CompassAPI/rest/patients
 	 * @apiUse BadRequestError
 	 * @apiUse InternalServerError
 	 * @apiUse NotImplementedError
@@ -243,12 +249,14 @@ public class PatientResource {
 	}
 
 	/**
-	 * @api {get} /patient/:id Get detail for a specific Patient
-	 * @apiName GetPatientDetail
+	 * @api {get} /patient/:patientPin/rewards Get rewards for a specific Patient
+	 * @apiName GetPatientRewards
 	 * @apiGroup Patient
-	 * @apiParam {Number} id Patient's Unique Id
-	 * @apiSampleRequest http://localhost:8080/ReachAPI/rest/patients/4014
+	 * @apiParam {Number} patientPin Patient's Unique Id
+	 * @apiSampleRequest http://localhost:8080/ReachAPI/rest/patients/4014/rewards
 	 * @apiUse InternalServerError
+	 * @apiUse PatientNotFoundError
+	 * @apiUse BadRequestError
 	 * @apiUse PatientNotFoundError
 	 */
 	@GET
@@ -265,22 +273,18 @@ public class PatientResource {
 			ie.printStackTrace();
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
 		}
-		if (patientPin == 0 || patientPin < -1) {
+		if (patientPin == 0 || patientPin <= -1) {
 			response = builder
-					.setData("YOUR PATIENT PIN IS ABSENT FROM THE REQUEST")
+					.setData("BAD VALUES FOR PARAMETER PATIENT PIN")
 					.setStatusCode(Response.Status.BAD_REQUEST.getStatusCode())
 					.setServerURI(_uri.getBaseUri().toString())
 					.build();
+			return Response.status(response.getStatusCode()).entity(response.toEntity()).build();
 		}else {
 			rewardsInstance = service.getPatientRewards(patientPin);
 			if (rewardsInstance == null) {
 				 return Response.status(Response.Status.BAD_REQUEST.getStatusCode()).entity(rewardsInstance).build();
 
-			} else if (rewardsInstance.equals(NullObjects.getNullPatient())) {
-				response = builder
-						.setStatusCode(Response.Status.NOT_FOUND.getStatusCode())
-						.setData("THE PATIENT YOU'RE REQUESTING DOES NOT EXIST")
-						.build();
 			} else {
 				response = builder
 						.setStatusCode(Response.Status.OK.getStatusCode())
@@ -291,5 +295,4 @@ public class PatientResource {
 		}
 		return Response.status(Response.Status.OK.getStatusCode()).entity(rewardsInstance).build();
 	}
-
 }

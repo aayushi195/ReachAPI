@@ -11,7 +11,7 @@ public class NullObjects {
     private static final Patient NULL_PATIENT;
     private static final Trial NULL_TRIAL;
     private static final Domain NULL_DOMAIN;
-    private static final Logger NULL_LOGGER;
+    private static final Logger NULL_LOGGER;  
 
     static {
         Activity a = new Activity();

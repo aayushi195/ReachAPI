@@ -38,11 +38,12 @@ public class DomainResource {
      * @api {get} /domains Get list of all Domains
      * @apiName GetDomains
      * @apiGroup Domain
-     * @apiSampleRequest http://localhost:8080/ReachAPI/rest/domains
+     * @apiSampleRequest http://localhost:8080/CompassAPI/rest/domains
      * @apiUse DomainNotFoundError
      * @apiUse InternalServerError
      */
     @GET
+    @Produces("application/hal+json")
     public Response fetchDomains() {
 
         HEALResponse response;
@@ -77,17 +78,18 @@ public class DomainResource {
     }
 
     /**
-     * @api {get} /domains/:id Get a specific domain Detail
+     * @api {get} /domains/:id Get a specific domain
      * @apiName DomainDetail
      * @apiGroup Domain
      * @apiParam {String} id Domain's Unique Id
-     * @apiSampleRequest http://localhost:8080/ReachAPI/rest/domains/5a937d15f85cf71f59e36411
+     * @apiSampleRequest http://localhost:8080/CompassAPI/rest/domains/5abd64f5734d1d0cf303bda1
      * @apiUse BadRequestError
      * @apiUse InternalServerError
      * @apiUse NotImplementedError
      */
     @GET
     @Path("/{id}")
+    @Produces("application/hal+json")
     public Response fetchDomain(@PathParam("id") String id) {
 
         HEALResponse response;
@@ -122,23 +124,22 @@ public class DomainResource {
 
 
     /**
-     * @api {post} /domain Create Domain
+     * @api {post} /domains Create Domain
      * @apiName CreateDomain
      * @apiGroup Domain
-     * @apiParam {String} Title Title of the Domain
-     * @apiParam {String} Description Description of the Domain
-     * @apiParam {String} State The status of the Domain from Active | InActive
-     * @apiParamExample {json} Activity Example:
-     * {
-     *  	 "title": "COMPASS",
-     *       "description": "Heal domain for preventive anxiety applicatons for children",
-     *       "state": "Active"
-     * }
+     * @apiSampleRequest http://localhost:8080/CompassAPI/rest/domains
+     * @apiParamExample {json} Request-Payload:
+        * {
+            * "title": "Preventive Anxiety",
+            * "description": "Heal domain for preventive anxiety applicatons",
+            * "state": "Active"
+        * }
      * @apiUse DomainNotFoundError
      * @apiUse BadRequestError
      */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces("application/hal+json")
     public Response addDomain(Domain domain) {
         HEALResponse response;
         HEALResponseBuilder builder;
