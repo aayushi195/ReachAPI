@@ -7,6 +7,8 @@ import edu.asu.heal.core.api.service.HealService;
 import edu.asu.heal.core.api.service.SuggestedActivityiesMappingService.MappingFactory;
 import edu.asu.heal.core.api.service.SuggestedActivityiesMappingService.MappingInterface;
 import edu.asu.heal.reachv3.api.modelFactory.ModelFactory;
+
+import java.util.HashMap;
 import java.util.List;
 
 public class ReachService implements HealService {
@@ -73,6 +75,17 @@ public class ReachService implements HealService {
 			return __modelFactory.deleteActivity(activityId);
 		} catch (Exception e) {
 			System.out.println("SOME PROBLEM IN REACH SERVICE DELETE ACTIVITY INSTANCE");
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public HashMap<String, Boolean> getScheduleOfModules(){
+
+		try{
+			return __modelFactory.getScheduleOfModules();
+		} catch (Exception e){
+			System.out.println("SOME PROBLEM IN GETTING THE SCHEDULE OF MODULES");
 			e.printStackTrace();
 			return null;
 		}
@@ -277,4 +290,6 @@ public class ReachService implements HealService {
 			return null;
 		}
 	}
+
+
 }
