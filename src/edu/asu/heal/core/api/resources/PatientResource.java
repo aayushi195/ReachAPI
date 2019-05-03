@@ -194,9 +194,9 @@ public class PatientResource {
 	 * @apiParamExample {json} Request-payload :
 	 * {
 	 * "pin": 4010,
-	 * "startDate": "2018-01-01 13:00:00",
-	 * "endDate": "2018-03-01 13:00:00",
-	 * "state": "completed"
+	 * "startDate": "2018-10-23T07:00:00.000Z,
+	 * "endDate": "2018-10-23T07:00:00.000Z,
+	 * "state": "Active"
 	 * }
 	 * @apiSampleRequest http://localhost:8080/CompassAPI/rest/patients
 	 * @apiUse BadRequestError
