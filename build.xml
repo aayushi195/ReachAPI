@@ -36,7 +36,12 @@
     <copy file="${src}/${modelfactorypackage}/moduleSchedule.json" todir="${destdir}/WEB-INF/classes/${modelfactorypackage}" />
   </target>
 
-  <target name="build" depends="compile,apidoc">
+<!--  <target name="build" depends="compile,apidoc">-->
+<!--    <copy file="${srcweb}/web.xml" todir="${destdir}/WEB-INF"/>-->
+<!--    <war destfile="${warfile}" basedir="${destdir}" needxmlfile="false"/>-->
+<!--  </target>-->
+
+  <target name="build" depends="compile">
     <copy file="${srcweb}/web.xml" todir="${destdir}/WEB-INF"/>
     <war destfile="${warfile}" basedir="${destdir}" needxmlfile="false"/>
   </target>
