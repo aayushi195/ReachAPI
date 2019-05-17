@@ -13,215 +13,235 @@ import java.util.List;
 
 public class HALBuilderApiHALHelperImpl implements HALHelper{
 
-    @Override
-    public String getActivityInstancesJSON(ActivityInstance activityInstance, String activityInstanceResourcePath, String patientResourcePath, String activityResourcePath) {
-        RepresentationFactory factory = new StandardRepresentationFactory();
-        Representation representation;
+	@Override
+	public String getActivityInstancesJSON(ActivityInstance activityInstance, String activityInstanceResourcePath, String patientResourcePath, String activityResourcePath) {
+		RepresentationFactory factory = new StandardRepresentationFactory();
+		Representation representation;
 
-        representation = factory.newRepresentation()
-                .withProperty("activity_instance", activityInstance)
-                .withLink(Support.SELF, activityInstanceResourcePath + "/" + activityInstance.getActivityInstanceId())
-                .withLink("patient_pin", patientResourcePath + "/" + String.valueOf(activityInstance.getPatientPin()))
-                .withLink("activity_type", activityResourcePath + "/" + activityInstance.getActivityId());
+		representation = factory.newRepresentation()
+				.withProperty("activity_instance", activityInstance)
+				.withLink(Support.SELF, activityInstanceResourcePath + "/" + activityInstance.getActivityInstanceId())
+				.withLink("patient_pin", patientResourcePath + "/" + String.valueOf(activityInstance.getPatientPin()))
+				.withLink("activity_type", activityResourcePath + "/" + activityInstance.getActivityId());
 
-        System.out.println("REPRESENTATION HERE");  
-        System.out.println(representation);
-        return representation.toString(RepresentationFactory.HAL_JSON);
-    }
+		System.out.println("REPRESENTATION HERE");  
+		System.out.println(representation);
+		return representation.toString(RepresentationFactory.HAL_JSON);
+	}
 
-    @Override
-    public String getActivityInstancesJSON(List<ActivityInstance> aList, String activityInstanceResourcePath, String patientResourcePath, String activityResourcePath) {
-        RepresentationFactory factory = new StandardRepresentationFactory();
-        Representation finalRepresentation, representation;
+	@Override
+	public String getActivityInstancesJSON(List<ActivityInstance> aList, String activityInstanceResourcePath, String patientResourcePath, String activityResourcePath) {
+		RepresentationFactory factory = new StandardRepresentationFactory();
+		Representation finalRepresentation, representation;
 
-        finalRepresentation = factory.newRepresentation(activityInstanceResourcePath);
-        for (ActivityInstance a : aList) {
-            representation = factory.newRepresentation()
-                    .withProperty("activity_instance", a)
-                    .withLink(Support.SELF, activityInstanceResourcePath + "/" + a.getActivityInstanceId())
-                    .withLink("patient_pin", patientResourcePath + "/" + String.valueOf(a.getPatientPin()))
-                    .withLink("activity_type", activityResourcePath + "/" + a.getActivityId());
+		finalRepresentation = factory.newRepresentation(activityInstanceResourcePath);
+		for (ActivityInstance a : aList) {
+			representation = factory.newRepresentation()
+					.withProperty("activity_instance", a)
+					.withLink(Support.SELF, activityInstanceResourcePath + "/" + a.getActivityInstanceId())
+					.withLink("patient_pin", patientResourcePath + "/" + String.valueOf(a.getPatientPin()))
+					.withLink("activity_type", activityResourcePath + "/" + a.getActivityId());
 
-            finalRepresentation.withRepresentation("activity_instances", representation);
-        }
-        finalRepresentation.withLink("patient_pin", patientResourcePath);
-        return finalRepresentation.toString(RepresentationFactory.HAL_JSON);
-    }
+			finalRepresentation.withRepresentation("activity_instances", representation);
+		}
+		finalRepresentation.withLink("patient_pin", patientResourcePath);
+		return finalRepresentation.toString(RepresentationFactory.HAL_JSON);
+	}
 
-    @Override
-    public String getActivitiesJSON(Activity a, String activityResourcePath) {
-        RepresentationFactory factory = new StandardRepresentationFactory();
-        Representation representation;
+	@Override
+	public String getActivitiesJSON(Activity a, String activityResourcePath) {
+		RepresentationFactory factory = new StandardRepresentationFactory();
+		Representation representation;
 
-        representation = factory.newRepresentation()
-                .withProperty("activity", a)
-                .withLink(Support.SELF, activityResourcePath + "/" + a.getActivityId());
-        factory = null;
-        return representation.toString(RepresentationFactory.HAL_JSON);
-    }
+		representation = factory.newRepresentation()
+				.withProperty("activity", a)
+				.withLink(Support.SELF, activityResourcePath + "/" + a.getActivityId());
+		factory = null;
+		return representation.toString(RepresentationFactory.HAL_JSON);
+	}
 
-    @Override
-    public String getActivitiesJSON(List<Activity> activities, String activityResourcePath) {
-        RepresentationFactory factory = new StandardRepresentationFactory();
-        Representation finalRepresentation, representation;
+	@Override
+	public String getActivitiesJSON(List<Activity> activities, String activityResourcePath) {
+		RepresentationFactory factory = new StandardRepresentationFactory();
+		Representation finalRepresentation, representation;
 
-        finalRepresentation = factory.newRepresentation(activityResourcePath);
+		finalRepresentation = factory.newRepresentation(activityResourcePath);
 
-        for (Activity a : activities) {
-            representation = factory.newRepresentation()
-                    .withProperty("activity", a)
-                    .withLink(Support.SELF, activityResourcePath + "/" + a.getActivityId());
+		for (Activity a : activities) {
+			representation = factory.newRepresentation()
+					.withProperty("activity", a)
+					.withLink(Support.SELF, activityResourcePath + "/" + a.getActivityId());
 
-            finalRepresentation.withRepresentation("activities", representation);
-        }
-        factory = null;
-        return finalRepresentation.toString(RepresentationFactory.HAL_JSON);
-    }
+			finalRepresentation.withRepresentation("activities", representation);
+		}
+		factory = null;
+		return finalRepresentation.toString(RepresentationFactory.HAL_JSON);
+	}
 
-    @Override
-    public String getDomainsJSON(Domain a, String domainResourcePath, String activityResourcePath, String trialResourcePath) {
-        RepresentationFactory factory = new StandardRepresentationFactory();
-        Representation representation;
+	@Override
+	public String getDomainsJSON(Domain a, String domainResourcePath, String activityResourcePath, String trialResourcePath) {
+		RepresentationFactory factory = new StandardRepresentationFactory();
+		Representation representation;
 
-        representation = factory.newRepresentation()
-                .withProperty("domain", a)
-                .withLink(Support.SELF, domainResourcePath + "/" + a.getDomainId());
-        for (String temp : a.getActivities())
-            representation.withLink("activity", activityResourcePath + "/" + temp);
-        for (String temp : a.getTrials())
-            representation.withLink("trial", trialResourcePath + "/" + temp);
-
-
-        return representation.toString(RepresentationFactory.HAL_JSON);
-    }
-
-    @Override
-    public String getDomainsJSON(List<Domain> domains, String domainResourcePath, String activityResourcePath, String trialResourcePath) {
-        RepresentationFactory factory = new StandardRepresentationFactory();
-        Representation finalRepresentation, representation;
-
-        finalRepresentation = factory.newRepresentation(domainResourcePath);
-        for (Domain a : domains) {
-            representation = factory.newRepresentation()
-                    .withProperty("domain", a)
-                    .withLink(Support.SELF, domainResourcePath + "/" + a.getDomainId());
-            for (String temp : a.getActivities())
-                representation.withLink("activity", activityResourcePath + "/" + temp);
-            for (String temp : a.getTrials())
-                representation.withLink("trial", trialResourcePath + "/" + temp);
-
-            finalRepresentation.withRepresentation("domains", representation);
-        }
-        return finalRepresentation.toString(RepresentationFactory.HAL_JSON);
-    }
-
-    @Override
-    public String getPatientsJSON(Patient a, String patientResourcePath, String activityInstanceResourcePath) {
-        RepresentationFactory factory = new StandardRepresentationFactory();
-        Representation representation;
-        representation = factory.newRepresentation()
-                .withProperty("patient", a)
-                .withLink(Support.SELF, patientResourcePath + "/" + String.valueOf(a.getPin()));
-        for (String temp : a.getActivityInstances())
-            representation.withLink("activity_instance", activityInstanceResourcePath + "/" + temp);
+		representation = factory.newRepresentation()
+				.withProperty("domain", a)
+				.withLink(Support.SELF, domainResourcePath + "/" + a.getDomainId());
+		for (String temp : a.getActivities())
+			representation.withLink("activity", activityResourcePath + "/" + temp);
+		for (String temp : a.getTrials())
+			representation.withLink("trial", trialResourcePath + "/" + temp);
 
 
-        return representation.toString(RepresentationFactory.HAL_JSON);
+		return representation.toString(RepresentationFactory.HAL_JSON);
+	}
 
-    }
+	@Override
+	public String getDomainsJSON(List<Domain> domains, String domainResourcePath, String activityResourcePath, String trialResourcePath) {
+		RepresentationFactory factory = new StandardRepresentationFactory();
+		Representation finalRepresentation, representation;
 
-    @Override
-    public String getPatientsJSON(List<Patient> patients, String patientResourcePath, String activityInstanceResourcePath) {
-        RepresentationFactory factory = new StandardRepresentationFactory();
-        Representation finalRepresentation, representation;
+		finalRepresentation = factory.newRepresentation(domainResourcePath);
+		for (Domain a : domains) {
+			representation = factory.newRepresentation()
+					.withProperty("domain", a)
+					.withLink(Support.SELF, domainResourcePath + "/" + a.getDomainId());
+			for (String temp : a.getActivities())
+				representation.withLink("activity", activityResourcePath + "/" + temp);
+			for (String temp : a.getTrials())
+				representation.withLink("trial", trialResourcePath + "/" + temp);
 
-        finalRepresentation = factory.newRepresentation(patientResourcePath);
-        for (Patient a : patients) {
-            representation = factory.newRepresentation()
-                    .withProperty("patient", a)
-                    .withLink(Support.SELF, patientResourcePath + "/" + String.valueOf(a.getPin()));
-            for (String temp : a.getActivityInstances())
-                representation.withLink("activity_instance", activityInstanceResourcePath + "/" + temp);
+			finalRepresentation.withRepresentation("domains", representation);
+		}
+		return finalRepresentation.toString(RepresentationFactory.HAL_JSON);
+	}
 
-            finalRepresentation.withRepresentation("patients", representation);
-        }
-        return finalRepresentation.toString(RepresentationFactory.HAL_JSON);
-    }
-
-    @Override
-    public String getTrialsJSON(Trial a, String trialResourcePath, String domainResourcePath, String patientResourcePath) {
-        RepresentationFactory factory = new StandardRepresentationFactory();
-        Representation representation;
-        representation = factory.newRepresentation()
-                .withProperty("trial", a)
-                .withLink(Support.SELF, trialResourcePath + "/" + a.getTrialId())
-                .withLink("domain", domainResourcePath + "/" + a.getDomainId());
-        for (String temp : a.getPatients())
-            representation.withLink("patients", patientResourcePath + "/" + temp);
+	@Override
+	public String getPatientsJSON(Patient a, String patientResourcePath, String activityInstanceResourcePath) {
+		RepresentationFactory factory = new StandardRepresentationFactory();
+		Representation representation;
+		representation = factory.newRepresentation()
+				.withProperty("patient", a)
+				.withLink(Support.SELF, patientResourcePath + "/" + String.valueOf(a.getPin()));
+		for (String temp : a.getActivityInstances())
+			representation.withLink("activity_instance", activityInstanceResourcePath + "/" + temp);
 
 
-        return representation.toString(RepresentationFactory.HAL_JSON);
-    }
+		return representation.toString(RepresentationFactory.HAL_JSON);
 
-    @Override
-    public String getTrialsJSON(List<Trial> trials, String trialResourcePath, String domainResourcePath, String patientResourcePath) {
-        RepresentationFactory factory = new StandardRepresentationFactory();
-        Representation finalRepresentation, representation;
+	}
 
-        finalRepresentation = factory.newRepresentation(trialResourcePath);
-        for (Trial a : trials) {
-            representation = factory.newRepresentation()
-                    .withProperty("trial", a)
-                    .withLink(Support.SELF, trialResourcePath + "/" + a.getTrialId())
-                    .withLink("domain", domainResourcePath + "/" + a.getDomainId());
-            for (String temp : a.getPatients())
-                representation.withLink("patients", patientResourcePath + "/" + temp);
+	@Override
+	public String getPatientsJSON(List<Patient> patients, String patientResourcePath, String activityInstanceResourcePath) {
+		RepresentationFactory factory = new StandardRepresentationFactory();
+		Representation finalRepresentation, representation;
 
-            finalRepresentation.withRepresentation("trials", representation);
-        }
-        return finalRepresentation.toString(RepresentationFactory.HAL_JSON);
-    }
+		finalRepresentation = factory.newRepresentation(patientResourcePath);
+		for (Patient a : patients) {
+			representation = factory.newRepresentation()
+					.withProperty("patient", a)
+					.withLink(Support.SELF, patientResourcePath + "/" + String.valueOf(a.getPin()));
+			for (String temp : a.getActivityInstances())
+				representation.withLink("activity_instance", activityInstanceResourcePath + "/" + temp);
+
+			finalRepresentation.withRepresentation("patients", representation);
+		}
+		return finalRepresentation.toString(RepresentationFactory.HAL_JSON);
+	}
+
+	@Override
+	public String getTrialsJSON(Trial a, String trialResourcePath, String domainResourcePath, String patientResourcePath) {
+		RepresentationFactory factory = new StandardRepresentationFactory();
+		Representation representation;
+		representation = factory.newRepresentation()
+				.withProperty("trial", a)
+				.withLink(Support.SELF, trialResourcePath + "/" + a.getTrialId())
+				.withLink("domain", domainResourcePath + "/" + a.getDomainId());
+		for (String temp : a.getPatients())
+			representation.withLink("patients", patientResourcePath + "/" + temp);
+
+
+		return representation.toString(RepresentationFactory.HAL_JSON);
+	}
+
+	@Override
+	public String getTrialsJSON(List<Trial> trials, String trialResourcePath, String domainResourcePath, String patientResourcePath) {
+		RepresentationFactory factory = new StandardRepresentationFactory();
+		Representation finalRepresentation, representation;
+
+		finalRepresentation = factory.newRepresentation(trialResourcePath);
+		for (Trial a : trials) {
+			representation = factory.newRepresentation()
+					.withProperty("trial", a)
+					.withLink(Support.SELF, trialResourcePath + "/" + a.getTrialId())
+					.withLink("domain", domainResourcePath + "/" + a.getDomainId());
+			for (String temp : a.getPatients())
+				representation.withLink("patients", patientResourcePath + "/" + temp);
+
+			finalRepresentation.withRepresentation("trials", representation);
+		}
+		return finalRepresentation.toString(RepresentationFactory.HAL_JSON);
+	}
 
 	@Override
 	public String getPatientScheduleJSON(PatientSchedule patientSchedule, String patientSchedulePath,String patientResourcePath) {
 		RepresentationFactory factory = new StandardRepresentationFactory();
-        Representation representation;
+		Representation representation;
 
-        representation = factory.newRepresentation()
-                .withProperty("patient_schedule", patientSchedule)
-                .withLink(Support.SELF, patientSchedulePath + "?patientPin=" + patientSchedule.getPatientPin())
-                .withLink("patient_pin", patientResourcePath + "/" + String.valueOf(patientSchedule.getPatientPin()));
-              
-        System.out.println("REPRESENTATION HERE");  
-        System.out.println(representation);
-        return representation.toString(RepresentationFactory.HAL_JSON);
+		representation = factory.newRepresentation()
+				.withProperty("patient_schedule", patientSchedule)
+				.withLink(Support.SELF, patientSchedulePath + "?patientPin=" + patientSchedule.getPatientPin())
+				.withLink("patient_pin", patientResourcePath + "/" + String.valueOf(patientSchedule.getPatientPin()));
+
+		System.out.println("REPRESENTATION HERE");  
+		System.out.println(representation);
+		return representation.toString(RepresentationFactory.HAL_JSON);
 	}
 
-    @Override
-    public String getmoduleProgressionJSON(ModuleInstance moduleInstance, String patientResourcePath) {
-        RepresentationFactory factory = new StandardRepresentationFactory();
-        Representation representation;
+	@Override
+	public String getmoduleProgressionJSON(ModuleInstance moduleInstance, String patientResourcePath) {
+		RepresentationFactory factory = new StandardRepresentationFactory();
+		Representation representation;
 
-        representation = factory.newRepresentation()
-                .withProperty("module_progression", moduleInstance)
-                .withLink("patient_pin", patientResourcePath + "/" + String.valueOf(moduleInstance.getPatientPin()));
+		representation = factory.newRepresentation()
+				.withProperty("module_progression", moduleInstance)
+				.withLink("patient_pin", patientResourcePath + "/" + String.valueOf(moduleInstance.getPatientPin()));
 
-        System.out.println("REPRESENTATION HERE");
-        System.out.println(representation);
-        return representation.toString(RepresentationFactory.HAL_JSON);
-    }
-    
-    @Override
-    public String getmoduleActivitiesJSON(ModuleActivityList moduleInstance, String patientResourcePath) {
-        RepresentationFactory factory = new StandardRepresentationFactory();
-        Representation representation;
+		System.out.println("REPRESENTATION HERE");
+		System.out.println(representation);
+		return representation.toString(RepresentationFactory.HAL_JSON);
+	}
 
-        representation = factory.newRepresentation()
-                .withProperty("module_progression", moduleInstance)
-                .withLink("patient_pin", patientResourcePath + "/" + String.valueOf(moduleInstance.getPatientPin()));
+	@Override
+	public String getmoduleActivitiesJSON(ModuleActivityList moduleInstance, String patientResourcePath) {
+		RepresentationFactory factory = new StandardRepresentationFactory();
+		Representation representation;
 
-        System.out.println("REPRESENTATION HERE");
-        System.out.println(representation);
-        return representation.toString(RepresentationFactory.HAL_JSON);
-    }
+		representation = factory.newRepresentation()
+				.withProperty("module_progression", moduleInstance)
+				.withLink("patient_pin", patientResourcePath + "/" + String.valueOf(moduleInstance.getPatientPin()));
+
+		System.out.println("REPRESENTATION HERE");
+		System.out.println(representation);
+		return representation.toString(RepresentationFactory.HAL_JSON);
+	}
+
+	@Override
+	public String getPatientScheduleJSON(List<PatientSchedule> patientSchedules, String patientSchedulePath,
+			String patientResourcePath) {
+		RepresentationFactory factory = new StandardRepresentationFactory();
+		Representation finalRepresentation, representation;
+
+		finalRepresentation = factory.newRepresentation(patientResourcePath);
+		for(PatientSchedule patientSchedule : patientSchedules) {
+			representation = factory.newRepresentation()
+					.withProperty("patient_schedule", patientSchedule)
+					.withLink(Support.SELF, patientSchedulePath + "?patientPin=" + patientSchedule.getPatientPin())
+					.withLink("patient_pin", patientResourcePath + "/" + String.valueOf(patientSchedule.getPatientPin()));
+			finalRepresentation.withRepresentation("patientSchedules", representation); 
+		}
+		System.out.println("REPRESENTATION HERE");  
+		System.out.println(finalRepresentation);
+		return finalRepresentation.toString(RepresentationFactory.HAL_JSON);
+
+	}
 }

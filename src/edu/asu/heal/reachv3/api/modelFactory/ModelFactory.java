@@ -683,7 +683,7 @@ public class ModelFactory {
 
 	// ************************************* SCHEDULES ****************************************************
 
-	public PatientSchedule createPatientSchedule(int patientPin) {
+	public PatientSchedule createPatientSchedule(int patientPin , Date date) {
 		PatientSchedule result = new PatientSchedule();
 		List<ModuleDetail> moduleDetails = new ArrayList<>();
 		HashMap<String,List<String>> dateMap;
@@ -691,7 +691,9 @@ public class ModelFactory {
 			result.setPatientPin(patientPin);
 			ObjectMapper mapper = new ObjectMapper();
 			String moduleScheduleFileName = _properties.getProperty(MODULE_SCHEDULE_FILE);
-			dateMap = this.calculateDefaultModuleDates();
+			SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT_AI);
+			Date startDate= date;
+			dateMap = this.calculateDefaultModuleDates(startDate);
 			if(moduleScheduleFileName != null) {
 				String fileData = this.readFile(moduleScheduleFileName);
 				if(fileData == null || fileData.equals(""))
@@ -970,12 +972,12 @@ public class ModelFactory {
 	}
 
 	// To calculate date according to module length and starting date of first module. 
-	public HashMap<String,List<String>> calculateDefaultModuleDates(){
+	public HashMap<String,List<String>> calculateDefaultModuleDates(Date date){
 		HashMap<String,List<String>> result = new HashMap<>();
 		try {
 			int moduleDays = Integer.parseInt(_properties.getProperty(MODULE_DURATION_DAYS));
 			int totalModule = Integer.parseInt(_properties.getProperty(TOTAL_MODULE));
-			Date today = new Date();
+			Date today = date;
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(today);
 			Date startDate = today;

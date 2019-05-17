@@ -141,7 +141,7 @@ public class PatientResource {
 	}
 
 	/**
-	 * @api {post} /patient Create Patient
+	 * @api {post} /patients Create Patient
 	 * @apiName AddPatient
 	 * @apiGroup Patient
 	 * @apiParam {String} Trial ID of the trial to which the patient needs to be added
@@ -153,6 +153,7 @@ public class PatientResource {
 	 * @apiUse NotImplementedError
 	 */
 	@POST
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response createPatient(String trialId) {
 		HEALResponse response;
 		HEALResponseBuilder builder;

@@ -1,1 +1,36 @@
-define({  "name": "HEAL API",  "version": "0.1.0",  "description": "HEAL API Documentation",  "title": "HEAL API",  "url": "https://localhost:8080/CompassAPI/rest",  "order": [    "Patient",    "GetPatients",    "GetPatientsOfTrial",    "GetPatientDetail",    "AddPatient",    "UpdatePatient",    "RemovePatient",    "ActivityInstance",    "GetActivityInstances",    "ActivityInstanceDetail",    "CreateActivityInstance",    "UpdateActivityInstance",    "DeleteActivityInstance",    "Activity",    "CreateActivity",    "GetTrialsOfDomain",    "AddTrial",    "AddLogs"  ],  "sampleUrl": false,  "defaultVersion": "0.0.0",  "apidoc": "0.3.0",  "generator": {    "name": "apidoc",    "time": "2019-05-02T11:34:03.422Z",    "url": "http://apidocjs.com",    "version": "0.17.7"  }});
+define({
+  "name": "HEAL API",
+  "version": "0.1.0",
+  "description": "HEAL API Documentation",
+  "title": "HEAL API",
+  "url": "https://localhost:8080/CompassAPI/rest",
+  "order": [
+    "Patient",
+    "GetPatients",
+    "GetPatientsOfTrial",
+    "GetPatientDetail",
+    "AddPatient",
+    "UpdatePatient",
+    "RemovePatient",
+    "ActivityInstance",
+    "GetActivityInstances",
+    "ActivityInstanceDetail",
+    "CreateActivityInstance",
+    "UpdateActivityInstance",
+    "DeleteActivityInstance",
+    "Activity",
+    "CreateActivity",
+    "GetTrialsOfDomain",
+    "AddTrial",
+    "AddLogs"
+  ],
+  "sampleUrl": false,
+  "defaultVersion": "0.0.0",
+  "apidoc": "0.3.0",
+  "generator": {
+    "name": "apidoc",
+    "time": "2019-05-17T08:54:34.610Z",
+    "url": "http://apidocjs.com",
+    "version": "0.17.6"
+  }
+});

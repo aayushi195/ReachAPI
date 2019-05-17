@@ -4,6 +4,7 @@ import edu.asu.heal.core.api.models.*;
 import edu.asu.heal.core.api.models.schedule.PatientSchedule;
 import edu.asu.heal.reachv3.api.models.MakeBelieveActivityInstance;
 
+import java.util.Date;
 import java.util.List;
 
 public interface HealService {
@@ -60,10 +61,10 @@ public interface HealService {
 
     /******************************************* Schedule methods ***********************************************************/
     
-    PatientSchedule createPatientSchedule(int patientPin);
+    PatientSchedule createPatientSchedule(int patientPin,String startDate);
     
     PatientSchedule getPatientSchedule(int patientPin);
     
     PatientSchedule updatePatientSchedule(int patientPin,String module);
-    
+  
 }

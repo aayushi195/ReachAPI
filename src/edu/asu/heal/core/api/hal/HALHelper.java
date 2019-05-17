@@ -27,6 +27,8 @@ public interface HALHelper {
     String getTrialsJSON(List<Trial> trial, String trialResourcePath, String domainResourcePath, String patientResourcePath);
 
     String getPatientScheduleJSON(PatientSchedule patientSchedule,String patientSchedulePath,  String patientResourcePath);
+    String getPatientScheduleJSON(List<PatientSchedule> patientSchedules,String patientSchedulePath,  String patientResourcePath);
+
 
     String getmoduleProgressionJSON(ModuleInstance moduleInstance, String patientResourcePath);
     

@@ -932,6 +932,9 @@ public class MongoDBDAO implements DAO {
 					database.getCollection(PATIENT_SCHEDULE_COLLECTION, PatientSchedule.class);
 			
 			PatientSchedule instance = getPatientSchedule(patientSchedule.getPatientPin());
+			Patient patient = getPatient(patientSchedule.getPatientPin());
+			if(patient.equals(NullObjects.getNullPatient()))
+				return null;
 			if(instance == null) {
 				patientScheduleMongoCollection.insertOne(patientSchedule);
 				instance = patientSchedule;
