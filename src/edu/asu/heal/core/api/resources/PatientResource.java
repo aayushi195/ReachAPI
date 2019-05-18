@@ -153,6 +153,7 @@ public class PatientResource {
 	 * @apiUse NotImplementedError
 	 */
 	@POST
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response createPatient(String trialId) {
 		HEALResponse response;
 		HEALResponseBuilder builder;

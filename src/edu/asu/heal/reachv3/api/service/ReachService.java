@@ -299,9 +299,14 @@ public class ReachService implements HealService {
 	/******************************** Schedule Methods **********************************************************/
 
 	@Override
-	public PatientSchedule createPatientSchedule(int patientPin) {
+	public PatientSchedule createPatientSchedule(int patientPin, String startDate) {
 		try {
-			return __modelFactory.createPatientSchedule(patientPin);
+			Date date=null;
+			if(startDate != null && !startDate.equalsIgnoreCase(""))
+				date =new Date(startDate);
+			else
+				date= new Date();
+			return __modelFactory.createPatientSchedule(patientPin,date);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

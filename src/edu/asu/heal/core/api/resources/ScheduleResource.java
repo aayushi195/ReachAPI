@@ -102,7 +102,8 @@ public class ScheduleResource {
 	 * @apiSampleRequest http://localhost:8080/CompassAPI/rest/schedules
 	 * @apiParamExample {json} Request-Payload:
 	 * {
-	 * 		"patientPin" : 4012
+	 * 		"patientPin" : 4012,
+	 * 		"startDate"  : "Fri May 6 20:12:38 MST 2019"
 	 * }
 	 * @apiUse BadRequestError
 	 * @apiUse InternalServerError
@@ -121,12 +122,16 @@ public class ScheduleResource {
 
 			JSONObject patientData = new JSONObject(patientJson);
 			int patientPin = -1;
+			String startDate = null;
 			if(patientData.has("patientPin")) {
 				patientPin = patientData.getInt("patientPin");
 			}
+			if(patientData.has("startDate")) {
+				startDate = patientData.getString("startDate");
+			}
 			PatientSchedule patientSchedule = null;
 			if(patientPin > 0)
-				patientSchedule = reachService.createPatientSchedule(patientPin);
+				patientSchedule = reachService.createPatientSchedule(patientPin,startDate);
 			else if (patientPin == 0 || patientPin <= -1){
 				response = builder
 						.setStatusCode(Response.Status.BAD_REQUEST.getStatusCode())

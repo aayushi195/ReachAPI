@@ -60,7 +60,7 @@ public interface HealService {
 
     /******************************************* Schedule methods ***********************************************************/
     
-    PatientSchedule createPatientSchedule(int patientPin);
+    PatientSchedule createPatientSchedule(int patientPin, String startDate);
     
     PatientSchedule getPatientSchedule(int patientPin);
     
